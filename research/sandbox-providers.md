@@ -46,4 +46,4 @@ Code mode and large-tool-response offloading both require an enabled sandbox, so
 - Does Daytona's free credit expire, and is a card ever demanded at Tier 1 when creating snapshots? (Pricing page says no card for trial; not verified by signing up, which was out of scope.)
 - Is the `truefoundry` provider type going to be released, and can it target a user-run server?
 - Is there a roadmap for additional providers (docs only say "planned")? Check the TrueForge repo issues/changelog before relying on it.
-- Latency impact of a cloud sandbox for code mode (each call bridges back to the local harness via NATS WebSocket and a preview URL). The harness must be reachable from Daytona's sandboxes; unverified whether a laptop-local server behind NAT works for the code-mode bridge. Treat as a risk to test early.
+- Code-mode transport: the Daytona provider has a NATS WebSocket bridge port (default 4444) and a signed preview URL, which suggests the local harness connects out to the sandbox (so NAT is likely fine). This is inferred from source, not tested; verify early with a real code-mode run, along with latency.
