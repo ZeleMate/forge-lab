@@ -37,5 +37,8 @@ The local copy of TrueForge's source, pinned to the exact commit of the server v
 A named, repeatable scenario that deliberately triggers one harness behaviour (e.g. forced compaction, hitting the subagent cap, an SSE drop and resume) and records expected against observed.
 _Avoid_: test, demo
 
+**Experiment Session**:
+A Session tagged with `experiment` metadata, created for an Experiment. It's the only kind of Session Cartographer's write tools (fork, re-run, cancel) may act on; the user's own chat Sessions are never tagged.
+
 **Harness Notes**:
 The user's own deep-dive notes on how TrueForge works inside, written while building on it. Not a comparison with other harnesses.
