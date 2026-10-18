@@ -1,6 +1,6 @@
 # forge-lab
 
-A learning project: a paper-scout agent running on the TrueForge harness, used to understand how a third-party harness works compared with a custom one.
+A personal learning project: build an agent on the TrueForge harness to learn, in depth, how TrueForge works inside and the TypeScript it's written in.
 
 ## Language
 
@@ -9,7 +9,7 @@ The runtime around a model that turns it into a long-running agent: plans turns,
 _Avoid_: framework, platform
 
 **Paper Scout**:
-The agent this repo builds. Finds, summarises and tracks research papers on the user's behalf.
+Candidate agent for this repo (the use case is being reconsidered). Finds, summarises and tracks research papers on the user's behalf.
 
 **Agent**:
 A saved, named configuration on the harness: model, instructions, tools, skills and sandbox it may use.
@@ -23,7 +23,8 @@ _Avoid_: chat, thread
 One user message and everything the Agent does in response, up to its final reply.
 
 **Approval**:
-A pause in a Turn where a human must allow or deny a sensitive tool call before it runs.
+A human's allow or deny decision on a sensitive tool call. The Turn ends while it waits, and the next Turn carries the decision.
+_Avoid_: confirmation, permission prompt
 
 **Subagent**:
 A child agent the Agent delegates a subtask to, so the subtask's detail stays out of the parent's context.
@@ -35,4 +36,4 @@ A research publication identified by a stable source id (e.g. an arXiv id).
 The user's saved set of Papers the Paper Scout is tracking.
 
 **Harness Notes**:
-The written comparison between TrueForge's design and the user's own custom harness.
+The user's own deep-dive notes on how TrueForge works inside, written while building on it. Not a comparison with other harnesses.
