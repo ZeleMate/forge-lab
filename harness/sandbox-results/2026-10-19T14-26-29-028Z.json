@@ -1,0 +1,80 @@
+{
+  "session": "01m5a8vej7jbt9sessad0zmbgz",
+  "exec": {
+    "status": "done",
+    "wallMs": 10027,
+    "metrics": {
+      "total_input_tokens": 11466,
+      "total_output_tokens": 314,
+      "total_tokens": 11780,
+      "total_cache_read_tokens": 11008,
+      "total_reasoning_tokens": 80
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 3,
+      "sandbox.created": 1,
+      "tool.response": 2,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "exec",
+      "exec"
+    ],
+    "usedMetaTools": false,
+    "usedSubagent": false,
+    "cacheReadTokens": 11008,
+    "answer": "The script ran successfully. Here are the three lines exactly as printed:\n\n```\n3.13.16 (main, Sep 30 2026, 18:57:20) [Clang 21.0.0 (clang-2100.3.34.2)]\nmacOS-27.0.1-arm64-arm-64bit\n500000500000\n```"
+  },
+  "codeMode": {
+    "status": "done",
+    "wallMs": 34106,
+    "metrics": {
+      "total_input_tokens": 18190,
+      "total_output_tokens": 862,
+      "total_tokens": 19052,
+      "total_cache_read_tokens": 17408,
+      "total_reasoning_tokens": 345
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 4,
+      "mcp.initialize": 1,
+      "tool.response": 3,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "list_tools",
+      "get_tool_info",
+      "exec"
+    ],
+    "usedMetaTools": true,
+    "usedSubagent": false,
+    "cacheReadTokens": 17408,
+    "answer": "The script ran successfully. Here's exactly what it printed:\n\n```\nQ1: How is context compaction triggered?\nContext compaction is triggered when the estimated input token count for an agent's conversation history reaches a specified threshold. This mechanism is part of the `context_management` configuration\n----\nQ2: How do tool approvals pause a turn?\nTool approvals pause a turn by emitting a `tool.approval_required` event, which sets the turn's state to \"paused\" and requires user intervention to proceed  . This mechanism is part of the agent's run\n```\n\nEach answer is truncated to its first 200 characters, as requested. In short: compaction fires when the conversation's estimated input token count hits a configured `context_management` threshold, and tool approvals pause a turn by emitting a `tool.approval_required` event that sets the turn state to \"paused\" until the user intervenes."
+  },
+  "isolation": {
+    "status": "done",
+    "wallMs": 8042,
+    "metrics": {
+      "total_input_tokens": 11856,
+      "total_output_tokens": 705,
+      "total_tokens": 12561,
+      "total_cache_read_tokens": 11264,
+      "total_reasoning_tokens": 318
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 2,
+      "tool.response": 1,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "exec"
+    ],
+    "usedMetaTools": false,
+    "usedSubagent": false,
+    "cacheReadTokens": 11264,
+    "answer": "Output, verbatim:\n\n```\nnet example.com: BLOCKED\nnet pypi.org: ALLOWED\nread real ~/.zshrc: BLOCKED\nread repo .env: BLOCKED\nwrite real ~/: BLOCKED\nwrite /tmp: BLOCKED\nsandbox HOME: /Users/zelenyianszkimate/Library/Application Support/trueforge/sandboxes/01m5a8vej7jbt9sessad0zmbgz/01m5a8vh0qn57p6dpm9g9wxfy8/.home\n```"
+  }
+}

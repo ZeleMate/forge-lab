@@ -1,0 +1,80 @@
+{
+  "session": "01m5a8rpckhp6ne9zqm28cdn1m",
+  "exec": {
+    "status": "done",
+    "wallMs": 16081,
+    "metrics": {
+      "total_input_tokens": 11550,
+      "total_output_tokens": 441,
+      "total_tokens": 11991,
+      "total_cache_read_tokens": 7424,
+      "total_reasoning_tokens": 207
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 3,
+      "sandbox.created": 1,
+      "tool.response": 2,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "exec",
+      "exec"
+    ],
+    "usedMetaTools": false,
+    "usedSubagent": false,
+    "cacheReadTokens": 7424,
+    "answer": "The script ran successfully. Here are the three lines exactly as printed:\n\n```\n3.13.16 (main, Sep 30 2026, 18:57:20) [Clang 21.0.0 (clang-2100.3.34.2)]\nmacOS-27.0.1-arm64-arm-64bit\n500000500000\n```"
+  },
+  "codeMode": {
+    "status": "done",
+    "wallMs": 34125,
+    "metrics": {
+      "total_input_tokens": 18737,
+      "total_output_tokens": 847,
+      "total_tokens": 19584,
+      "total_cache_read_tokens": 17664,
+      "total_reasoning_tokens": 361
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 4,
+      "mcp.initialize": 1,
+      "tool.response": 3,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "list_tools",
+      "get_tool_info",
+      "exec"
+    ],
+    "usedMetaTools": true,
+    "usedSubagent": false,
+    "cacheReadTokens": 17664,
+    "answer": "The script ran successfully. Here is exactly what it printed:\n\n```\nQuestion: How is context compaction triggered?\nContext compaction is triggered when the estimated input to the model reaches a predefined token threshold. This mechanism is enabled by default and aims to manage the runtime context to prevent conte\n----------------------------------------\nQuestion: How do tool approvals pause a turn?\nTool approvals pause a turn by transitioning the turn's state to `paused` and emitting a `tool.approval_required` event, which signals to the UI that human intervention is needed before the turn can p\n----------------------------------------\n```\n\nSummary of what the script did:\n- Called `deepwiki`'s `ask_wiki_question` tool twice, both times with `repoName: truefoundry/trueforge`\n- First call asked how context compaction is triggered; second asked how tool approvals pause a turn\n- Read the `result` field from each response and printed its first 200 characters"
+  },
+  "isolation": {
+    "status": "done",
+    "wallMs": 14062,
+    "metrics": {
+      "total_input_tokens": 12303,
+      "total_output_tokens": 1383,
+      "total_tokens": 13686,
+      "total_cache_read_tokens": 11776,
+      "total_reasoning_tokens": 1054
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 2,
+      "tool.response": 1,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "exec"
+    ],
+    "usedMetaTools": false,
+    "usedSubagent": false,
+    "cacheReadTokens": 11776,
+    "answer": "Ran the snippet exactly as provided. Output verbatim:\n\n```\nnet example.com: BLOCKED\nnet pypi.org: ALLOWED\nread ~/.zshrc: BLOCKED\nwrite ~/: ALLOWED\ncwd: /Users/zelenyianszkimate/Library/Application Support/trueforge/sandboxes/01m5a8rpckhp6ne9zqm28cdn1m/01m5a8rr10ce9qryjmkjd86v7h\n```\n\nNote: since `write ~/: ALLOWED`, the probe created the file `~/tf-sandbox-write-probe` on the host home directory. I have not run any cleanup or extra commands beyond the snippet you provided."
+  }
+}
