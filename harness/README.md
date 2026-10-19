@@ -1,6 +1,34 @@
 # harness
 
-A pinned, local TrueForge server for forge-lab. It follows the hardening rules in [research/security-review.md](https://github.com/ZeleMate/forge-lab/blob/research/security-review/research/security-review.md).
+A pinned, local TrueForge server for forge-lab. It follows the hardening rules in [docs/research/security-review.md](../docs/research/security-review.md).
+
+## Machine prerequisites (macOS)
+
+```bash
+brew install node bun python@3.13
+```
+
+```bash
+ln -s /opt/homebrew/opt/python@3.13/libexec/bin/python3 /opt/homebrew/bin/python3
+```
+
+The link matters. TrueForge's local sandbox looks for `python3` on a **fixed** path (`/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:…`) and ignores your `$PATH`. Without the link it finds macOS's Python 3.9, which passes TrueForge's startup check but crashes the sandbox bootstrap (`TypeError: unsupported operand type(s) for |`). The link also makes 3.13 your shell's default `python3`. To undo it: `rm /opt/homebrew/bin/python3`.
+
+At startup the server logs which Python it picked: `Local sandbox fallback is available {… "python": "…3.13…"}`.
+
+## OpenRouter account setup (done once, on openrouter.ai)
+
+This lives in your OpenRouter account, not in the repo:
+
+1. **API key** named `forge-lab`, with a **credit limit** ($5 so far).
+2. **Privacy**: training on prompts off; zero-data-retention endpoints only, where offered.
+3. **Routing defaults** for the Auto Router (`openrouter/auto`): open-weight model families, low cost tier. They're set at account level because TrueForge drops the per-request `plugins` field.
+
+Put the key in the repo-root `.env`, which is git-ignored:
+
+```
+OPENROUTER_API_KEY=sk-or-v1-…
+```
 
 ## Run
 
@@ -10,7 +38,24 @@ bun install --frozen-lockfile
 bun run start
 ```
 
-Then open http://127.0.0.1:8790. Stop it with Ctrl-C when you're done: the server has no login and no Host/Origin checks, so it should only run while you're using it.
+Then, with the server up, register the models. You run this yourself, because it sends the key:
+
+```bash
+bun run apply:provider
+```
+
+The UI is at http://127.0.0.1:8790. Stop the server with Ctrl-C when you're done: it has no login and no Host/Origin checks, so it should only run while you're using it.
+
+## Scripts
+
+| Script | What it does |
+|---|---|
+| `start` | Starts TrueForge on `127.0.0.1:8790` with telemetry off |
+| `apply:provider` | Upserts the `openrouter` provider: `opus-5-5` (main), `glm-5-3-flash`, `deepseek-v4-flash`, `openrouter-auto` |
+| `smoke [model…]` | Tool discovery, cache reads, and (on GLM) parallel subagents, via DeepWiki. Results go to `smoke-results/` |
+| `sandbox-check` | Local sandbox exec, code mode, and isolation probes (network, real home, repo `.env`, writes). Results go to `sandbox-results/` |
+
+Shared API helpers are in `scripts/lib/trueforge.ts`.
 
 ## What's pinned and why
 
@@ -27,6 +72,4 @@ Then open http://127.0.0.1:8790. Stop it with Ctrl-C when you're done: the serve
 | `DO_NOT_TRACK` | `1` | Disables OpenUI's install telemetry, as a second safeguard |
 | `SENTRY_ENABLED` | `false` | Already the default; set explicitly |
 
-## Keys
-
-The OpenRouter key goes into TrueForge's UI (Settings → Models), never into this repo or a chat. TrueForge stores it unencrypted in SQLite in its app data directory, so use a dedicated key with a low credit limit.
+TrueForge keeps its data (including the OpenRouter key, unencrypted) in `~/Library/Application Support/trueforge/db/db.sqlite`, and sandboxes under `…/trueforge/sandboxes/`.
