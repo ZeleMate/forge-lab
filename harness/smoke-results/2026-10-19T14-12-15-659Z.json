@@ -1,0 +1,51 @@
+{
+  "opus-5-5": {
+    "session": "01m5a820t3z3zavnvzc1mce4r7",
+    "toolTurn": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 12834,
+        "total_output_tokens": 542,
+        "total_tokens": 13376,
+        "total_cache_read_tokens": 0,
+        "total_reasoning_tokens": 14
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 4,
+        "mcp.initialize": 1,
+        "tool.response": 3,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "list_tools",
+        "get_tool_info",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 0,
+      "answeredBy": []
+    },
+    "followUp": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 4499,
+        "total_output_tokens": 184,
+        "total_tokens": 4683,
+        "total_cache_read_tokens": 0,
+        "total_reasoning_tokens": 105
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 1,
+        "turn.done": 1
+      },
+      "toolCalls": [],
+      "usedMetaTools": false,
+      "usedSubagent": false,
+      "cacheReadTokens": 0,
+      "answeredBy": []
+    }
+  }
+}
