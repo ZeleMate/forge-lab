@@ -1,0 +1,13 @@
+{
+  "name": "@forge-lab/harness",
+  "private": true,
+  "description": "Pinned local TrueForge server for forge-lab. See README.md for the hardening rules.",
+  "scripts": {
+    "start": "HOST=127.0.0.1 PORT=8790 DO_NOT_TRACK=1 SENTRY_ENABLED=false trueforge",
+    "apply:provider": "bun --env-file=../.env scripts/apply-provider.ts",
+    "smoke": "bun scripts/smoke.ts"
+  },
+  "devDependencies": {
+    "@truefoundry/trueforge": "0.179.2"
+  }
+}

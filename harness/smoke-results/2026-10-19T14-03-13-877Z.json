@@ -1,0 +1,106 @@
+{
+  "deepseek-v4-flash": {
+    "session": "01m5a7fh21whcm5sbzbnexw60r",
+    "toolTurn": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 6330,
+        "total_output_tokens": 439,
+        "total_tokens": 6769,
+        "total_cache_read_tokens": 3584,
+        "total_reasoning_tokens": 161
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 3,
+        "mcp.initialize": 1,
+        "tool.response": 3,
+        "tool.response_required": 1,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "list_tools",
+        "get_tool_info",
+        "get_tool_info",
+        "ask_user_question"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 3584,
+      "answeredBy": []
+    },
+    "followUp": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 10123,
+        "total_output_tokens": 796,
+        "total_tokens": 10919,
+        "total_cache_read_tokens": 7936,
+        "total_reasoning_tokens": 536
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 3,
+        "tool.response": 2,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "call_tool",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 7936,
+      "answeredBy": []
+    }
+  },
+  "openrouter-auto": {
+    "session": "01m5a7hhpehnz53kd6grtdqcj1",
+    "toolTurn": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 6178,
+        "total_output_tokens": 233,
+        "total_tokens": 6411,
+        "total_cache_read_tokens": 3908,
+        "total_reasoning_tokens": 13
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 4,
+        "mcp.initialize": 1,
+        "tool.response": 3,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "list_tools",
+        "get_tool_info",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 3908,
+      "answeredBy": []
+    },
+    "followUp": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 2363,
+        "total_output_tokens": 52,
+        "total_tokens": 2415,
+        "total_cache_read_tokens": 2258,
+        "total_reasoning_tokens": 0
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 1,
+        "turn.done": 1
+      },
+      "toolCalls": [],
+      "usedMetaTools": false,
+      "usedSubagent": false,
+      "cacheReadTokens": 2258,
+      "answeredBy": []
+    }
+  }
+}
