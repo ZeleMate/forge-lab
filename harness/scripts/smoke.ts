@@ -10,7 +10,7 @@
 // It never touches provider keys: TrueForge already holds them.
 
 const BASE = "http://127.0.0.1:8790/api/v1";
-const ALL_MODELS = ["glm-5-3-flash", "deepseek-v4-flash", "openrouter-auto"] as const;
+const ALL_MODELS = ["opus-5-5", "glm-5-3-flash", "deepseek-v4-flash", "openrouter-auto"] as const;
 type ModelName = (typeof ALL_MODELS)[number]; // a union of the three string literals
 
 // ---------- tiny typed HTTP helper ----------

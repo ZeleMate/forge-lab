@@ -37,6 +37,14 @@ type CustomProviderManifest = {
 const limits = { context_length: 131_072, max_output_tokens: 16_384 };
 
 const models: CustomModel[] = [
+  // Main model: SOTA. 131k context still applies, so compaction stays observable
+  // and a single turn can't silently cost dollars.
+  {
+    model_id: "anthropic/claude-opus-5.5",
+    name: "opus-5-5",
+    properties: { ...limits, reasoning_efforts: ["low", "medium", "high", "max"] },
+  },
+  // Cheaper alternatives, for work that doesn't need SOTA (mechanics Experiments, smoke tests).
   // GLM-5.3-Flash always reasons and defaults to max effort; declaring the
   // levels lets agents turn it down.
   {
