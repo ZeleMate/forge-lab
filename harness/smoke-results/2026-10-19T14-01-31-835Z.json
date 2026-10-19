@@ -1,0 +1,84 @@
+{
+  "glm-5-3-flash": {
+    "session": "01m5a7dgm1zv4dn9sh2r9m1bjm",
+    "toolTurn": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 9015,
+        "total_output_tokens": 318,
+        "total_tokens": 9333,
+        "total_cache_read_tokens": 3840,
+        "total_reasoning_tokens": 10
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 4,
+        "mcp.initialize": 1,
+        "tool.response": 3,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "list_tools",
+        "call_tool",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 3840,
+      "answeredBy": []
+    },
+    "followUp": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 3030,
+        "total_output_tokens": 52,
+        "total_tokens": 3082,
+        "total_cache_read_tokens": 2880,
+        "total_reasoning_tokens": 1
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 1,
+        "turn.done": 1
+      },
+      "toolCalls": [],
+      "usedMetaTools": false,
+      "usedSubagent": false,
+      "cacheReadTokens": 2880,
+      "answeredBy": []
+    },
+    "subagentTurn": {
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 18087,
+        "total_output_tokens": 1448,
+        "total_tokens": 19535,
+        "total_cache_read_tokens": 9088,
+        "total_reasoning_tokens": 17
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 10,
+        "thread.created": 2,
+        "tool.response": 8,
+        "mcp.initialize": 1,
+        "thread.done": 2,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "create_sub_agent",
+        "create_sub_agent",
+        "list_tools",
+        "list_tools",
+        "get_tool_info",
+        "get_tool_info",
+        "call_tool",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": true,
+      "cacheReadTokens": 9088,
+      "answeredBy": []
+    }
+  }
+}

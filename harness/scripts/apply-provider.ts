@@ -10,10 +10,18 @@ const TRUEFORGE_URL = "http://127.0.0.1:8790";
 
 // A type alias for the request body. `as const` below would also work, but an
 // explicit type gives you autocompletion and catches typos at compile time.
+type ReasoningEffort = "none" | "minimal" | "low" | "medium" | "high" | "xhigh" | "max";
+
 type CustomModel = {
   model_id: string; // the OpenRouter model id
   name: string; // TrueForge's name for it: lowercase, digits and hyphens
-  properties: { context_length: number; max_output_tokens: number };
+  properties: {
+    context_length: number;
+    max_output_tokens: number;
+    // Declares which `reasoning_effort` values agents may set. Without it,
+    // TrueForge rejects any agent that sets reasoning_effort (HTTP 422).
+    reasoning_efforts?: ReasoningEffort[];
+  };
 };
 
 type CustomProviderManifest = {
@@ -29,7 +37,13 @@ type CustomProviderManifest = {
 const limits = { context_length: 131_072, max_output_tokens: 16_384 };
 
 const models: CustomModel[] = [
-  { model_id: "z-ai/glm-5.3-flash", name: "glm-5-3-flash", properties: limits },
+  // GLM-5.3-Flash always reasons and defaults to max effort; declaring the
+  // levels lets agents turn it down.
+  {
+    model_id: "z-ai/glm-5.3-flash",
+    name: "glm-5-3-flash",
+    properties: { ...limits, reasoning_efforts: ["low", "medium", "high", "max"] },
+  },
   { model_id: "deepseek/deepseek-v4-flash-0731", name: "deepseek-v4-flash", properties: limits },
   // OpenRouter's Auto Router picks a model per request. TrueForge drops the
   // `plugins` body field, so its allowed models and cost tier must be set on the
