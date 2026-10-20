@@ -38,7 +38,7 @@ A named, repeatable scenario that deliberately triggers one harness behaviour (e
 _Avoid_: test, demo
 
 **Experiment Session**:
-A Session tagged with `experiment` metadata, created for an Experiment. It's the only kind of Session Cartographer's write tools (fork, re-run, cancel) may act on; the user's own chat Sessions are never tagged.
+A Session tagged with `experiment` metadata, created for an Experiment. It's an inline Session carrying its own copy of Cartographer's spec, so an Experiment changes that copy and never the Cartographer Agent. It's the only kind of Session Cartographer's write tools (fork, re-run, cancel) may act on in place; the user's own chat Sessions are never tagged. Forking a chat Session replays its user messages into a new Experiment Session: the context is replayed, never copied.
 
 **Harness Notes**:
 The user's own deep-dive notes on how TrueForge works inside, written while building on it. Not a comparison with other harnesses.
