@@ -54,8 +54,9 @@ The UI is at http://127.0.0.1:8790. Stop the server with Ctrl-C when you're done
 | `apply:provider` | Upserts the `openrouter` provider: `opus-5-5` (main), `glm-5-3-flash`, `deepseek-v4-flash`, `openrouter-auto` |
 | `smoke [model…]` | Tool discovery, cache reads, and (on GLM) parallel subagents, via DeepWiki. Results go to `smoke-results/` |
 | `sandbox-check` | Local sandbox exec, code mode, and isolation probes (network, real home, repo `.env`, writes). Results go to `sandbox-results/` |
+| `session-api-check [guard]` | What an MCP tool sees of its own Session, self-cancel, forks from paused/cancelled/error Turns, inline replay and `PATCH`. Runs a throwaway MCP server on `127.0.0.1:8791`. Expected vs observed in `session-api-results/README.md` |
 
-Shared API helpers are in `scripts/lib/trueforge.ts`.
+Shared API helpers are in `scripts/lib/trueforge.ts`; a minimal hand-rolled MCP server for Experiments is in `scripts/lib/probe-mcp.ts`.
 
 ## What's pinned and why
 
@@ -71,5 +72,6 @@ Shared API helpers are in `scripts/lib/trueforge.ts`.
 | `PORT` | `8790` | TrueForge's default |
 | `DO_NOT_TRACK` | `1` | Disables OpenUI's install telemetry, as a second safeguard |
 | `SENTRY_ENABLED` | `false` | Already the default; set explicitly |
+| `OUTBOUND_URL_ALLOWED_HOSTS` | `["127.0.0.1"]` | TrueForge's outbound URL guard blocks loopback, so without this it refuses to register our own MCP servers on `127.0.0.1`. It allows the whole host (every port), not one URL |
 
 TrueForge keeps its data (including the OpenRouter key, unencrypted) in `~/Library/Application Support/trueforge/db/db.sqlite`, and sandboxes under `…/trueforge/sandboxes/`.

@@ -1,0 +1,12 @@
+{
+  "mode": "guard",
+  "startedAt": "2026-10-20T13:08:34.787Z",
+  "E10_healthz": {
+    "status": "ok",
+    "version": "0.179.2"
+  },
+  "register_probe_mcp": {
+    "status": 400,
+    "body": "{\"error\":{\"message\":\"Outbound URL blocked for host \\\"127.0.0.1\\\"\"}}"
+  }
+}

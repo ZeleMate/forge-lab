@@ -13,16 +13,31 @@ export type ModelName = (typeof ALL_MODELS)[number]; // a union of the string li
 // { data: [...], pagination: {...} }. `Envelope<T>` describes that wrapper.
 export type Envelope<T> = { data: T; pagination?: { next_page_token?: string | null } };
 
-// A generic function: the caller says what shape it expects inside `data` (T).
-export async function api<T>(method: string, path: string, body?: unknown): Promise<Envelope<T>> {
+// The raw outcome of one call. Never throws on an HTTP error, so a script can
+// record an expected 4xx. `bytes` is the response body size on the wire.
+export type RawResult = { status: number; bytes: number; text: string; json: unknown };
+
+export async function request(method: string, path: string, body?: unknown): Promise<RawResult> {
   const res = await fetch(`${BASE}${path}`, {
     method,
     headers: body ? { "content-type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,
   });
   const text = await res.text();
-  if (!res.ok) throw new Error(`${method} ${path} -> HTTP ${res.status}: ${text.slice(0, 500)}`);
-  return (text ? JSON.parse(text) : { data: undefined }) as Envelope<T>;
+  let json: unknown;
+  try {
+    json = text ? JSON.parse(text) : undefined;
+  } catch {
+    json = undefined; // not JSON (e.g. an HTML error page); `text` still has it
+  }
+  return { status: res.status, bytes: new TextEncoder().encode(text).length, text, json };
+}
+
+// A generic function: the caller says what shape it expects inside `data` (T).
+export async function api<T>(method: string, path: string, body?: unknown): Promise<Envelope<T>> {
+  const res = await request(method, path, body);
+  if (res.status >= 400) throw new Error(`${method} ${path} -> HTTP ${res.status}: ${res.text.slice(0, 500)}`);
+  return (res.json ?? { data: undefined }) as Envelope<T>;
 }
 
 export async function serverVersion(): Promise<string> {
@@ -33,7 +48,14 @@ export async function serverVersion(): Promise<string> {
 }
 
 // Only the fields we read. Everything else in the payloads is ignored.
-export type Turn = { id: string; state: { status: string; metrics?: Record<string, number>; error?: unknown } };
+export type Turn = {
+  id: string;
+  previous_turn_id?: string | null;
+  input?: { type: string; content?: unknown }[];
+  created_at?: string;
+  // `reason` is set on `cancelled`; `error` on `error`.
+  state: { status: string; metrics?: Record<string, number>; error?: unknown; reason?: string };
+};
 export type Event = { type: string; [key: string]: unknown };
 
 // ---------- setup ----------
@@ -70,6 +92,29 @@ export async function openExperimentSession(agent: string, experiment: string) {
 
 // ---------- running turns ----------
 
+// Starts a Turn and returns at once (`stream: false`), still `running`.
+// `previousTurnId`: omitted means "auto" (the Session tip), "none" a new root,
+// an id forks from that Turn.
+export async function createTurn(sessionId: string, content: string, previousTurnId?: string): Promise<Turn> {
+  const { data } = await api<Turn>("POST", `/sessions/${sessionId}/turns`, {
+    input: [{ type: "user.message", content }],
+    stream: false, // returns at once; we poll instead of holding an SSE stream open
+    ...(previousTurnId ? { previous_turn_id: previousTurnId } : {}),
+  });
+  return data;
+}
+
+// Polls until the Turn leaves `running` (done, paused, cancelled or error).
+export async function waitTurn(sessionId: string, turnId: string, timeoutMs = 240_000): Promise<Turn> {
+  const started = Date.now();
+  for (;;) {
+    const { data: turn } = await api<Turn>("GET", `/sessions/${sessionId}/turns/${turnId}`);
+    if (turn.state.status !== "running") return turn;
+    if (Date.now() - started > timeoutMs) throw new Error(`turn ${turnId} still running after ${timeoutMs} ms`);
+    await Bun.sleep(2_000);
+  }
+}
+
 export async function runTurn(
   sessionId: string,
   content: string,
@@ -77,17 +122,9 @@ export async function runTurn(
   timeoutMs = 240_000,
 ): Promise<Turn & { wallMs: number }> {
   const started = Date.now();
-  const { data: created } = await api<Turn>("POST", `/sessions/${sessionId}/turns`, {
-    input: [{ type: "user.message", content }],
-    stream: false, // returns at once; we poll instead of holding an SSE stream open
-    ...(previousTurnId ? { previous_turn_id: previousTurnId } : {}),
-  });
-  for (;;) {
-    const { data: turn } = await api<Turn>("GET", `/sessions/${sessionId}/turns/${created.id}`);
-    if (turn.state.status !== "running") return { ...turn, wallMs: Date.now() - started };
-    if (Date.now() - started > timeoutMs) throw new Error(`turn ${created.id} still running after ${timeoutMs} ms`);
-    await Bun.sleep(2_000);
-  }
+  const created = await createTurn(sessionId, content, previousTurnId);
+  const turn = await waitTurn(sessionId, created.id, timeoutMs);
+  return { ...turn, wallMs: Date.now() - started };
 }
 
 export async function allEvents(sessionId: string, turnId: string): Promise<Event[]> {

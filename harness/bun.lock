@@ -6,6 +6,7 @@
       "name": "@forge-lab/harness",
       "devDependencies": {
         "@truefoundry/trueforge": "0.179.2",
+        "@truefoundry/trueforge-sdk": "0.179.0",
       },
     },
   },

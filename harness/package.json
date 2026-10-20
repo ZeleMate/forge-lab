@@ -3,12 +3,14 @@
   "private": true,
   "description": "Pinned local TrueForge server for forge-lab. See README.md for the hardening rules.",
   "scripts": {
-    "start": "HOST=127.0.0.1 PORT=8790 DO_NOT_TRACK=1 SENTRY_ENABLED=false trueforge",
+    "start": "HOST=127.0.0.1 PORT=8790 DO_NOT_TRACK=1 SENTRY_ENABLED=false OUTBOUND_URL_ALLOWED_HOSTS='[\"127.0.0.1\"]' trueforge",
     "apply:provider": "bun --env-file=../.env scripts/apply-provider.ts",
     "smoke": "bun scripts/smoke.ts",
-    "sandbox-check": "bun scripts/sandbox-check.ts"
+    "sandbox-check": "bun scripts/sandbox-check.ts",
+    "session-api-check": "bun scripts/session-api-check.ts"
   },
   "devDependencies": {
-    "@truefoundry/trueforge": "0.179.2"
+    "@truefoundry/trueforge": "0.179.2",
+    "@truefoundry/trueforge-sdk": "0.179.0"
   }
 }

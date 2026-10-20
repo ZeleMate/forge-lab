@@ -1,0 +1,831 @@
+{
+  "mode": "full",
+  "startedAt": "2026-10-20T13:12:24.123Z",
+  "E10_healthz": {
+    "status": "ok",
+    "version": "0.179.2"
+  },
+  "register_probe_mcp": {
+    "status": 200,
+    "body": "{\"data\":{\"name\":\"session-probe\",\"manifest\":{\"type\":\"remote\",\"name\":\"session-probe\",\"url\":\"http://127.0.0.1:8791/mcp\",\"description\":\"Throwaway probe server for the session API live check.\"},\"auth_status\":{\"status\":\"not_required\"}}}"
+  },
+  "E1_E3_whoami": {
+    "turns": {
+      "a1": {
+        "id": "01m5cq23t11ptm6q42ctp4432v",
+        "status": "done",
+        "metrics": {
+          "total_input_tokens": 4099,
+          "total_output_tokens": 9,
+          "total_tokens": 4108,
+          "total_cache_read_tokens": 4032,
+          "total_reasoning_tokens": 2
+        },
+        "eventCounts": {
+          "turn.created": 1,
+          "mcp.initialize": 1,
+          "model.message": 2,
+          "tool.response": 1,
+          "turn.done": 1
+        },
+        "toolCalls": [
+          "whoami"
+        ],
+        "usedMetaTools": false,
+        "usedSubagent": false,
+        "cacheReadTokens": 4032,
+        "mcpInit": [
+          {
+            "name": "session-probe",
+            "id": "session-probe",
+            "session_id": "fa366f01-a20c-4046-ae9d-984ce6035ba9",
+            "transport_type": "streamable-http"
+          }
+        ]
+      },
+      "a2": {
+        "id": "01m5cq25s0sqhzsrf4e3a3vqqp",
+        "status": "done",
+        "metrics": {
+          "total_input_tokens": 4169,
+          "total_output_tokens": 22,
+          "total_tokens": 4191,
+          "total_cache_read_tokens": 4096,
+          "total_reasoning_tokens": 15
+        },
+        "eventCounts": {
+          "turn.created": 1,
+          "model.message": 2,
+          "tool.response": 1,
+          "turn.done": 1
+        },
+        "toolCalls": [
+          "whoami"
+        ],
+        "usedMetaTools": false,
+        "usedSubagent": false,
+        "cacheReadTokens": 4096,
+        "mcpInit": []
+      },
+      "b1": {
+        "id": "01m5cq27r9cvaxxd437xdrhsxp",
+        "status": "done",
+        "metrics": {
+          "total_input_tokens": 4099,
+          "total_output_tokens": 9,
+          "total_tokens": 4108,
+          "total_cache_read_tokens": 4032,
+          "total_reasoning_tokens": 2
+        },
+        "eventCounts": {
+          "turn.created": 1,
+          "mcp.initialize": 1,
+          "model.message": 2,
+          "tool.response": 1,
+          "turn.done": 1
+        },
+        "toolCalls": [
+          "whoami"
+        ],
+        "usedMetaTools": false,
+        "usedSubagent": false,
+        "cacheReadTokens": 4032,
+        "mcpInit": [
+          {
+            "name": "session-probe",
+            "id": "session-probe",
+            "session_id": "08df0bf6-2a72-4576-bd42-c664f29bbd22",
+            "transport_type": "streamable-http"
+          }
+        ]
+      }
+    },
+    "sessions": {
+      "A": "01m5cq23t1qa12skedhxn2csk1",
+      "B": "01m5cq27r49znrynt1vazqb1mx"
+    },
+    "calls": [
+      {
+        "driverSession": "01m5cq23t1qa12skedhxn2csk1",
+        "driverTurn": "01m5cq23t11ptm6q42ctp4432v",
+        "mcpSessionId": "fa366f01-a20c-4046-ae9d-984ce6035ba9",
+        "meta": null,
+        "headers": {
+          "accept": "application/json, text/event-stream",
+          "accept-encoding": "gzip, deflate",
+          "accept-language": "*",
+          "connection": "keep-alive",
+          "content-length": "88",
+          "content-type": "application/json",
+          "host": "127.0.0.1:8791",
+          "mcp-protocol-version": "2025-11-25",
+          "mcp-session-id": "fa366f01-a20c-4046-ae9d-984ce6035ba9",
+          "sec-fetch-mode": "cors",
+          "user-agent": "undici"
+        },
+        "correlation": {
+          "matches": [
+            {
+              "session": "01m5cq23t1qa12skedhxn2csk1",
+              "turn": "01m5cq23t11ptm6q42ctp4432v"
+            }
+          ],
+          "scannedSessions": 7
+        },
+        "inFlight": [
+          {
+            "turn": "01m5cq23t11ptm6q42ctp4432v",
+            "isDriversTurn": true,
+            "status": "running",
+            "hasMetrics": false,
+            "eventTypes": [
+              "turn.created",
+              "mcp.initialize",
+              "model.message"
+            ],
+            "toolCallNames": [
+              "whoami"
+            ],
+            "hasToolResponse": false
+          }
+        ]
+      },
+      {
+        "driverSession": "01m5cq23t1qa12skedhxn2csk1",
+        "driverTurn": "01m5cq25s0sqhzsrf4e3a3vqqp",
+        "mcpSessionId": "fa366f01-a20c-4046-ae9d-984ce6035ba9",
+        "meta": null,
+        "headers": {
+          "accept": "application/json, text/event-stream",
+          "accept-encoding": "gzip, deflate",
+          "accept-language": "*",
+          "connection": "keep-alive",
+          "content-length": "88",
+          "content-type": "application/json",
+          "host": "127.0.0.1:8791",
+          "mcp-session-id": "fa366f01-a20c-4046-ae9d-984ce6035ba9",
+          "sec-fetch-mode": "cors",
+          "user-agent": "undici"
+        },
+        "correlation": {
+          "matches": [
+            {
+              "session": "01m5cq23t1qa12skedhxn2csk1",
+              "turn": "01m5cq23t11ptm6q42ctp4432v"
+            }
+          ],
+          "scannedSessions": 7
+        },
+        "inFlight": [
+          {
+            "turn": "01m5cq25s0sqhzsrf4e3a3vqqp",
+            "isDriversTurn": true,
+            "status": "running",
+            "hasMetrics": false,
+            "eventTypes": [
+              "turn.created",
+              "model.message"
+            ],
+            "toolCallNames": [
+              "whoami"
+            ],
+            "hasToolResponse": false
+          }
+        ]
+      },
+      {
+        "driverSession": "01m5cq27r49znrynt1vazqb1mx",
+        "driverTurn": "01m5cq27r9cvaxxd437xdrhsxp",
+        "mcpSessionId": "08df0bf6-2a72-4576-bd42-c664f29bbd22",
+        "meta": null,
+        "headers": {
+          "accept": "application/json, text/event-stream",
+          "accept-encoding": "gzip, deflate",
+          "accept-language": "*",
+          "connection": "keep-alive",
+          "content-length": "88",
+          "content-type": "application/json",
+          "host": "127.0.0.1:8791",
+          "mcp-protocol-version": "2025-11-25",
+          "mcp-session-id": "08df0bf6-2a72-4576-bd42-c664f29bbd22",
+          "sec-fetch-mode": "cors",
+          "user-agent": "undici"
+        },
+        "correlation": {
+          "matches": [
+            {
+              "session": "01m5cq27r49znrynt1vazqb1mx",
+              "turn": "01m5cq27r9cvaxxd437xdrhsxp"
+            }
+          ],
+          "scannedSessions": 8
+        },
+        "inFlight": [
+          {
+            "turn": "01m5cq27r9cvaxxd437xdrhsxp",
+            "isDriversTurn": true,
+            "status": "running",
+            "hasMetrics": false,
+            "eventTypes": [
+              "turn.created",
+              "mcp.initialize",
+              "model.message"
+            ],
+            "toolCallNames": [
+              "whoami"
+            ],
+            "hasToolResponse": false
+          }
+        ]
+      },
+      {
+        "driverSession": "01m5cq3fh9pqnhgts9d5vta14h",
+        "driverTurn": "01m5cq4917wa6p4w0qjrqe4fk7",
+        "mcpSessionId": "7864e5db-9ce7-40f3-b0da-1c5204dfeb3e",
+        "meta": null,
+        "headers": {
+          "accept": "application/json, text/event-stream",
+          "accept-encoding": "gzip, deflate",
+          "accept-language": "*",
+          "connection": "keep-alive",
+          "content-length": "88",
+          "content-type": "application/json",
+          "host": "127.0.0.1:8791",
+          "mcp-session-id": "7864e5db-9ce7-40f3-b0da-1c5204dfeb3e",
+          "sec-fetch-mode": "cors",
+          "user-agent": "undici"
+        },
+        "correlation": {
+          "matches": [
+            {
+              "session": "01m5cq3fh9pqnhgts9d5vta14h",
+              "turn": "01m5cq3fhbt9yvvwbneb5c08y8"
+            }
+          ],
+          "scannedSessions": 12
+        },
+        "inFlight": [
+          {
+            "turn": "01m5cq4917wa6p4w0qjrqe4fk7",
+            "isDriversTurn": true,
+            "status": "running",
+            "hasMetrics": false,
+            "eventTypes": [
+              "turn.created",
+              "model.message"
+            ],
+            "toolCallNames": [
+              "call_tool"
+            ],
+            "hasToolResponse": false
+          }
+        ]
+      }
+    ],
+    "probeLog": [
+      {
+        "at": "2026-10-20T13:12:24.132Z",
+        "httpMethod": "POST",
+        "rpcMethod": "initialize",
+        "mcpSessionId": null
+      },
+      {
+        "at": "2026-10-20T13:12:24.133Z",
+        "httpMethod": "POST",
+        "rpcMethod": "notifications/initialized",
+        "mcpSessionId": "fa366f01-a20c-4046-ae9d-984ce6035ba9"
+      },
+      {
+        "at": "2026-10-20T13:12:24.133Z",
+        "httpMethod": "GET",
+        "mcpSessionId": "fa366f01-a20c-4046-ae9d-984ce6035ba9"
+      },
+      {
+        "at": "2026-10-20T13:12:24.133Z",
+        "httpMethod": "POST",
+        "rpcMethod": "tools/list",
+        "mcpSessionId": "fa366f01-a20c-4046-ae9d-984ce6035ba9"
+      },
+      {
+        "at": "2026-10-20T13:12:24.947Z",
+        "httpMethod": "POST",
+        "rpcMethod": "tools/call",
+        "mcpSessionId": "fa366f01-a20c-4046-ae9d-984ce6035ba9"
+      },
+      {
+        "at": "2026-10-20T13:12:26.152Z",
+        "httpMethod": "POST",
+        "rpcMethod": "tools/list",
+        "mcpSessionId": "fa366f01-a20c-4046-ae9d-984ce6035ba9"
+      },
+      {
+        "at": "2026-10-20T13:12:26.798Z",
+        "httpMethod": "POST",
+        "rpcMethod": "tools/call",
+        "mcpSessionId": "fa366f01-a20c-4046-ae9d-984ce6035ba9"
+      },
+      {
+        "at": "2026-10-20T13:12:28.174Z",
+        "httpMethod": "POST",
+        "rpcMethod": "initialize",
+        "mcpSessionId": null
+      },
+      {
+        "at": "2026-10-20T13:12:28.178Z",
+        "httpMethod": "POST",
+        "rpcMethod": "notifications/initialized",
+        "mcpSessionId": "08df0bf6-2a72-4576-bd42-c664f29bbd22"
+      },
+      {
+        "at": "2026-10-20T13:12:28.178Z",
+        "httpMethod": "GET",
+        "mcpSessionId": "08df0bf6-2a72-4576-bd42-c664f29bbd22"
+      },
+      {
+        "at": "2026-10-20T13:12:28.179Z",
+        "httpMethod": "POST",
+        "rpcMethod": "tools/list",
+        "mcpSessionId": "08df0bf6-2a72-4576-bd42-c664f29bbd22"
+      },
+      {
+        "at": "2026-10-20T13:12:28.953Z",
+        "httpMethod": "POST",
+        "rpcMethod": "tools/call",
+        "mcpSessionId": "08df0bf6-2a72-4576-bd42-c664f29bbd22"
+      }
+    ],
+    "headerNamesSeen": [
+      "accept",
+      "accept-encoding",
+      "accept-language",
+      "connection",
+      "content-length",
+      "content-type",
+      "host",
+      "mcp-protocol-version",
+      "mcp-session-id",
+      "sec-fetch-mode",
+      "user-agent"
+    ]
+  },
+  "E4_self_cancel": {
+    "caller": {
+      "id": "01m5cq29qa14qke3bhn8b1fx96",
+      "state": {
+        "status": "cancelled",
+        "reason": "cancelled-for-next-turn",
+        "completed_at": "2026-10-20T13:12:31.290Z"
+      },
+      "eventTypes": [
+        "turn.created",
+        "model.message",
+        "turn.done"
+      ]
+    },
+    "toolSaw": {
+      "createStatus": 200,
+      "newTurn": "01m5cq2assdrfqex62th13ycbz",
+      "newTurnPrevious": "01m5cq29qa14qke3bhn8b1fx96",
+      "callerStateSeenByToolAfter4s": {
+        "status": "cancelled",
+        "reason": "cancelled-for-next-turn",
+        "completed_at": "2026-10-20T13:12:31.290Z"
+      }
+    },
+    "forked": {
+      "id": "01m5cq2assdrfqex62th13ycbz",
+      "previous_turn_id": "01m5cq29qa14qke3bhn8b1fx96",
+      "status": "done",
+      "answer": "forked"
+    }
+  },
+  "E6_fork_from_cancelled": {
+    "cancelledForNextTurn": {
+      "from": {
+        "id": "01m5cq29qa14qke3bhn8b1fx96",
+        "state": {
+          "status": "cancelled",
+          "reason": "cancelled-for-next-turn",
+          "completed_at": "2026-10-20T13:12:31.290Z"
+        }
+      },
+      "fork": {
+        "id": "01m5cq2f4j4knsvey6krkvr182",
+        "status": "done",
+        "metrics": {
+          "total_input_tokens": 2139,
+          "total_output_tokens": 3,
+          "total_tokens": 2142,
+          "total_cache_read_tokens": 2112,
+          "total_reasoning_tokens": 1
+        },
+        "eventCounts": {
+          "turn.created": 1,
+          "model.message": 1,
+          "turn.done": 1
+        },
+        "toolCalls": [],
+        "usedMetaTools": false,
+        "usedSubagent": false,
+        "cacheReadTokens": 2112
+      },
+      "answer": "ok"
+    },
+    "clientCancelled": {
+      "cancelCall": {
+        "status": 200,
+        "body": "{}"
+      },
+      "from": {
+        "id": "01m5cq2h3qcx31eewcvzr1adqh",
+        "state": {
+          "status": "cancelled",
+          "reason": "client-cancelled",
+          "completed_at": "2026-10-20T13:12:42.766Z",
+          "metrics": {
+            "total_input_tokens": 0,
+            "total_output_tokens": 0,
+            "total_tokens": 0
+          }
+        }
+      },
+      "fork": {
+        "id": "01m5cq2p0kyvhypacxq4vx6179",
+        "status": "done",
+        "metrics": {
+          "total_input_tokens": 2050,
+          "total_output_tokens": 97,
+          "total_tokens": 2147,
+          "total_cache_read_tokens": 2048,
+          "total_reasoning_tokens": 95
+        },
+        "eventCounts": {
+          "turn.created": 1,
+          "model.message": 1,
+          "turn.done": 1
+        },
+        "toolCalls": [],
+        "usedMetaTools": false,
+        "usedSubagent": false,
+        "cacheReadTokens": 2048
+      },
+      "answer": "ok"
+    }
+  },
+  "E5_fork_from_paused": {
+    "paused": {
+      "id": "01m5cq2qzt3fqnnj9sb4tesx0w",
+      "state": {
+        "status": "done",
+        "output": null,
+        "required_actions": [
+          {
+            "type": "tool.approval_required",
+            "id": "01m5cq2sftf15eth9mh0gqtwrt",
+            "created_at": "2026-10-20T13:12:46.330Z",
+            "thread_id": "main",
+            "tool_calls": [
+              {
+                "id": "call_abbb06326aec45c09eef9868",
+                "source_event_id": "01m5cq2r06dqqd8dtvshrdtgrx"
+              }
+            ]
+          }
+        ],
+        "completed_at": "2026-10-20T13:12:46.330Z",
+        "metrics": {
+          "total_input_tokens": 2035,
+          "total_output_tokens": 6,
+          "total_tokens": 2041,
+          "total_cache_read_tokens": 1984,
+          "total_reasoning_tokens": 1
+        }
+      },
+      "eventTypes": [
+        "turn.created",
+        "mcp.initialize",
+        "model.message",
+        "tool.approval_required",
+        "turn.done"
+      ]
+    },
+    "forkAttempt": {
+      "status": 200,
+      "body": "{\"data\":{\"id\":\"01m5cq2syxvvvr95gf9f9s02c3\",\"session_id\":\"01m5cq2qznsyw4bz521748mag8\",\"previous_turn_id\":\"01m5cq2qzt3fqnnj9sb4tesx0w\",\"input\":[{\"type\":\"user.message\",\"content\":\"Reply with the word ok.\"}],\"state\":{\"status\":\"running\"},\"created_at\":\"2026-10-20T13:12:46.816Z\"}}"
+    }
+  },
+  "E11_replay": {
+    "source": "01m5cq2sz79a3gp0667kmqprpb",
+    "specCopySource": "GET /agents/{id} manifest",
+    "createInline": {
+      "status": 201,
+      "agent": {
+        "type": "inline",
+        "spec": {
+          "model": {
+            "name": "openrouter/glm-5-3-flash",
+            "params": {
+              "max_tokens": 16384
+            }
+          },
+          "instructions": "You are a fixture for harness experiments. Do exactly what the user asks and nothing more. When asked to call a tool, call it exactly once, then answer in one short sentence.",
+          "mcp_servers": [
+            {
+              "name": "session-probe",
+              "enable_tools": [
+                "@all"
+              ],
+              "disable_tools": [],
+              "preload_tools": [],
+              "require_approval_for_tools": [
+                "@write",
+                "@destructive"
+              ],
+              "preload": true
+            }
+          ],
+          "config": {
+            "iteration_limit": 6,
+            "sandbox": {
+              "enabled": false,
+              "file_downloads": true
+            },
+            "dynamic_sub_agents": {
+              "enabled": true
+            },
+            "context_management": {
+              "compaction": {
+                "enabled": true
+              },
+              "large_tool_response": {
+                "enabled": true
+              }
+            },
+            "generative_ui": {
+              "enabled": true
+            },
+            "ask_user_questions": {
+              "enabled": true
+            },
+            "web_search": {
+              "enabled": false
+            }
+          }
+        }
+      }
+    },
+    "inline": "01m5cq3fh9pqnhgts9d5vta14h",
+    "replayedInputs": 3,
+    "turns": [
+      {
+        "id": "01m5cq3fhbt9yvvwbneb5c08y8",
+        "previous": null,
+        "status": "done",
+        "inputTokens": [
+          2026
+        ]
+      },
+      {
+        "id": "01m5cq3kesxwff5qn8xwq8342c",
+        "previous": "01m5cq3fhbt9yvvwbneb5c08y8",
+        "status": "done",
+        "inputTokens": [
+          2267
+        ]
+      },
+      {
+        "id": "01m5cq3qc9d5v038x10hrjygrn",
+        "previous": "01m5cq3kesxwff5qn8xwq8342c",
+        "status": "done",
+        "inputTokens": [
+          2302
+        ]
+      }
+    ]
+  },
+  "E13_E14_patch_refusals": {
+    "partialSpecOnInline": {
+      "status": 400,
+      "body": "{\"error\":{\"message\":\"✖ Invalid input: expected object, received undefined\\n  → at agent.spec.model\"}}"
+    },
+    "inlineConfigAfter": {
+      "iteration_limit": 6,
+      "sandbox": {
+        "enabled": false,
+        "file_downloads": true
+      },
+      "dynamic_sub_agents": {
+        "enabled": true
+      },
+      "context_management": {
+        "compaction": {
+          "enabled": true
+        },
+        "large_tool_response": {
+          "enabled": true
+        }
+      },
+      "generative_ui": {
+        "enabled": true
+      },
+      "ask_user_questions": {
+        "enabled": true
+      },
+      "web_search": {
+        "enabled": false
+      }
+    },
+    "fullSpecOnNamed": {
+      "status": 422,
+      "body": "{\"error\":{\"message\":\"Session 01m5cq23t1qa12skedhxn2csk1 is named; agent cannot be updated\"}}"
+    }
+  },
+  "E12a_patch_compaction": {
+    "patch": {
+      "status": 200,
+      "body": "{\"data\":{\"id\":\"01m5cq3fh9pqnhgts9d5vta14h\",\"agent\":{\"type\":\"inline\",\"spec\":{\"model\":{\"name\":\"openrouter/glm-5-3-flash\",\"params\":{\"max_tokens\":16384}},\"instructions\":\"You are a fixture for harness experiments. Do exactly what the user asks and nothing more. When asked to call a tool, call it exactly "
+    },
+    "trigger": 3110,
+    "before": {
+      "lastInputTokens": 2302,
+      "messagesTokens": 245,
+      "fixedTokens": 2057
+    },
+    "after": {
+      "id": "01m5cq3z7ea15cqe3btq5xcr2a",
+      "status": "done",
+      "inputTokensPerCall": [
+        2583
+      ],
+      "messagesTokensPerCall": [
+        526
+      ],
+      "turnTotalInputTokens": 4199,
+      "sumOfModelMessageInputTokens": 2583,
+      "answer": "We discussed how a lighthouse lens concentrates light, how a sourdough starter makes bread rise, and how a bicycle's derailleur changes gear."
+    }
+  },
+  "E12b_E7_iteration_limit_and_error_fork": {
+    "patch": {
+      "status": 200
+    },
+    "limited": {
+      "id": "01m5cq4917wa6p4w0qjrqe4fk7",
+      "state": {
+        "status": "error",
+        "message": "You have reached iteration limit of 1, please request again",
+        "completed_at": "2026-10-20T13:13:37.252Z",
+        "metrics": {
+          "total_input_tokens": 2664,
+          "total_output_tokens": 24,
+          "total_tokens": 2688,
+          "total_cache_read_tokens": 1024,
+          "total_reasoning_tokens": 1
+        }
+      },
+      "status": "error",
+      "metrics": {
+        "total_input_tokens": 2664,
+        "total_output_tokens": 24,
+        "total_tokens": 2688,
+        "total_cache_read_tokens": 1024,
+        "total_reasoning_tokens": 1
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 1,
+        "tool.response": 1,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 1024
+    },
+    "restore": {
+      "status": 200
+    },
+    "forkFromError": {
+      "id": "01m5cq4cz48q6fd8vqfpxb98a1",
+      "status": "done",
+      "metrics": {
+        "total_input_tokens": 2704,
+        "total_output_tokens": 3,
+        "total_tokens": 2707,
+        "total_cache_read_tokens": 2048,
+        "total_reasoning_tokens": 1
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 1,
+        "turn.done": 1
+      },
+      "toolCalls": [],
+      "usedMetaTools": false,
+      "usedSubagent": false,
+      "cacheReadTokens": 2048,
+      "answer": "ok"
+    }
+  },
+  "E9_sdk": {
+    "getSessionKeys": [
+      "id",
+      "agent",
+      "title",
+      "shared",
+      "createdBySubject",
+      "createdAt",
+      "updatedAt",
+      "metrics",
+      "metadata",
+      "source"
+    ],
+    "firstTurnKeys": [
+      "id",
+      "sessionId",
+      "previousTurnId",
+      "input",
+      "state",
+      "createdAt"
+    ],
+    "turnsIterated": 5,
+    "firstEventPage": [
+      "turn.created",
+      "mcp.initialize",
+      "model.message",
+      "tool.response",
+      "model.message",
+      "turn.done"
+    ],
+    "ok": true
+  },
+  "E8_payload_bytes": {
+    "getSession": {
+      "n": 6,
+      "max": 1293,
+      "mean": 661
+    },
+    "listTurnsPage": {
+      "n": 6,
+      "max": 7846,
+      "mean": 3527
+    },
+    "getTurn": {
+      "n": 19,
+      "max": 1987,
+      "mean": 1110
+    },
+    "eventsPage": {
+      "n": 19,
+      "max": 3940,
+      "mean": 2232
+    },
+    "sessionEventsPage": {
+      "n": 6,
+      "max": 15673,
+      "mean": 7310
+    },
+    "eventByType": {
+      "turn.created": {
+        "count": 19,
+        "max": 345,
+        "mean": 324
+      },
+      "mcp.initialize": {
+        "count": 6,
+        "max": 267,
+        "mean": 267
+      },
+      "model.message": {
+        "count": 21,
+        "max": 1478,
+        "mean": 702
+      },
+      "tool.response": {
+        "count": 4,
+        "max": 209,
+        "mean": 195
+      },
+      "turn.done": {
+        "count": 19,
+        "max": 1832,
+        "mean": 953
+      },
+      "tool.approval_required": {
+        "count": 1,
+        "max": 227,
+        "mean": 227
+      }
+    }
+  },
+  "sessions": {
+    "A": "01m5cq23t1qa12skedhxn2csk1",
+    "B": "01m5cq27r49znrynt1vazqb1mx",
+    "C": "01m5cq2qznsyw4bz521748mag8",
+    "D": "01m5cq2h3masgghxhb6g3t7r6h",
+    "source": "01m5cq2sz79a3gp0667kmqprpb",
+    "inline": "01m5cq3fh9pqnhgts9d5vta14h"
+  }
+}
