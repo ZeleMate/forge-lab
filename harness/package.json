@@ -7,10 +7,12 @@
     "apply:provider": "bun --env-file=../.env scripts/apply-provider.ts",
     "smoke": "bun scripts/smoke.ts",
     "sandbox-check": "bun scripts/sandbox-check.ts",
-    "session-api-check": "bun scripts/session-api-check.ts"
+    "session-api-check": "bun scripts/session-api-check.ts",
+    "ts-morph-bench": "bun scripts/ts-morph-bench-run.ts"
   },
   "devDependencies": {
     "@truefoundry/trueforge": "0.179.2",
-    "@truefoundry/trueforge-sdk": "0.179.0"
+    "@truefoundry/trueforge-sdk": "0.179.0",
+    "ts-morph": "28.0.0"
   }
 }

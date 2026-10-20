@@ -1,0 +1,1944 @@
+{
+  "snapshot": "/private/tmp/claude-501/-Users-zelenyianszkimate-Documents-repos-forge-lab/833c5250-dcbd-4f64-9a56-1a759aef597e/scratchpad/snapshot",
+  "runs": 7,
+  "table": "| Metric (median of 7 runs) | bun 1.4.3 | node v26.12.0 |\n|---|---:|---:|\n| Process wall time (import + load + all queries + full check) | 1580 ms | 1450 ms |\n| Cold load: add 412 files | 188 ms | 191 ms |\n| First type-aware query (find_references AgentThread; builds the Program) | 140 ms | 127 ms |\n| find_declaration: first call, worst symbol | 23 ms | 16 ms |\n| find_declaration: warm, median symbol | 4.94 ms | 3.69 ms |\n| find_references: first call, worst symbol | 140 ms | 127 ms |\n| find_references: warm, median symbol | 3.66 ms | 2.50 ms |\n| type_of: first call, worst symbol | 34 ms | 45 ms |\n| type_of: warm, median symbol | 0.02 ms | 0.03 ms |\n| Stress find_references:Database (210 results) | 13 ms | 14 ms |\n| Stress find_references:RequestErrorResponseSchema (201 results) | 20 ms | 20 ms |\n| Stress full_check (1505 results) | 776 ms | 619 ms |\n| RSS after load | 178 MB | 225 MB |\n| RSS after the representative queries | 437 MB | 291 MB |\n| RSS after full check | 513 MB | 350 MB |\n| Peak RSS (time -l) | 561 MB | 371 MB |",
+  "detail": "| Symbol | Tool | First (Bun / Node) | Warm (Bun / Node) | Results |\n|---|---|---:|---:|---:|\n| `AgentThread` | find_declaration | 23 ms / 16 ms | 5.89 ms / 4.34 ms | 1 |\n| `AgentThread` | find_references | 140 ms / 127 ms | 4.24 ms / 2.75 ms | 24 |\n| `AgentThread` | type_of | 34 ms / 45 ms | 0.02 ms / 0.04 ms | 1 |\n| `LargeToolResponseProcessor` | find_declaration | 6.11 ms / 6.00 ms | 4.54 ms / 3.83 ms | 1 |\n| `LargeToolResponseProcessor` | find_references | 6.16 ms / 2.87 ms | 2.38 ms / 1.48 ms | 2 |\n| `LargeToolResponseProcessor` | type_of | 0.48 ms / 0.32 ms | 0.02 ms / 0.03 ms | 1 |\n| `DynamicSubAgents` | find_declaration | 5.06 ms / 4.42 ms | 4.07 ms / 3.60 ms | 1 |\n| `DynamicSubAgents` | find_references | 5.87 ms / 3.95 ms | 1.95 ms / 1.50 ms | 2 |\n| `DynamicSubAgents` | type_of | 0.28 ms / 0.27 ms | 0.02 ms / 0.01 ms | 1 |\n| `SessionHandle` | find_declaration | 5.01 ms / 4.26 ms | 4.94 ms / 3.63 ms | 1 |\n| `SessionHandle` | find_references | 13 ms / 9.06 ms | 4.36 ms / 2.68 ms | 20 |\n| `SessionHandle` | type_of | 0.66 ms / 0.38 ms | 0.03 ms / 0.03 ms | 1 |\n| `buildTurnSandbox` | find_declaration | 5.39 ms / 4.44 ms | 4.74 ms / 3.63 ms | 1 |\n| `buildTurnSandbox` | find_references | 12 ms / 7.83 ms | 3.66 ms / 2.53 ms | 4 |\n| `buildTurnSandbox` | type_of | 0.81 ms / 0.65 ms | 0.02 ms / 0.02 ms | 1 |",
+  "passes": {
+    "bun": [
+      {
+        "runtime": "bun 1.4.3",
+        "files": 412,
+        "loadMs": 252.851709,
+        "rssAfterLoadMb": 169,
+        "rssAfterQueriesMb": 442,
+        "rssAfterFullCheckMb": 508,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 21.67420800000002,
+              "warmMs": 5.9117500000000405,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 155.05654200000004,
+              "warmMs": 4.360125000000039,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 31.799709000000007,
+              "warmMs": 0.018916999999987638,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 8.961125000000038,
+              "warmMs": 4.915750000000003,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 6.164457999999968,
+              "warmMs": 2.1125410000000784,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.6510839999999689,
+              "warmMs": 0.0206670000000031,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.509541000000013,
+              "warmMs": 5.03733299999999,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 5.8722080000000005,
+              "warmMs": 2.2929579999999987,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.35991599999999835,
+              "warmMs": 0.025291000000038366,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 6.16883299999995,
+              "warmMs": 5.015125000000012,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 11.748291999999992,
+              "warmMs": 4.5243339999999534,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.6947089999999889,
+              "warmMs": 0.02800000000002001,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 5.3916660000001,
+              "warmMs": 4.735667000000035,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 11.800875000000019,
+              "warmMs": 4.285333000000037,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.8119580000000042,
+              "warmMs": 0.01733400000000529,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 12.791416000000027,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 19.218833000000018,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 784.1768750000001,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1740,
+        "peakRssMb": 539
+      },
+      {
+        "runtime": "bun 1.4.3",
+        "files": 412,
+        "loadMs": 188.077041,
+        "rssAfterLoadMb": 178,
+        "rssAfterQueriesMb": 444,
+        "rssAfterFullCheckMb": 513,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 19.504707999999994,
+              "warmMs": 5.566958999999997,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 139.44487500000002,
+              "warmMs": 4.430583000000013,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 33.65587500000004,
+              "warmMs": 0.025999999999953616,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 9.833292000000029,
+              "warmMs": 4.759707999999932,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 6.0626250000000255,
+              "warmMs": 2.3824999999999363,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.47812499999997726,
+              "warmMs": 0.03645900000003621,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 9.366874999999936,
+              "warmMs": 6.625166000000036,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 7.435707999999977,
+              "warmMs": 2.9394170000000486,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.42799999999999727,
+              "warmMs": 0.09004199999992579,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 7.788999999999987,
+              "warmMs": 6.7131669999999986,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 15.65874999999994,
+              "warmMs": 4.544250000000034,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.6409170000000586,
+              "warmMs": 0.02800000000002001,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 4.966458999999986,
+              "warmMs": 3.8864169999999376,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 11.728750000000105,
+              "warmMs": 8.15016700000001,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.7051669999999604,
+              "warmMs": 0.01979099999994105,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 14.01075000000003,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 22.062082999999916,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 778.626584,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1670,
+        "peakRssMb": 527
+      },
+      {
+        "runtime": "bun 1.4.3",
+        "files": 412,
+        "loadMs": 169.17125,
+        "rssAfterLoadMb": 180,
+        "rssAfterQueriesMb": 446,
+        "rssAfterFullCheckMb": 499,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 23.397875,
+              "warmMs": 5.303667000000019,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 130.64825000000002,
+              "warmMs": 3.923000000000002,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 36.273167,
+              "warmMs": 0.02391600000004246,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 5.895416000000068,
+              "warmMs": 4.639416000000097,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 14.961667000000034,
+              "warmMs": 2.236083000000008,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.4355839999999489,
+              "warmMs": 0.020125000000007276,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 5.180500000000052,
+              "warmMs": 3.7413329999999405,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 5.415583000000083,
+              "warmMs": 1.655416999999943,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.27329199999996945,
+              "warmMs": 0.020249999999919055,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.798792000000049,
+              "warmMs": 5.141707999999994,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 11.880458999999973,
+              "warmMs": 4.799166000000014,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.7857089999999971,
+              "warmMs": 0.02183300000001509,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 6.201708000000053,
+              "warmMs": 5.1124999999999545,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 11.702750000000037,
+              "warmMs": 3.62337500000001,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.7389160000000174,
+              "warmMs": 0.018124999999940883,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 12.347833000000037,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 19.124959000000104,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 759.300792,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1560,
+        "peakRssMb": 572
+      },
+      {
+        "runtime": "bun 1.4.3",
+        "files": 412,
+        "loadMs": 177.06466700000001,
+        "rssAfterLoadMb": 178,
+        "rssAfterQueriesMb": 430,
+        "rssAfterFullCheckMb": 511,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 21.69104199999998,
+              "warmMs": 5.891083000000037,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 133.17866600000002,
+              "warmMs": 4.167624999999987,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 31.978917000000024,
+              "warmMs": 0.027875000000051386,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 8.796707999999967,
+              "warmMs": 4.240167000000042,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 5.372457999999938,
+              "warmMs": 3.392417000000023,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.46783400000003894,
+              "warmMs": 0.021500000000060027,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.7595830000000205,
+              "warmMs": 3.9174170000000004,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 6.293166000000042,
+              "warmMs": 1.7899170000000595,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.2754169999999476,
+              "warmMs": 0.018708000000060565,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 5.006250000000023,
+              "warmMs": 4.781917000000021,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 13.023083000000042,
+              "warmMs": 4.359540999999922,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.9703329999999823,
+              "warmMs": 0.0515419999999267,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 5.5617919999999685,
+              "warmMs": 4.8022079999999505,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 11.366166000000021,
+              "warmMs": 3.4565830000000233,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 1.095209000000068,
+              "warmMs": 0.013374999999996362,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 13.666375000000016,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 20.22883300000001,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 775.693791,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1580,
+        "peakRssMb": 574
+      },
+      {
+        "runtime": "bun 1.4.3",
+        "files": 412,
+        "loadMs": 181.519583,
+        "rssAfterLoadMb": 177,
+        "rssAfterQueriesMb": 437,
+        "rssAfterFullCheckMb": 518,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 28.428209000000038,
+              "warmMs": 6.358333000000016,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 144.32691599999998,
+              "warmMs": 4.7606250000000045,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 34.478875000000016,
+              "warmMs": 0.022708000000079664,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 6.06616699999995,
+              "warmMs": 4.442457999999988,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 5.729249999999979,
+              "warmMs": 4.784708000000023,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.45354200000008404,
+              "warmMs": 0.02083299999992505,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 5.056791999999973,
+              "warmMs": 3.889499999999998,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 6.395083,
+              "warmMs": 1.976541999999995,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.2631669999999531,
+              "warmMs": 0.02033399999993435,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.720083000000045,
+              "warmMs": 4.257584000000065,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 12.826416999999992,
+              "warmMs": 4.0753330000000005,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.6062499999999318,
+              "warmMs": 0.02400000000000091,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 5.338541999999961,
+              "warmMs": 4.4246669999999995,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 12.317874999999958,
+              "warmMs": 4.082084000000009,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.7980000000000018,
+              "warmMs": 0.01645799999994324,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 12.439208000000008,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 20.801124999999956,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 726.6267500000001,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1570,
+        "peakRssMb": 581
+      },
+      {
+        "runtime": "bun 1.4.3",
+        "files": 412,
+        "loadMs": 188.06520799999998,
+        "rssAfterLoadMb": 182,
+        "rssAfterQueriesMb": 433,
+        "rssAfterFullCheckMb": 518,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 26.045749999999998,
+              "warmMs": 6.132167000000038,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 142.07012500000002,
+              "warmMs": 4.204791,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 36.609916999999996,
+              "warmMs": 0.018915999999990163,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 6.107458000000065,
+              "warmMs": 4.54366600000003,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 13.422542000000021,
+              "warmMs": 2.443457999999964,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.6530409999999165,
+              "warmMs": 0.019333000000074207,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 5.697374999999965,
+              "warmMs": 4.116666000000009,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 5.102166999999895,
+              "warmMs": 1.6481670000000577,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.26812500000005457,
+              "warmMs": 0.022333000000003267,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 5.0704580000000306,
+              "warmMs": 4.942457999999988,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 11.739124999999945,
+              "warmMs": 4.331583000000023,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.6649169999999458,
+              "warmMs": 0.02841599999999289,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 5.836791999999946,
+              "warmMs": 5.376207999999906,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 12.266875000000027,
+              "warmMs": 3.657167000000072,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.8326670000000149,
+              "warmMs": 0.013499999999908141,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 12.64504199999999,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 19.68466699999999,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 734.648542,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1570,
+        "peakRssMb": 561
+      },
+      {
+        "runtime": "bun 1.4.3",
+        "files": 412,
+        "loadMs": 188.829583,
+        "rssAfterLoadMb": 177,
+        "rssAfterQueriesMb": 427,
+        "rssAfterFullCheckMb": 522,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 22.91149999999999,
+              "warmMs": 5.219082999999955,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 140.06658300000004,
+              "warmMs": 4.244708000000003,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 37.435,
+              "warmMs": 0.022375000000010914,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 5.729916000000003,
+              "warmMs": 4.486625000000004,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 19.755249999999933,
+              "warmMs": 2.0675410000000056,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.5103339999999434,
+              "warmMs": 0.029541999999992186,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.735165999999936,
+              "warmMs": 4.072584000000006,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 5.306084000000055,
+              "warmMs": 1.9465410000000247,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.3137500000000273,
+              "warmMs": 0.01933299999996052,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.39345800000001,
+              "warmMs": 4.760541999999987,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 13.40320799999995,
+              "warmMs": 3.8265420000000177,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.6038750000000164,
+              "warmMs": 0.04083400000001802,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 5.221499999999992,
+              "warmMs": 4.742834000000016,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 11.088999999999942,
+              "warmMs": 3.5242079999999305,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.8056659999999738,
+              "warmMs": 0.013166999999953077,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 12.23070800000005,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 19.450416999999902,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 787.164708,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1610,
+        "peakRssMb": 558
+      }
+    ],
+    "node": [
+      {
+        "runtime": "node v26.12.0",
+        "files": 412,
+        "loadMs": 199.162333,
+        "rssAfterLoadMb": 225,
+        "rssAfterQueriesMb": 290,
+        "rssAfterFullCheckMb": 346,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 15.534791999999982,
+              "warmMs": 4.4616249999999695,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 136.79641699999996,
+              "warmMs": 2.750541999999996,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 49.95191599999998,
+              "warmMs": 0.03962500000000091,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 6.767165999999975,
+              "warmMs": 4.374208000000067,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 3.0810409999999138,
+              "warmMs": 1.6245420000000195,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.35183299999994233,
+              "warmMs": 0.03212499999995089,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.697041000000013,
+              "warmMs": 3.8411250000000337,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 4.366874999999936,
+              "warmMs": 1.8407499999999573,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.2689579999999978,
+              "warmMs": 0.014540999999894666,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.255667000000017,
+              "warmMs": 3.77049999999997,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 9.039666000000011,
+              "warmMs": 2.4279169999999795,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.3706250000000182,
+              "warmMs": 0.02870800000005147,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 4.867124999999987,
+              "warmMs": 3.7561249999999973,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 7.719500000000039,
+              "warmMs": 3.0346669999998994,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.6642079999999169,
+              "warmMs": 0.019083000000023276,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 14.252040999999963,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 22.098542000000066,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 627.8057079999999,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1540,
+        "peakRssMb": 363
+      },
+      {
+        "runtime": "node v26.12.0",
+        "files": 412,
+        "loadMs": 181.59758300000001,
+        "rssAfterLoadMb": 226,
+        "rssAfterQueriesMb": 291,
+        "rssAfterFullCheckMb": 349,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 20.56925000000001,
+              "warmMs": 3.9904999999999973,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 125.75624999999997,
+              "warmMs": 2.661666000000025,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 44.45220800000004,
+              "warmMs": 0.03849999999999909,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 5.379207999999949,
+              "warmMs": 3.817124999999919,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 2.8721249999999827,
+              "warmMs": 1.4757909999999583,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.32029099999999744,
+              "warmMs": 0.032417000000009466,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.2520829999999705,
+              "warmMs": 3.6049170000000004,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 3.843666999999982,
+              "warmMs": 1.35450000000003,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.22958300000004783,
+              "warmMs": 0.01416699999992943,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.319832999999903,
+              "warmMs": 3.5941660000000866,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 8.660083999999983,
+              "warmMs": 2.613583999999946,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.4042090000000371,
+              "warmMs": 0.024499999999989086,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 4.100125000000048,
+              "warmMs": 3.261957999999936,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 7.386915999999928,
+              "warmMs": 2.5320410000000493,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.7970000000000255,
+              "warmMs": 0.019249999999942702,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 13.483666999999969,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 19.97108300000002,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 587.066542,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1390,
+        "peakRssMb": 371
+      },
+      {
+        "runtime": "node v26.12.0",
+        "files": 412,
+        "loadMs": 193.95579099999998,
+        "rssAfterLoadMb": 225,
+        "rssAfterQueriesMb": 291,
+        "rssAfterFullCheckMb": 347,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 16.983249999999998,
+              "warmMs": 4.06208300000003,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 127.32891699999999,
+              "warmMs": 2.6010409999999524,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 43.987292000000025,
+              "warmMs": 0.040332999999918684,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 5.323167000000012,
+              "warmMs": 3.387292000000002,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 2.9317089999999553,
+              "warmMs": 1.4570830000000115,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.26775000000009186,
+              "warmMs": 0.033084000000030755,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.0820830000000115,
+              "warmMs": 3.284791999999925,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 3.9470420000000104,
+              "warmMs": 1.3456669999999349,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.3619580000000724,
+              "warmMs": 0.01529199999993125,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.08604200000002,
+              "warmMs": 3.3252080000000888,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 9.071916999999985,
+              "warmMs": 2.796791999999982,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.3840420000000222,
+              "warmMs": 0.026375000000030013,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 4.107334000000037,
+              "warmMs": 3.6302499999999327,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 7.777125000000069,
+              "warmMs": 2.221584000000007,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.5737910000000284,
+              "warmMs": 0.017917000000011285,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 13.32891600000005,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 19.660332999999923,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 594.332459,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1420,
+        "peakRssMb": 369
+      },
+      {
+        "runtime": "node v26.12.0",
+        "files": 412,
+        "loadMs": 189.77062500000002,
+        "rssAfterLoadMb": 227,
+        "rssAfterQueriesMb": 291,
+        "rssAfterFullCheckMb": 357,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 14.644833000000006,
+              "warmMs": 4.342083000000002,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 127.98616699999997,
+              "warmMs": 2.724958000000015,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 47.238000000000056,
+              "warmMs": 0.039874999999938154,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 6.695750000000089,
+              "warmMs": 3.833499999999958,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 2.7187920000000076,
+              "warmMs": 1.4590420000000677,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.2995409999999765,
+              "warmMs": 0.037457999999901403,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.236124999999902,
+              "warmMs": 3.5845829999999523,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 3.996208000000024,
+              "warmMs": 1.6806250000000773,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.2779999999999063,
+              "warmMs": 0.01320799999996325,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.124166999999943,
+              "warmMs": 3.633207999999968,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 9.485000000000014,
+              "warmMs": 2.8577079999998887,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.3542089999999689,
+              "warmMs": 0.02500000000009095,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 4.586416999999983,
+              "warmMs": 3.6935000000000855,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 8.463916999999924,
+              "warmMs": 2.8818330000000287,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.6668750000000045,
+              "warmMs": 0.01816600000006474,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 13.928584,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 20.349583000000052,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 619.67675,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1450,
+        "peakRssMb": 375
+      },
+      {
+        "runtime": "node v26.12.0",
+        "files": 412,
+        "loadMs": 188.31162499999996,
+        "rssAfterLoadMb": 226,
+        "rssAfterQueriesMb": 291,
+        "rssAfterFullCheckMb": 350,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 15.05258299999997,
+              "warmMs": 4.359582999999986,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 127.190833,
+              "warmMs": 2.895750000000021,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 44.86512499999998,
+              "warmMs": 0.03654099999994287,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 5.6401670000000195,
+              "warmMs": 3.6847080000000005,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 2.531833000000006,
+              "warmMs": 1.5307500000000118,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.321042000000034,
+              "warmMs": 0.03308300000003328,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.570291999999995,
+              "warmMs": 3.3073750000000928,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 3.8326660000000174,
+              "warmMs": 1.500583000000006,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.2699999999999818,
+              "warmMs": 0.013958000000002357,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.090332999999987,
+              "warmMs": 3.222915999999941,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 8.094249999999988,
+              "warmMs": 2.6776660000000447,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.35970800000006875,
+              "warmMs": 0.024750000000040018,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 4.413833000000068,
+              "warmMs": 3.338457999999946,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 7.8272080000000415,
+              "warmMs": 2.4417909999999665,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.6278330000000096,
+              "warmMs": 0.018124999999940883,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 13.177915999999982,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 19.977666999999997,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 606.4230420000001,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1420,
+        "peakRssMb": 369
+      },
+      {
+        "runtime": "node v26.12.0",
+        "files": 412,
+        "loadMs": 191.13925,
+        "rssAfterLoadMb": 225,
+        "rssAfterQueriesMb": 290,
+        "rssAfterFullCheckMb": 350,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 17.12975,
+              "warmMs": 4.794708999999955,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 136.89779099999998,
+              "warmMs": 3.0095420000000104,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 47.170124999999985,
+              "warmMs": 0.05400000000008731,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 6.002749999999992,
+              "warmMs": 4.107749999999896,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 2.9742499999999836,
+              "warmMs": 1.5860420000000204,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.3675419999999576,
+              "warmMs": 0.032417000000009466,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.419709000000012,
+              "warmMs": 4.027500000000032,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 4.56512500000008,
+              "warmMs": 1.6171249999999873,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.27641700000003766,
+              "warmMs": 0.015124999999898137,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.341000000000008,
+              "warmMs": 3.69887499999993,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 10.456625000000031,
+              "warmMs": 3.318834000000038,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.389583000000016,
+              "warmMs": 0.025250000000028194,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 4.444374999999923,
+              "warmMs": 3.7795830000000024,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 8.199458999999933,
+              "warmMs": 2.499500000000012,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.6435830000000351,
+              "warmMs": 0.01987500000007003,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 15.337207999999919,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 20.69475,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 663.4914170000001,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1530,
+        "peakRssMb": 372
+      },
+      {
+        "runtime": "node v26.12.0",
+        "files": 412,
+        "loadMs": 191.094666,
+        "rssAfterLoadMb": 224,
+        "rssAfterQueriesMb": 290,
+        "rssAfterFullCheckMb": 356,
+        "perSymbol": {
+          "AgentThread": {
+            "find_declaration": {
+              "firstMs": 15.355875000000026,
+              "warmMs": 4.096584000000007,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 123.73962499999999,
+              "warmMs": 2.9141250000000127,
+              "count": 24
+            },
+            "type_of": {
+              "firstMs": 45.464792000000045,
+              "warmMs": 0.037916999999993095,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/runtime/CreateDynamicSubAgentThread.ts:3 -> AgentThread"
+          },
+          "LargeToolResponseProcessor": {
+            "find_declaration": {
+              "firstMs": 6.037042000000042,
+              "warmMs": 3.851541999999995,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 2.6815409999999247,
+              "warmMs": 1.4579589999999598,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.35524999999995543,
+              "warmMs": 0.04604200000005676,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts:47 -> LargeToolResponseProcessor"
+          },
+          "DynamicSubAgents": {
+            "find_declaration": {
+              "firstMs": 4.466292000000067,
+              "warmMs": 4.298125000000027,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 3.728791000000001,
+              "warmMs": 1.4913340000000517,
+              "count": 2
+            },
+            "type_of": {
+              "firstMs": 0.2577920000001086,
+              "warmMs": 0.014749999999935426,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts:54 -> DynamicSubAgents"
+          },
+          "SessionHandle": {
+            "find_declaration": {
+              "firstMs": 4.410292000000027,
+              "warmMs": 3.729832999999985,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 9.064666999999986,
+              "warmMs": 2.668790999999942,
+              "count": 20
+            },
+            "type_of": {
+              "firstMs": 0.5975839999999835,
+              "warmMs": 0.032417000000009466,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge-core/src/agent-session/Sessions.ts:3 -> typeof SessionHandle"
+          },
+          "buildTurnSandbox": {
+            "find_declaration": {
+              "firstMs": 4.533582999999908,
+              "warmMs": 3.5876250000000027,
+              "count": 1
+            },
+            "find_references": {
+              "firstMs": 7.952207999999928,
+              "warmMs": 2.55495899999994,
+              "count": 4
+            },
+            "type_of": {
+              "firstMs": 0.6516249999999673,
+              "warmMs": 0.018542000000024927,
+              "count": 1
+            },
+            "type_of_sample": "packages/trueforge/src/apis/turns.ts:61 -> typeof buildTurnSandbox"
+          }
+        },
+        "stress": {
+          "find_references:Database": {
+            "ms": 13.874165999999946,
+            "count": 210
+          },
+          "find_references:RequestErrorResponseSchema": {
+            "ms": 20.94962499999997,
+            "count": 201
+          },
+          "full_check": {
+            "ms": 619.164417,
+            "count": 1505
+          }
+        },
+        "order": [
+          "find_declaration:AgentThread",
+          "find_references:AgentThread",
+          "type_of:AgentThread",
+          "find_declaration:LargeToolResponseProcessor",
+          "find_references:LargeToolResponseProcessor",
+          "type_of:LargeToolResponseProcessor",
+          "find_declaration:DynamicSubAgents",
+          "find_references:DynamicSubAgents",
+          "type_of:DynamicSubAgents",
+          "find_declaration:SessionHandle",
+          "find_references:SessionHandle",
+          "type_of:SessionHandle",
+          "find_declaration:buildTurnSandbox",
+          "find_references:buildTurnSandbox",
+          "type_of:buildTurnSandbox"
+        ],
+        "importHealth": {
+          "resolved": 1448,
+          "workspaceUnresolved": 10,
+          "externalUnresolved": 521
+        },
+        "wallMs": 1460,
+        "peakRssMb": 378
+      }
+    ]
+  }
+}

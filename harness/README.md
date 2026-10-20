@@ -55,6 +55,7 @@ The UI is at http://127.0.0.1:8790. Stop the server with Ctrl-C when you're done
 | `smoke [model…]` | Tool discovery, cache reads, and (on GLM) parallel subagents, via DeepWiki. Results go to `smoke-results/` |
 | `sandbox-check` | Local sandbox exec, code mode, and isolation probes (network, real home, repo `.env`, writes). Results go to `sandbox-results/` |
 | `session-api-check [guard]` | What an MCP tool sees of its own Session, self-cancel, forks from paused/cancelled/error Turns, inline replay and `PATCH`. Runs a throwaway MCP server on `127.0.0.1:8791`. Expected vs observed in `session-api-results/README.md` |
+| `ts-morph-bench -- --snapshot <dir> [--runs N]` | ts-morph cold start, first and warm latency of `find_declaration` / `find_references` / `type_of`, and RSS, on Bun and Node, over a Source Snapshot fetched outside the repo. Needs no server. Expected vs observed in `ts-morph-results/README.md` |
 
 Shared API helpers are in `scripts/lib/trueforge.ts`; a minimal hand-rolled MCP server for Experiments is in `scripts/lib/probe-mcp.ts`.
 

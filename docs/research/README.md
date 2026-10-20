@@ -14,4 +14,4 @@ Findings behind the closed research tickets on the [wayfinder map](https://githu
 | [decisions-api.md](decisions-api.md) | [#15](https://github.com/ZeleMate/forge-lab/issues/15) | Current. Examples use papers; Cartographer applies it to source files |
 | [pr-review.md](pr-review.md) | [#16](https://github.com/ZeleMate/forge-lab/issues/16) | Out of scope: automatic PR review was dropped ([#18](https://github.com/ZeleMate/forge-lab/issues/18)) |
 | [session-api.md](session-api.md) | [#21](https://github.com/ZeleMate/forge-lab/issues/21) | Current. Shapes for Cartographer's session tools |
-| [source-snapshot.md](source-snapshot.md) | [#22](https://github.com/ZeleMate/forge-lab/issues/22) | Current. Shapes for Cartographer's source tools |
+| [source-snapshot.md](source-snapshot.md) | [#22](https://github.com/ZeleMate/forge-lab/issues/22) | Current. Shapes for Cartographer's source tools. Its timing and memory **estimates are replaced** by measurements in [harness/ts-morph-results](../../harness/ts-morph-results/README.md) ([#23](https://github.com/ZeleMate/forge-lab/issues/23)) |
