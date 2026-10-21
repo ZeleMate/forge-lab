@@ -124,7 +124,7 @@ Mechanism (`core/capabilities/builtins/DynamicSubAgents.ts`, `AgentThreadOrchest
 
 What a subagent gets:
 - **Context**: empty. Only the delegated `input` string as the first user message. It has **no access to the user's message or history**, so the parent must write a self-contained brief.
-- **System prompt**: `SUB_AGENT_IDENTITY`. **Your agent `instructions` are not given to subagents** (`instruction: undefined`). Skills in the prompt and root-only sections are absent too.
+- **System prompt**: `SUB_AGENT_IDENTITY`. **Your agent `instructions` are not given to subagents** (`instruction: undefined`). Root-only sections are absent too. **Correction ([#27](https://github.com/ZeleMate/forge-lab/issues/27)):** the skills list is probably *not* absent. The child gets the parent's `sandbox`, and `Sandbox.buildInstruction` renders the `<skills>` section for every thread (installed 0.179.2: `agent-session/SessionHandle.mjs` `makeCreateDynamicSubAgentThread`, `core/sandbox/Sandbox.mjs:201-262`). **(inferred; Experiment 8 checks it)**
 - **Tools and sandbox**: the same MCP tool sets as the parent (`toolSets` inherited) and the same sandbox with shared files.
 - **Capabilities**: compaction, large-response offload and web search (when enabled). **No** ask-user, generative UI or further subagents (`isChild`), so one level deep.
 - **Model**: same as the parent. A per-call model override exists in code (`ModelSetConfig`) but `builtinsFromSpec` never passes one, so it is not reachable from an agent spec. **(inferred)**
