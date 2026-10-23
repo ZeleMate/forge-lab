@@ -2,7 +2,7 @@
 
 What can an MCP tool see of its own Session, and do the session-tool assumptions from #8 and #9 hold on a live TrueForge 0.179.2?
 
-Script: [`scripts/session-api-check.ts`](../scripts/session-api-check.ts) (`bun run session-api-check`). It starts a throwaway MCP server ([`scripts/lib/probe-mcp.ts`](../scripts/lib/probe-mcp.ts)) on `127.0.0.1:8791` inside the same process, registers it in TrueForge as `session-probe`, and drives `glm-5-3-flash` Sessions that call its tools. Every Session it creates is an Experiment Session (`metadata.experiment = "session-api-check"`). Raw results are the timestamped JSON files in this folder.
+Script: [`scripts/session-api-check.ts`](../scripts/session-api-check.ts) (`bun run session-api-check`). It starts a throwaway MCP server ([`scripts/lib/probe-mcp.ts`](../scripts/lib/probe-mcp.ts)) on `127.0.0.1:8791` (8799 since #33) inside the same process, registers it in TrueForge as `session-probe`, and drives `glm-5-3-flash` Sessions that call its tools. Every Session it creates is an Experiment Session (`metadata.experiment = "session-api-check"`). Raw results are the timestamped JSON files in this folder.
 
 ## Expected (written before the first run)
 

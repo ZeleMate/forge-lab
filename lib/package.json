@@ -1,0 +1,13 @@
+{
+  "name": "@forge-lab/lib",
+  "private": true,
+  "description": "Shared helpers for forge-lab scripts: the TrueForge REST helpers and the local ports. TypeScript source, no build step.",
+  "type": "module",
+  "exports": {
+    "./trueforge": "./trueforge.ts",
+    "./ports": "./ports.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

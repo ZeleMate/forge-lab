@@ -1,0 +1,8 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    // Only Bun's global types (Bun.*, import.meta.dir); no DOM.
+    "types": ["bun"]
+  },
+  "include": ["scripts/**/*.ts"]
+}

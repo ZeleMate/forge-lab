@@ -24,6 +24,8 @@ Done so far:
 |---|---|
 | [`CONTEXT.md`](CONTEXT.md) | Domain glossary |
 | [`CLAUDE.md`](CLAUDE.md) | Orientation and rules for coding agents |
-| [`harness/`](harness/) | The pinned local TrueForge server and its scripts (`start`, `apply:provider`, `smoke`, `sandbox-check`) |
+| [`package.json`](package.json), [`bunfig.toml`](bunfig.toml), [`bun.lock`](bun.lock) | Bun workspaces root: one lockfile, install rules, `bun run typecheck` across packages |
+| [`harness/`](harness/) | The pinned local TrueForge server and its scripts (`start`, `apply:provider`, `smoke`, `sandbox-check`, `session-api-check`, `ts-morph-bench`) |
+| [`lib/`](lib/) | `@forge-lab/lib`: shared TrueForge API helpers and the local ports |
 | [`docs/research/`](docs/research/) | Findings behind each research ticket, with superseded ones marked |
 | [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | Review rules (automatic PR review is currently off) |

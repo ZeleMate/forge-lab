@@ -2,13 +2,18 @@
   "name": "@forge-lab/harness",
   "private": true,
   "description": "Pinned local TrueForge server for forge-lab. See README.md for the hardening rules.",
+  "type": "module",
   "scripts": {
     "start": "HOST=127.0.0.1 PORT=8790 DO_NOT_TRACK=1 SENTRY_ENABLED=false OUTBOUND_URL_ALLOWED_HOSTS='[\"127.0.0.1\"]' trueforge",
     "apply:provider": "bun --env-file=../.env scripts/apply-provider.ts",
     "smoke": "bun scripts/smoke.ts",
     "sandbox-check": "bun scripts/sandbox-check.ts",
     "session-api-check": "bun scripts/session-api-check.ts",
-    "ts-morph-bench": "bun scripts/ts-morph-bench-run.ts"
+    "ts-morph-bench": "bun scripts/ts-morph-bench-run.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@forge-lab/lib": "workspace:*"
   },
   "devDependencies": {
     "@truefoundry/trueforge": "0.179.2",

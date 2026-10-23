@@ -3,10 +3,12 @@
 // Run it yourself from harness/, with the server already running:
 //   bun run apply:provider
 //
-// The key is read from the repo-root .env (OPENROUTER_API_KEY) and sent only to
-// TrueForge on 127.0.0.1. It's never printed; the response is checked for redaction.
+// The key is read from the repo-root .env (OPENROUTER_API_KEY), which the script's
+// explicit `--env-file=../.env` loads (bunfig.toml turns implicit loading off), and
+// is sent only to TrueForge on 127.0.0.1. It's never printed; the response is
+// checked for redaction.
 
-const TRUEFORGE_URL = "http://127.0.0.1:8790";
+import { TRUEFORGE_ORIGIN as TRUEFORGE_URL } from "@forge-lab/lib/ports"; // `as` renames on import
 
 // A type alias for the request body. `as const` below would also work, but an
 // explicit type gives you autocompletion and catches typos at compile time.

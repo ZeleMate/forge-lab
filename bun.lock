@@ -3,12 +3,21 @@
   "configVersion": 1,
   "workspaces": {
     "": {
+      "name": "forge-lab",
+    },
+    "harness": {
       "name": "@forge-lab/harness",
+      "dependencies": {
+        "@forge-lab/lib": "workspace:*",
+      },
       "devDependencies": {
         "@truefoundry/trueforge": "0.179.2",
         "@truefoundry/trueforge-sdk": "0.179.0",
         "ts-morph": "28.0.0",
       },
+    },
+    "lib": {
+      "name": "@forge-lab/lib",
     },
   },
   "packages": {
@@ -83,6 +92,10 @@
     "@daytona/sdk": ["@daytona/sdk@0.218.0", "", { "dependencies": { "@aws-sdk/client-s3": "^3.1131.0", "@aws-sdk/lib-storage": "^3.1131.0", "@daytona/analytics-api-client": "0.218.0", "@daytona/api-client": "0.218.0", "@daytona/toolbox-api-client": "0.218.0", "@iarna/toml": "^2.2.5", "@opentelemetry/api": "^1.9.1", "@opentelemetry/exporter-trace-otlp-http": "^0.222.0", "@opentelemetry/instrumentation-http": "^0.222.0", "@opentelemetry/otlp-exporter-base": "0.222.0", "@opentelemetry/resources": "2.11.0", "@opentelemetry/sdk-node": "^0.222.0", "@opentelemetry/sdk-trace-base": "^2.11.0", "@opentelemetry/semantic-conventions": "^1.43.0", "axios": "^1.20.0", "busboy": "^1.0.0", "expand-tilde": "^2.0.2", "fast-glob": "^3.3.0", "form-data": "^4.0.4", "isomorphic-ws": "^5.0.0", "pathe": "^2.0.3", "shell-quote": "^1.8.2", "socket.io-client": "^4.8.1", "tar": "^7.5.22", "tslib": "2.8.1", "ws": "^8.21.3" } }, "sha512-dPlUCg26+3zPln58L+QWhV1kd/k4DTzv2Qf5mpad8ZIGm0t9vaSLQ0P2klVrtoKV0s6fTlJ9vqmj1GiCdciZZA=="],
 
     "@daytona/toolbox-api-client": ["@daytona/toolbox-api-client@0.218.0", "", { "dependencies": { "axios": "^1.6.1" } }, "sha512-8ZI4Mc9xEan1hAkEJVvSxvJbnGkIhc4JhA5o6woBOs5MVHwOnXepqozeBl73CkxgEUl3ZLS9c8TOf95UYZ9aeA=="],
+
+    "@forge-lab/harness": ["@forge-lab/harness@workspace:harness"],
+
+    "@forge-lab/lib": ["@forge-lab/lib@workspace:lib"],
 
     "@grpc/grpc-js": ["@grpc/grpc-js@1.14.6", "", { "dependencies": { "@grpc/proto-loader": "^0.8.0", "@js-sdsl/ordered-map": "^4.4.2" } }, "sha512-SgC/B3/VZ8lTyOZ4Cwk6f1skWhmkNAaVfiX90qd5u1rRXGKk1//8FTUEN9GvOUq7rfWIqAYkA3CoyumYVpOS6g=="],
 

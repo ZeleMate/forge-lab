@@ -25,4 +25,5 @@ A personal learning project. The user builds **Cartographer**, an agent on the T
 - Inside the sandbox, `$HOME` is remapped to a private `.home`. Isolation probes need absolute paths.
 - TrueForge API responses are wrapped in `{ data }` (plus `pagination` on lists). Agent updates (`PUT /agents/{id}`) must omit `name`. `reasoning_effort` is rejected unless the model declares `reasoning_efforts`.
 - Opus via OpenRouter gets no prompt caching (TrueForge sends no `cache_control` on custom providers). The user accepted this.
-- Shared API helpers live in `harness/scripts/lib/trueforge.ts`. Extend them rather than copying.
+- Shared API helpers and port constants live in the `@forge-lab/lib` package (`lib/trueforge.ts`, `lib/ports.ts`). Extend them rather than copying.
+- **Bun workspaces**: one `bun.lock`, `bunfig.toml` and `tsconfig.base.json` at the root; run `bun install` there. `bunfig.toml` sets `env = false` (no implicit `.env`; scripts that need a key pass `--env-file`) and `ignoreScripts = true` (no install scripts at all). A new package must be added to the root `workspaces` list: Bun errors on listed folders that don't exist.

@@ -7,7 +7,7 @@
 // The snapshot is TrueForge's source at 198a2ead, fetched outside the repo with
 // no dependency install (see ts-morph-results/README.md).
 
-import { saveResults } from "./lib/trueforge";
+import { saveResults } from "@forge-lab/lib/trueforge";
 
 function arg(name: string): string | undefined {
   const i = Bun.argv.indexOf(name);
@@ -117,4 +117,4 @@ const detail = [
 
 console.log(`${table}\n\n${detail}\n`);
 console.log("Import health:", JSON.stringify(passes.bun[0]?.importHealth));
-console.log(`Saved to ${await saveResults("ts-morph-results", { snapshot, runs, table, detail, passes })}`);
+console.log(`Saved to ${await saveResults(`${import.meta.dir}/../ts-morph-results`, { snapshot, runs, table, detail, passes })}`);

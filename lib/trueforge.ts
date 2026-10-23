@@ -1,7 +1,9 @@
 // Shared helpers for talking to the local TrueForge server.
-// Scripts import what they need: `import { api, runTurn } from "./lib/trueforge"`.
+// Scripts import what they need: `import { api, runTurn } from "@forge-lab/lib/trueforge"`.
 
-export const ORIGIN = "http://127.0.0.1:8790";
+import { TRUEFORGE_ORIGIN } from "./ports";
+
+export const ORIGIN = TRUEFORGE_ORIGIN;
 const BASE = `${ORIGIN}/api/v1`;
 
 export const ALL_MODELS = ["opus-5-5", "glm-5-3-flash", "deepseek-v4-flash", "openrouter-auto"] as const;
@@ -166,8 +168,10 @@ export function summarise(turn: Turn & { wallMs?: number }, events: Event[]) {
   };
 }
 
-export async function saveResults(folder: string, results: unknown) {
-  const file = `${import.meta.dir}/../../${folder}/${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
+// `dir` is the caller's absolute results folder, e.g. `${import.meta.dir}/../smoke-results`
+// (`import.meta.dir` is the folder of the file that writes it, so it names the caller's own).
+export async function saveResults(dir: string, results: unknown) {
+  const file = `${dir}/${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
   await Bun.write(file, JSON.stringify(results, null, 2));
   return file;
 }

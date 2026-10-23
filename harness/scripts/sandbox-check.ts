@@ -15,7 +15,7 @@ import {
   serverVersion,
   summarise,
   upsertAgent,
-} from "./lib/trueforge";
+} from "@forge-lab/lib/trueforge";
 
 import { homedir } from "node:os";
 import { resolve } from "node:path";
@@ -65,4 +65,4 @@ for (const [name, prompt] of Object.entries(prompts)) {
   console.log(`== ${name}\n${JSON.stringify(results[name], null, 2)}\n`);
 }
 
-console.log(`Saved to ${await saveResults("sandbox-results", results)}`);
+console.log(`Saved to ${await saveResults(`${import.meta.dir}/../sandbox-results`, results)}`);

@@ -8,6 +8,7 @@
 // Uses the cheap GLM model. Every Session it creates is an Experiment Session.
 
 import { TrueForge } from "@truefoundry/trueforge-sdk";
+import { PORTS } from "@forge-lab/lib/ports";
 import { type CallContext, startProbeMcp } from "./lib/probe-mcp";
 import {
   ORIGIN,
@@ -22,10 +23,10 @@ import {
   summarise,
   upsertAgent,
   waitTurn,
-} from "./lib/trueforge";
+} from "@forge-lab/lib/trueforge";
 
 const EXPERIMENT = "session-api-check";
-const PROBE_PORT = 8791;
+const PROBE_PORT = PORTS.probe; // 8799, clear of the Cartographer MCP server on 8791
 const MODE = process.argv[2] ?? "full"; // process.argv: [bun, script, ...args]
 
 const results: Record<string, unknown> = { mode: MODE, startedAt: new Date().toISOString() };
@@ -193,7 +194,7 @@ record("register_probe_mcp", { status: register.status, body: register.text.slic
 if (MODE === "guard") {
   // E15: with the default network policy, TrueForge refuses the loopback URL
   // already at registration (the record above); nothing more to run.
-  console.log(`Saved to ${await saveResults("session-api-results", results)}`);
+  console.log(`Saved to ${await saveResults(`${import.meta.dir}/../session-api-results`, results)}`);
   probe.stop();
   process.exit(0);
 }
@@ -475,5 +476,5 @@ record("E8_payload_bytes", {
 });
 
 results.sessions = { A: sessionA, B: sessionB, C: sessionC, D: sessionD, source: sourceS, inline: sessionR };
-console.log(`Saved to ${await saveResults("session-api-results", results)}`);
+console.log(`Saved to ${await saveResults(`${import.meta.dir}/../session-api-results`, results)}`);
 probe.stop();

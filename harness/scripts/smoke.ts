@@ -19,7 +19,7 @@ import {
   serverVersion,
   summarise,
   upsertAgent,
-} from "./lib/trueforge";
+} from "@forge-lab/lib/trueforge";
 
 const requested = Bun.argv.slice(2) as ModelName[];
 const models = requested.length ? requested : [...ALL_MODELS];
@@ -66,4 +66,4 @@ for (const model of models) {
   console.log(JSON.stringify(r, null, 2), "\n");
 }
 
-console.log(`Saved to ${await saveResults("smoke-results", results)}`);
+console.log(`Saved to ${await saveResults(`${import.meta.dir}/../smoke-results`, results)}`);

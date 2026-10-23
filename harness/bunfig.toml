@@ -1,7 +1,0 @@
-[install]
-# Only install versions published at least 7 days ago (research/security-review.md).
-minimumReleaseAge = 604800
-# Accepted exception: 0.179.2 and its first-party packages were reviewed by hand
-# (provenance, tarball hash, install scripts, telemetry) before they were 7 days old.
-minimumReleaseAgeExcludes = ["@truefoundry/trueforge", "@truefoundry/trueforge-core", "@truefoundry/trueforge-sdk"]
-exact = true
