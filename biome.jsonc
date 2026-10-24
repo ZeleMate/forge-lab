@@ -1,0 +1,24 @@
+{
+  // Editors read this schema for autocomplete. The `.jsonc` extension is what lets this file have comments.
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  // Skip whatever .gitignore skips (node_modules, .env files).
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    // TypeScript and JSON only. A leading `!` excludes: the `*-results/` folders
+    // hold recorded Experiment output, which stays exactly as it was written.
+    "includes": ["**/*.ts", "**/*.json", "**/*.jsonc", "!**/*-results"]
+  },
+  "formatter": {
+    "enabled": true,
+    // Matches how the existing code was written, so formatting changes stay small.
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "linter": {
+    "enabled": true,
+    "rules": { "preset": "recommended" }
+  },
+  // Also sorts imports (`biome check` runs the formatter, linter and this "assist").
+  "assist": { "actions": { "source": { "organizeImports": "on" } } }
+}

@@ -7,6 +7,14 @@
     "lib"
   ],
   "scripts": {
-    "typecheck": "bun run --filter '*' typecheck"
+    "lint": "biome check --error-on-warnings",
+    "format": "biome check --write",
+    "typecheck": "bun run --filter '*' typecheck",
+    "check": "bun run lint && bun run typecheck"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@types/bun": "1.4.3",
+    "typescript": "7.0.2"
   }
 }
