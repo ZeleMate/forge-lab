@@ -73,11 +73,31 @@ export async function ensureDeepWiki() {
   });
 }
 
+// Every item of a list endpoint, following `next_page_token` across pages.
+export async function listAll<T>(path: string): Promise<T[]> {
+  const out: T[] = [];
+  let token: string | null | undefined;
+  do {
+    const q = new URLSearchParams({ limit: "100", ...(token ? { page_token: token } : {}) });
+    const page = await api<T[]>("GET", `${path}${path.includes("?") ? "&" : "?"}${q}`);
+    out.push(...page.data);
+    token = page.pagination?.next_page_token;
+  } while (token);
+  return out;
+}
+
+// A saved Agent as GET /agents returns it (snake_case manifest, server defaults filled in).
+export type AgentRecord = { id: string; name: string; description?: string; manifest: Record<string, unknown> };
+
+// GET /agents ignores `?name=`, so match by exact name over every page.
+export async function findAgent(name: string): Promise<AgentRecord | undefined> {
+  return (await listAll<AgentRecord>("/agents")).find((a) => a.name === name);
+}
+
 // Agents have no upsert: find by exact name, then update or create.
 // Names are immutable, so an update sends everything except `name`.
 export async function upsertAgent(name: string, description: string, manifest: Record<string, unknown>) {
-  const found = await api<{ id: string; name: string }[]>("GET", `/agents?name=${encodeURIComponent(name)}`);
-  const existing = found.data.find((a) => a.name === name);
+  const existing = await findAgent(name);
   if (existing) await api("PUT", `/agents/${existing.id}`, { description, manifest });
   else await api("POST", "/agents", { name, description, manifest });
   return name;

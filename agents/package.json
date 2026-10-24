@@ -1,0 +1,16 @@
+{
+  "name": "@forge-lab/agents",
+  "private": true,
+  "description": "Agent specs as code: the Cartographer Agent and the MCP servers it attaches. scripts/apply.ts registers them; Experiments import the same manifest for inline copies. TypeScript source, no build step.",
+  "type": "module",
+  "exports": {
+    "./cartographer": "./cartographer.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@forge-lab/lib": "workspace:*",
+    "@truefoundry/trueforge-sdk": "0.179.0"
+  }
+}

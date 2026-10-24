@@ -30,6 +30,8 @@ Done so far:
 | [`.claude/settings.json`](.claude/settings.json) | Project settings for Claude Code: agents may not read `.env` files |
 | [`harness/`](harness/) | The pinned local TrueForge server and its scripts (`start`, `apply:provider`, `smoke`, `sandbox-check`, `session-api-check`, `ts-morph-bench`) |
 | [`lib/`](lib/) | `@forge-lab/lib`: shared TrueForge API helpers the local ports and the Source Snapshot pin reader |
+| [`agents/`](agents/) | `@forge-lab/agents`: the Cartographer Agent spec and its instructions, plus the MCP servers it attaches |
+| [`scripts/dev.ts`](scripts/dev.ts), [`scripts/apply.ts`](scripts/apply.ts) | `bun run dev` starts the whole local stack in one terminal tab (snapshot check, TrueForge, MCP server, apply, Vite) and stops it with Ctrl-C; `bun run apply` registers the specs on a running TrueForge (repo wins, diff shown; `-- --dry-run` writes nothing) |
 | [`snapshot.json`](snapshot.json), [`scripts/snapshot.ts`](scripts/snapshot.ts) | The Source Snapshot pin (0.179.2 → attested commit `198a2ead`) and its lifecycle: `bun run snapshot` fetches and generates it read-only in `~/Library/Caches/forge-lab/trueforge-src/<sha>/`; `bun run snapshot:pin` re-pins after a TrueForge bump |
 | [`docs/research/`](docs/research/) | Findings behind each research ticket, with superseded ones marked |
 | [`lefthook.yml`](lefthook.yml), [`scripts/hooks.ts`](scripts/hooks.ts), [`scripts/check-pins.ts`](scripts/check-pins.ts) | The git hooks and the checks they run (see below) |
