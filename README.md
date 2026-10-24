@@ -24,8 +24,10 @@ Done so far:
 |---|---|
 | [`CONTEXT.md`](CONTEXT.md) | Domain glossary |
 | [`CLAUDE.md`](CLAUDE.md) | Orientation and rules for coding agents |
-| [`package.json`](package.json), [`bunfig.toml`](bunfig.toml), [`bun.lock`](bun.lock) | Bun workspaces root: one lockfile, install rules, `bun run typecheck` across packages |
+| [`package.json`](package.json), [`bunfig.toml`](bunfig.toml), [`bun.lock`](bun.lock) | Bun workspaces root: one lockfile, install rules, and the checks (`bun run check` = `lint` + `typecheck`; `bun run format` rewrites) |
+| [`biome.jsonc`](biome.jsonc), [`tsconfig.base.json`](tsconfig.base.json) | Biome lint and format rules; the shared strict TypeScript options |
+| [`SECURITY.md`](SECURITY.md) | The security rules in one page, pointing at the full review |
+| [`.claude/settings.json`](.claude/settings.json) | Project settings for Claude Code: agents may not read `.env` files |
 | [`harness/`](harness/) | The pinned local TrueForge server and its scripts (`start`, `apply:provider`, `smoke`, `sandbox-check`, `session-api-check`, `ts-morph-bench`) |
 | [`lib/`](lib/) | `@forge-lab/lib`: shared TrueForge API helpers and the local ports |
 | [`docs/research/`](docs/research/) | Findings behind each research ticket, with superseded ones marked |
-| [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | Review rules (automatic PR review is currently off) |
