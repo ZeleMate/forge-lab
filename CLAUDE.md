@@ -17,7 +17,7 @@ A personal learning project. The user builds **Cartographer**, an agent on the T
 - **Models** (all via OpenRouter): Opus 5.5 (`opus-5-5`) for Cartographer itself; `glm-5-3-flash` for smoke tests and mechanics Experiments.
 - **Security**: every change follows `docs/research/security-review.md`: exact version pins, loopback only, no trusted dependency scripts.
 - **Write tools act only on Experiment Sessions** (`metadata.experiment` set). Never on the user's own chat sessions.
-- **Run the server only while working** (`cd harness && bun run start`, in a terminal tab the user can see), and stop it afterwards.
+- **Run the server only while working** (`bun run dev` at the root, in a terminal tab the user can see), and stop it afterwards with Ctrl-C. `dev` refuses to start while anything else holds port 8790.
 
 ## Gotchas
 
