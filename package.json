@@ -10,6 +10,7 @@
     "snapshot": "bun scripts/snapshot.ts ensure",
     "snapshot:pin": "bun scripts/snapshot.ts pin",
     "check:pins": "bun scripts/check-pins.ts",
+    "audit": "bun scripts/audit.ts",
     "lint": "biome check --error-on-warnings",
     "format": "biome check --write",
     "typecheck": "tsc --noEmit && bun run --filter '*' typecheck",

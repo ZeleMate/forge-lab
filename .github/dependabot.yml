@@ -1,0 +1,26 @@
+# Dependabot version updates (#31). Security alerts and fixes are on in the
+# repo settings (#28). The 7-day cooldown matches bunfig.toml's minimumReleaseAge,
+# and existing exact pins stay exact (check-pins fails the PR otherwise).
+# A TrueForge bump also needs `bun run snapshot:pin`; CI's deps job flags it.
+version: 2
+updates:
+  - package-ecosystem: bun
+    # One bun.lock for every workspace.
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]

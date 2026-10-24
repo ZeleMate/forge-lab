@@ -1,0 +1,123 @@
+# CI (#31): the backstop behind the git hooks (#30). The repo is private on
+# GitHub Free, so nothing here can block a merge. Treat a red run as "don't
+# merge yet". See SECURITY.md.
+#
+# Hardening: no secrets, no token permissions beyond reading the repo, every
+# action pinned to a full commit SHA, and tools fetched from their releases with
+# pinned SHA-256 digests (.github/actions/) instead of third-party actions.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Mondays 06:17 UTC: new advisories and secret rules land even without commits.
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+# No token permissions by default; each job asks for read access only.
+permissions: {}
+
+# A new push to the same PR or branch cancels the run it replaces.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      # The read-only form of `bun run lint`, with the same --error-on-warnings.
+      - run: bun x biome ci --error-on-warnings
+
+  typecheck:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - run: bun run typecheck
+
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - run: bun test --pass-with-no-tests
+
+  deps:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Includes `bun install --frozen-lockfile --ignore-scripts`.
+      - uses: ./.github/actions/setup
+      - name: Exact pins and install rules
+        run: bun run check:pins
+      - name: Source Snapshot pin matches TrueForge
+        run: bun scripts/snapshot.ts check-pin
+      - name: Known vulnerabilities
+        run: bun run audit
+
+  secrets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # The full history of every branch, not just the tip.
+          fetch-depth: 0
+      - uses: ./.github/actions/fetch-binary
+        with:
+          name: gitleaks
+          url: https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          sha256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+      - run: gitleaks git --redact --no-banner --exit-code 1 .
+
+  workflows:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/fetch-binary
+        with:
+          name: actionlint
+          url: https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz
+          sha256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+      - uses: ./.github/actions/fetch-binary
+        with:
+          name: zizmor
+          url: https://github.com/zizmorcore/zizmor/releases/download/v1.31.1/zizmor-x86_64-unknown-linux-gnu.tar.gz
+          sha256: d185f726bdaf92df78273217dfdd24ebcd6b0ef48cf3ce776ff5762b6e138c99
+      # actionlint also runs shellcheck on `run:` scripts (preinstalled on the runner).
+      - run: actionlint
+      # Workflows, the composite actions and dependabot.yml; config in .github/zizmor.yml.
+      - run: zizmor --offline --no-progress .
