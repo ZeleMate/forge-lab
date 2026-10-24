@@ -3,10 +3,13 @@
   "private": true,
   "description": "Cartographer on a local TrueForge. Bun workspaces: one lockfile (bun.lock) and one bunfig.toml at this root.",
   "workspaces": [
+    "agents",
     "harness",
     "lib"
   ],
   "scripts": {
+    "dev": "bun scripts/dev.ts",
+    "apply": "bun scripts/apply.ts",
     "snapshot": "bun scripts/snapshot.ts ensure",
     "snapshot:pin": "bun scripts/snapshot.ts pin",
     "check:pins": "bun scripts/check-pins.ts",
@@ -17,7 +20,9 @@
     "check": "bun run lint && bun run typecheck"
   },
   "dependencies": {
-    "@forge-lab/lib": "workspace:*"
+    "@forge-lab/agents": "workspace:*",
+    "@forge-lab/lib": "workspace:*",
+    "@truefoundry/trueforge-sdk": "0.179.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
