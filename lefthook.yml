@@ -33,8 +33,10 @@ pre-commit:
       run: bun scripts/snapshot.ts check-pin
 
     - name: workflows
-      glob: ".github/workflows/*.{yml,yaml}"
-      run: actionlint {staged_files} && zizmor --offline --no-progress {staged_files}
+      glob: ".github/**/*.{yml,yaml}"
+      # The same two commands as CI's `workflows` job: actionlint finds the
+      # workflows itself; zizmor also covers the composite actions and dependabot.yml.
+      run: actionlint && zizmor --offline --no-progress .
 
 pre-push:
   # Stop at the first failing job, so a push to main fails before the slow checks run.
