@@ -376,10 +376,14 @@ const messagesTokens = lastUsage.input_tokens_breakdown?.messages ?? 0;
 const fixedTokens = (lastUsage.input_tokens ?? 0) - messagesTokens;
 const trigger = fixedTokens + 931 + Math.floor(messagesTokens / 2);
 
-const withCompaction = structuredClone(specCopy) as Record<string, any>; // a deep copy
-withCompaction.config = {
-  ...withCompaction.config,
-  context_management: { compaction: { enabled: true, trigger: { type: "input_tokens", value: trigger } } },
+// A new object built with spread (`...`): it copies specCopy's fields and
+// overrides `config`, leaving specCopy itself untouched for the restore below.
+const withCompaction = {
+  ...specCopy,
+  config: {
+    ...specCopy.config,
+    context_management: { compaction: { enabled: true, trigger: { type: "input_tokens", value: trigger } } },
+  },
 };
 const patchCompaction = await request("PATCH", `/sessions/${sessionR}`, { agent: { spec: withCompaction } });
 const r4 = await turn(sessionR, "In one sentence, name the three topics we discussed so far.", prev);
@@ -401,8 +405,7 @@ record("E12a_patch_compaction", {
   },
 });
 
-const withLimit = structuredClone(specCopy) as Record<string, any>;
-withLimit.config = { ...withLimit.config, iteration_limit: 1 };
+const withLimit = { ...specCopy, config: { ...specCopy.config, iteration_limit: 1 } };
 const patchLimit = await request("PATCH", `/sessions/${sessionR}`, { agent: { spec: withLimit } });
 const r5 = await turn(sessionR, WHOAMI, r4.turn.id);
 const restore = await request("PATCH", `/sessions/${sessionR}`, { agent: { spec: specCopy } });
@@ -460,7 +463,9 @@ for (const s of [sessionA, sessionB, sessionC, sessionD, sourceS, sessionR]) {
     sizes.eventsPage.push(page.bytes);
     for (const e of (page.json as { data: Event[] }).data) {
       const n = new TextEncoder().encode(JSON.stringify(e)).length;
-      const slot = (perType[e.type] ??= { count: 0, max: 0, total: 0 }); // ??= assigns only if missing
+      // `??` takes the right side only when the left is null or undefined (here: a new type).
+      const slot = perType[e.type] ?? { count: 0, max: 0, total: 0 };
+      perType[e.type] = slot;
       slot.count++;
       slot.max = Math.max(slot.max, n);
       slot.total += n;

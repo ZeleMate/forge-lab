@@ -113,25 +113,25 @@ const table = [
 ].join("\n");
 
 // Per-symbol detail (Bun / Node, first then warm), medians over runs.
+// The parameter type is a union of two string literals, so `key` can only be one of those field names.
+const bunNode = (s: string, t: string, key: "firstMs" | "warmMs") => {
+  const bun = fmt(
+    med("bun", (p) => timing(p, s, t)?.[key]),
+    "ms",
+  );
+  const node = fmt(
+    med("node", (p) => timing(p, s, t)?.[key]),
+    "ms",
+  );
+  return `${bun} / ${node}`;
+};
 const detail = [
   "| Symbol | Tool | First (Bun / Node) | Warm (Bun / Node) | Results |",
   "|---|---|---:|---:|---:|",
   ...symbols.flatMap((s) =>
     TOOLS.map(
       (t) =>
-        `| \`${s}\` | ${t} | ${fmt(
-          med("bun", (p) => timing(p, s, t)?.firstMs),
-          "ms",
-        )} / ${fmt(
-          med("node", (p) => timing(p, s, t)?.firstMs),
-          "ms",
-        )} | ${fmt(
-          med("bun", (p) => timing(p, s, t)?.warmMs),
-          "ms",
-        )} / ${fmt(
-          med("node", (p) => timing(p, s, t)?.warmMs),
-          "ms",
-        )} | ${timing(passes.bun[0] as Pass, s, t)?.count} |`,
+        `| \`${s}\` | ${t} | ${bunNode(s, t, "firstMs")} | ${bunNode(s, t, "warmMs")} | ${timing(passes.bun[0] as Pass, s, t)?.count} |`,
     ),
   ),
 ].join("\n");

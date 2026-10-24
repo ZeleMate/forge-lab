@@ -114,7 +114,9 @@ export function findDeclaration(index: SourceIndex, name: string): Declaration[]
     ];
     for (const decl of candidates) {
       if (!decl) continue;
-      const start = file.getLineAndColumnAtPos(decl.getNameNode().getStart());
+      // A class's name node is typed `Identifier | undefined` (for `export default class {}`).
+      // We found `decl` by name, so it is always there; `?? decl` only satisfies the compiler.
+      const start = file.getLineAndColumnAtPos((decl.getNameNode() ?? decl).getStart());
       out.push({
         kind: decl.getKindName(),
         name,
