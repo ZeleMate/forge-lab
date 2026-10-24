@@ -7,23 +7,23 @@
 // Expected results are written down in session-api-results/README.md.
 // Uses the cheap GLM model. Every Session it creates is an Experiment Session.
 
-import { TrueForge } from "@truefoundry/trueforge-sdk";
 import { PORTS } from "@forge-lab/lib/ports";
-import { type CallContext, startProbeMcp } from "./lib/probe-mcp";
 import {
-  ORIGIN,
-  type Event,
-  type Turn,
   allEvents,
   api,
   createTurn,
+  type Event,
+  ORIGIN,
   openExperimentSession,
   request,
   saveResults,
   summarise,
+  type Turn,
   upsertAgent,
   waitTurn,
 } from "@forge-lab/lib/trueforge";
+import { TrueForge } from "@truefoundry/trueforge-sdk";
+import { type CallContext, startProbeMcp } from "./lib/probe-mcp";
 
 const EXPERIMENT = "session-api-check";
 const PROBE_PORT = PORTS.probe; // 8799, clear of the Cartographer MCP server on 8791
@@ -467,7 +467,11 @@ for (const s of [sessionA, sessionB, sessionC, sessionD, sourceS, sessionR]) {
     }
   }
 }
-const stats = (xs: number[]) => ({ n: xs.length, max: Math.max(...xs), mean: Math.round(xs.reduce((a, b) => a + b, 0) / xs.length) });
+const stats = (xs: number[]) => ({
+  n: xs.length,
+  max: Math.max(...xs),
+  mean: Math.round(xs.reduce((a, b) => a + b, 0) / xs.length),
+});
 record("E8_payload_bytes", {
   ...Object.fromEntries(Object.entries(sizes).map(([k, v]) => [k, stats(v)])),
   eventByType: Object.fromEntries(

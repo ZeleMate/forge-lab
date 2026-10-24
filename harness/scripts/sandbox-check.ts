@@ -6,6 +6,8 @@
 // Uses the cheap GLM model. The isolation probe prints only ALLOWED/BLOCKED,
 // never file contents, so nothing private reaches the model provider.
 
+import { homedir } from "node:os";
+import { resolve } from "node:path";
 import {
   allEvents,
   ensureDeepWiki,
@@ -16,9 +18,6 @@ import {
   summarise,
   upsertAgent,
 } from "@forge-lab/lib/trueforge";
-
-import { homedir } from "node:os";
-import { resolve } from "node:path";
 
 const REAL_HOME = homedir();
 const REPO_ENV = resolve(import.meta.dir, "../../.env"); // the repo-root .env holding the OpenRouter key

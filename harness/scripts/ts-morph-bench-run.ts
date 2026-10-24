@@ -83,10 +83,18 @@ row("Process wall time (import + load + all queries + full check)", "ms", (p) =>
 row(`Cold load: add ${passes.bun[0]?.files} files`, "ms", (p) => p.loadMs);
 const firstCall = passes.bun[0]?.order[1] ?? ""; // order[0] is find_declaration, which is AST only
 const [firstTool = "", firstSymbol = ""] = firstCall.split(":");
-row(`First type-aware query (${firstTool} ${firstSymbol}; builds the Program)`, "ms", (p) => timing(p, firstSymbol, firstTool)?.firstMs);
+row(
+  `First type-aware query (${firstTool} ${firstSymbol}; builds the Program)`,
+  "ms",
+  (p) => timing(p, firstSymbol, firstTool)?.firstMs,
+);
 for (const tool of TOOLS) {
-  row(`${tool}: first call, worst symbol`, "ms", (p) => Math.max(...symbols.map((s) => timing(p, s, tool)?.firstMs ?? 0)));
-  row(`${tool}: warm, median symbol`, "ms", (p) => median(symbols.map((s) => timing(p, s, tool)?.warmMs ?? Number.NaN)));
+  row(`${tool}: first call, worst symbol`, "ms", (p) =>
+    Math.max(...symbols.map((s) => timing(p, s, tool)?.firstMs ?? 0)),
+  );
+  row(`${tool}: warm, median symbol`, "ms", (p) =>
+    median(symbols.map((s) => timing(p, s, tool)?.warmMs ?? Number.NaN)),
+  );
 }
 for (const key of Object.keys(passes.bun[0]?.stress ?? {})) {
   row(`Stress ${key} (${passes.bun[0]?.stress[key]?.count} results)`, "ms", (p) => p.stress[key]?.ms);
@@ -96,7 +104,8 @@ row("RSS after the representative queries", "MB", (p) => p.rssAfterQueriesMb);
 row("RSS after full check", "MB", (p) => p.rssAfterFullCheckMb);
 row("Peak RSS (time -l)", "MB", (p) => p.peakRssMb);
 
-const fmt = (n: number, unit: string) => (unit === "MB" ? `${Math.round(n)} MB` : n < 10 ? `${n.toFixed(2)} ms` : `${Math.round(n)} ms`);
+const fmt = (n: number, unit: string) =>
+  unit === "MB" ? `${Math.round(n)} MB` : n < 10 ? `${n.toFixed(2)} ms` : `${Math.round(n)} ms`;
 const table = [
   `| Metric (median of ${runs} runs) | ${passes.bun[0]?.runtime} | ${passes.node[0]?.runtime} |`,
   "|---|---:|---:|",
@@ -110,11 +119,25 @@ const detail = [
   ...symbols.flatMap((s) =>
     TOOLS.map(
       (t) =>
-        `| \`${s}\` | ${t} | ${fmt(med("bun", (p) => timing(p, s, t)?.firstMs), "ms")} / ${fmt(med("node", (p) => timing(p, s, t)?.firstMs), "ms")} | ${fmt(med("bun", (p) => timing(p, s, t)?.warmMs), "ms")} / ${fmt(med("node", (p) => timing(p, s, t)?.warmMs), "ms")} | ${timing(passes.bun[0] as Pass, s, t)?.count} |`,
+        `| \`${s}\` | ${t} | ${fmt(
+          med("bun", (p) => timing(p, s, t)?.firstMs),
+          "ms",
+        )} / ${fmt(
+          med("node", (p) => timing(p, s, t)?.firstMs),
+          "ms",
+        )} | ${fmt(
+          med("bun", (p) => timing(p, s, t)?.warmMs),
+          "ms",
+        )} / ${fmt(
+          med("node", (p) => timing(p, s, t)?.warmMs),
+          "ms",
+        )} | ${timing(passes.bun[0] as Pass, s, t)?.count} |`,
     ),
   ),
 ].join("\n");
 
 console.log(`${table}\n\n${detail}\n`);
 console.log("Import health:", JSON.stringify(passes.bun[0]?.importHealth));
-console.log(`Saved to ${await saveResults(`${import.meta.dir}/../ts-morph-results`, { snapshot, runs, table, detail, passes })}`);
+console.log(
+  `Saved to ${await saveResults(`${import.meta.dir}/../ts-morph-results`, { snapshot, runs, table, detail, passes })}`,
+);

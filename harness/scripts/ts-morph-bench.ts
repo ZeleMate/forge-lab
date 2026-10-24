@@ -79,7 +79,8 @@ for (const name of SYMBOLS) {
     warmMs: warm(() => typeOf(index, usage.path, usage.line, usage.column)),
     count: 1,
   };
-  perSymbol[name].type_of_sample = `${usage.path}:${usage.line} -> ${type.result.typeText}${type.result.isAny ? " (any)" : ""}`;
+  perSymbol[name].type_of_sample =
+    `${usage.path}:${usage.line} -> ${type.result.typeText}${type.result.isAny ? " (any)" : ""}`;
   order.push(`type_of:${name}`);
 }
 

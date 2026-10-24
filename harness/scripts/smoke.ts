@@ -10,9 +10,9 @@
 
 import {
   ALL_MODELS,
-  type ModelName, // `type` imports are erased at runtime; they exist only for the compiler
   allEvents,
   ensureDeepWiki,
+  type ModelName, // `type` imports are erased at runtime; they exist only for the compiler
   openExperimentSession,
   runTurn,
   saveResults,

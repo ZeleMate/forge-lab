@@ -93,7 +93,11 @@ function rel(index: SourceIndex, file: SourceFile): string {
 
 function lineText(file: SourceFile, line: number): string {
   const starts = file.compilerNode.getLineStarts(); // cached by TypeScript per file
-  return file.getFullText().slice(starts[line - 1], starts[line]).trim().slice(0, 160);
+  return file
+    .getFullText()
+    .slice(starts[line - 1], starts[line])
+    .trim()
+    .slice(0, 160);
 }
 
 // AST only: walks top-level declarations by name, never asks the type checker.
@@ -177,7 +181,10 @@ export function importHealth(index: SourceIndex) {
   for (const file of index.project.getSourceFiles()) {
     for (const decl of file.getImportDeclarations()) {
       if (decl.getModuleSpecifierSourceFile()) resolved++;
-      else if (decl.getModuleSpecifierValue().startsWith(".") || decl.getModuleSpecifierValue().startsWith("@truefoundry/"))
+      else if (
+        decl.getModuleSpecifierValue().startsWith(".") ||
+        decl.getModuleSpecifierValue().startsWith("@truefoundry/")
+      )
         workspaceUnresolved++;
       else externalUnresolved++;
     }
