@@ -1,0 +1,55 @@
+# Git hooks (#30). They're the only gate on this repo: GitHub Free can't protect
+# `main` on a private repo, so CI (#31) reports but can't block. See SECURITY.md.
+#
+# One-time setup: `brew install lefthook gitleaks actionlint zizmor`, then
+# `lefthook install` at the repo root. Never skip them with `--no-verify`.
+
+# Standard `**` globbing: `**/` also matches the repo root, and `*` stops at `/`.
+glob_matcher: doublestar
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: gitleaks
+      run: gitleaks git --pre-commit --staged --redact --no-banner
+
+    - name: no .env files
+      glob: "**/.env*"
+      run: bun scripts/hooks.ts no-env {staged_files}
+
+    - name: biome
+      glob: "**/*.{ts,json,jsonc}"
+      # Same flags as `bun run lint`, so warnings fail here too, not only on pre-push.
+      run: bun x biome check --write --error-on-warnings --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      # Biome's fixes are added back to the commit.
+      stage_fixed: true
+
+    - name: exact pins
+      glob: ["**/package.json", "bunfig.toml"]
+      run: bun scripts/check-pins.ts
+
+    - name: snapshot pin
+      glob: ["snapshot.json", "harness/package.json"]
+      run: bun scripts/snapshot.ts check-pin
+
+    - name: workflows
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: actionlint {staged_files} && zizmor --offline --no-progress {staged_files}
+
+pre-push:
+  # Stop at the first failing job, so a push to main fails before the slow checks run.
+  piped: true
+  jobs:
+    - name: no push to main, gitleaks on pushed commits
+      run: bun scripts/hooks.ts pre-push
+      # Git sends the refs being pushed on stdin; only this job reads them.
+      use_stdin: true
+
+    - name: lockfile matches manifests
+      run: bun install --frozen-lockfile
+
+    - name: check
+      run: bun run check
+
+    - name: test
+      run: bun test --pass-with-no-tests

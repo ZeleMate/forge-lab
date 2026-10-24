@@ -32,3 +32,21 @@ Done so far:
 | [`lib/`](lib/) | `@forge-lab/lib`: shared TrueForge API helpers the local ports and the Source Snapshot pin reader |
 | [`snapshot.json`](snapshot.json), [`scripts/snapshot.ts`](scripts/snapshot.ts) | The Source Snapshot pin (0.179.2 → attested commit `198a2ead`) and its lifecycle: `bun run snapshot` fetches and generates it read-only in `~/Library/Caches/forge-lab/trueforge-src/<sha>/`; `bun run snapshot:pin` re-pins after a TrueForge bump |
 | [`docs/research/`](docs/research/) | Findings behind each research ticket, with superseded ones marked |
+| [`lefthook.yml`](lefthook.yml), [`scripts/hooks.ts`](scripts/hooks.ts), [`scripts/check-pins.ts`](scripts/check-pins.ts) | The git hooks and the checks they run (see below) |
+
+## Git hooks
+
+The hooks in [`lefthook.yml`](lefthook.yml) are the only gate on this repo: it's private on GitHub Free, so nothing on GitHub can block a merge (see [`SECURITY.md`](SECURITY.md)). Set them up once per clone:
+
+```bash
+brew install lefthook gitleaks actionlint zizmor
+```
+
+```bash
+lefthook install
+```
+
+- **pre-commit** (staged files only): Gitleaks, no `.env` files except `.env.example`, Biome with fixes re-staged, exact pins and install rules (`bun run check:pins`), the Source Snapshot pin, and `actionlint` plus `zizmor` on workflow files.
+- **pre-push:** no pushes to `main` (push a branch and open a PR), Gitleaks on the pushed commits, `bun install --frozen-lockfile`, `bun run check` and `bun test`.
+
+Never skip them with `--no-verify`. If a hook is wrong, fix the hook in its own PR. The one exception is a documented reason in the commit or PR description.

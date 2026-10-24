@@ -4,7 +4,7 @@ forge-lab is a private personal learning repo. The full reasoning is in [docs/re
 
 ## Nothing on GitHub enforces anything
 
-The repo stays **private on GitHub Free** (decided in [#28](https://github.com/ZeleMate/forge-lab/issues/28)), so there are no rulesets, no branch protection and no secret scanning. The local Lefthook hooks are the only gate (Gitleaks, Biome, `tsc`, an exact-pin check, no direct pushes to `main`). CI reports but cannot block.
+The repo stays **private on GitHub Free** (decided in [#28](https://github.com/ZeleMate/forge-lab/issues/28)), so there are no rulesets, no branch protection and no secret scanning. The local Lefthook hooks are the only gate (Gitleaks, Biome, `tsc`, an exact-pin check, no direct pushes to `main`). CI reports but cannot block. Setup is in the [README](README.md#git-hooks); never skip the hooks with `--no-verify` without a documented reason.
 
 ## Rules
 
