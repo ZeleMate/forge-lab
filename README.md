@@ -23,7 +23,7 @@ Done so far:
 | Path | What |
 |---|---|
 | [`CONTEXT.md`](CONTEXT.md) | Domain glossary |
-| [`CLAUDE.md`](CLAUDE.md) | Orientation and rules for coding agents |
+| [`AGENTS.md`](AGENTS.md) | Orientation and rules for coding agents ([`CLAUDE.md`](CLAUDE.md) imports it for Claude Code) |
 | [`package.json`](package.json), [`bunfig.toml`](bunfig.toml), [`bun.lock`](bun.lock) | Bun workspaces root: one lockfile, install rules, and the checks (`bun run check` = `lint` + `typecheck`; `bun run format` rewrites) |
 | [`biome.jsonc`](biome.jsonc), [`tsconfig.base.json`](tsconfig.base.json) | Biome lint and format rules; the shared strict TypeScript options |
 | [`SECURITY.md`](SECURITY.md) | The security rules in one page, pointing at the full review |
