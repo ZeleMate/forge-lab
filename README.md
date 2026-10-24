@@ -33,6 +33,7 @@ Done so far:
 | [`snapshot.json`](snapshot.json), [`scripts/snapshot.ts`](scripts/snapshot.ts) | The Source Snapshot pin (0.179.2 → attested commit `198a2ead`) and its lifecycle: `bun run snapshot` fetches and generates it read-only in `~/Library/Caches/forge-lab/trueforge-src/<sha>/`; `bun run snapshot:pin` re-pins after a TrueForge bump |
 | [`docs/research/`](docs/research/) | Findings behind each research ticket, with superseded ones marked |
 | [`lefthook.yml`](lefthook.yml), [`scripts/hooks.ts`](scripts/hooks.ts), [`scripts/check-pins.ts`](scripts/check-pins.ts) | The git hooks and the checks they run (see below) |
+| [`.github/`](.github/) | CI (`workflows/ci.yml`), its verified-download actions, Dependabot and zizmor config; [`scripts/audit.ts`](scripts/audit.ts) is the `bun audit` accept list |
 
 ## Git hooks
 
@@ -46,7 +47,9 @@ brew install lefthook gitleaks actionlint zizmor
 lefthook install
 ```
 
-- **pre-commit** (staged files only): Gitleaks, no `.env` files except `.env.example`, Biome with fixes re-staged, exact pins and install rules (`bun run check:pins`), the Source Snapshot pin, and `actionlint` plus `zizmor` on workflow files.
+- **pre-commit** (staged files only): Gitleaks, no `.env` files except `.env.example`, Biome with fixes re-staged, exact pins and install rules (`bun run check:pins`), the Source Snapshot pin, and `actionlint` plus `zizmor` on `.github/` files.
 - **pre-push:** no pushes to `main` (push a branch and open a PR), Gitleaks on the pushed commits, the pin, Source Snapshot and workflow checks again over the whole tree (so a `--no-verify` commit can't skip them), `bun install --frozen-lockfile`, `bun run check` and `bun test`.
 
-Never skip them with `--no-verify`. If a hook is wrong, fix the hook in its own PR. The one exception is a documented reason in the commit or PR description.
+**CI** ([`ci.yml`](.github/workflows/ci.yml)) runs on every PR, on pushes to `main`, and weekly: `lint`, `typecheck`, `test`, `deps` (frozen install, exact pins, Source Snapshot pin, `bun run audit`), `secrets` (Gitleaks over the full history) and `workflows` (`actionlint`, `zizmor`). It can't block a merge on GitHub Free, so don't merge a PR with a red run.
+
+Never skip the hooks with `--no-verify`. If a hook is wrong, fix the hook in its own PR. The one exception is a documented reason in the commit or PR description.
