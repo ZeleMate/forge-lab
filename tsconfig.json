@@ -1,0 +1,10 @@
+{
+  // The root isn't a workspace package, so `bun run --filter '*' typecheck` skips
+  // it; the root `typecheck` script runs `tsc` with this file for scripts/ first.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    // Only Bun's global types (Bun.*, import.meta.dir); no DOM.
+    "types": ["bun"]
+  },
+  "include": ["scripts/**/*.ts"]
+}

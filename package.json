@@ -7,10 +7,15 @@
     "lib"
   ],
   "scripts": {
+    "snapshot": "bun scripts/snapshot.ts ensure",
+    "snapshot:pin": "bun scripts/snapshot.ts pin",
     "lint": "biome check --error-on-warnings",
     "format": "biome check --write",
-    "typecheck": "bun run --filter '*' typecheck",
+    "typecheck": "tsc --noEmit && bun run --filter '*' typecheck",
     "check": "bun run lint && bun run typecheck"
+  },
+  "dependencies": {
+    "@forge-lab/lib": "workspace:*"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",

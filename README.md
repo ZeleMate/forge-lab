@@ -29,5 +29,6 @@ Done so far:
 | [`SECURITY.md`](SECURITY.md) | The security rules in one page, pointing at the full review |
 | [`.claude/settings.json`](.claude/settings.json) | Project settings for Claude Code: agents may not read `.env` files |
 | [`harness/`](harness/) | The pinned local TrueForge server and its scripts (`start`, `apply:provider`, `smoke`, `sandbox-check`, `session-api-check`, `ts-morph-bench`) |
-| [`lib/`](lib/) | `@forge-lab/lib`: shared TrueForge API helpers and the local ports |
+| [`lib/`](lib/) | `@forge-lab/lib`: shared TrueForge API helpers the local ports and the Source Snapshot pin reader |
+| [`snapshot.json`](snapshot.json), [`scripts/snapshot.ts`](scripts/snapshot.ts) | The Source Snapshot pin (0.179.2 → attested commit `198a2ead`) and its lifecycle: `bun run snapshot` fetches and generates it read-only in `~/Library/Caches/forge-lab/trueforge-src/<sha>/`; `bun run snapshot:pin` re-pins after a TrueForge bump |
 | [`docs/research/`](docs/research/) | Findings behind each research ticket, with superseded ones marked |
