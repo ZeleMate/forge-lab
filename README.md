@@ -47,6 +47,6 @@ lefthook install
 ```
 
 - **pre-commit** (staged files only): Gitleaks, no `.env` files except `.env.example`, Biome with fixes re-staged, exact pins and install rules (`bun run check:pins`), the Source Snapshot pin, and `actionlint` plus `zizmor` on workflow files.
-- **pre-push:** no pushes to `main` (push a branch and open a PR), Gitleaks on the pushed commits, `bun install --frozen-lockfile`, `bun run check` and `bun test`.
+- **pre-push:** no pushes to `main` (push a branch and open a PR), Gitleaks on the pushed commits, the pin, Source Snapshot and workflow checks again over the whole tree (so a `--no-verify` commit can't skip them), `bun install --frozen-lockfile`, `bun run check` and `bun test`.
 
 Never skip them with `--no-verify`. If a hook is wrong, fix the hook in its own PR. The one exception is a documented reason in the commit or PR description.

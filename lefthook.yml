@@ -45,6 +45,20 @@ pre-push:
       # Git sends the refs being pushed on stdin; only this job reads them.
       use_stdin: true
 
+    # The pre-commit checks again, over the whole tree: a commit made with
+    # `--no-verify` skipped them, and they cost well under a second.
+    - name: exact pins
+      run: bun scripts/check-pins.ts
+
+    - name: snapshot pin
+      run: bun scripts/snapshot.ts check-pin
+
+    - name: workflows
+      run: actionlint && zizmor --offline --no-progress .
+      # Both tools exit non-zero when there's nothing to check.
+      skip:
+        - run: test ! -d .github/workflows
+
     - name: lockfile matches manifests
       run: bun install --frozen-lockfile
 
