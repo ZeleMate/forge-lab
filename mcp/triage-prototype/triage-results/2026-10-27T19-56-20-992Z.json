@@ -1,0 +1,4857 @@
+{
+  "snapshot": "198a2ead7bcc32b00aef75d22eea6fa1569d1734",
+  "modes": [
+    "ripgrep",
+    "gpt-oss-file"
+  ],
+  "spent": 0.0034777569999999984,
+  "calls": [
+    {
+      "mode": "gpt-oss-file",
+      "ms": 644,
+      "inputTokens": 282,
+      "outputTokens": 35,
+      "cost": 0.00001301,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2385,
+      "inputTokens": 221,
+      "outputTokens": 57,
+      "cost": 0.00001012,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1536,
+      "inputTokens": 221,
+      "outputTokens": 6,
+      "cost": 0.00000992,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 597,
+      "inputTokens": 278,
+      "outputTokens": 39,
+      "cost": 0.0000138,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1808,
+      "inputTokens": 241,
+      "outputTokens": 41,
+      "cost": 0.00000892,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1584,
+      "inputTokens": 617,
+      "outputTokens": 7,
+      "cost": 0.00002594,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1150,
+      "inputTokens": 214,
+      "outputTokens": 80,
+      "cost": 0.00001228,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 761,
+      "inputTokens": 255,
+      "outputTokens": 48,
+      "cost": 0.00001389,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2407,
+      "inputTokens": 614,
+      "outputTokens": 66,
+      "cost": 0.00001888,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1701,
+      "inputTokens": 239,
+      "outputTokens": 33,
+      "cost": 0.00001148,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1083,
+      "inputTokens": 258,
+      "outputTokens": 44,
+      "cost": 0.00001346,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1144,
+      "inputTokens": 260,
+      "outputTokens": 67,
+      "cost": 0.00001651,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1007,
+      "inputTokens": 208,
+      "outputTokens": 42,
+      "cost": 0.0000119,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1454,
+      "inputTokens": 371,
+      "outputTokens": 46,
+      "cost": 0.00001202,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 807,
+      "inputTokens": 207,
+      "outputTokens": 44,
+      "cost": 0.00001237,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1581,
+      "inputTokens": 281,
+      "outputTokens": 79,
+      "cost": 0.00001352,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1504,
+      "inputTokens": 324,
+      "outputTokens": 48,
+      "cost": 0.000016116,
+      "question": "q1"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2130,
+      "inputTokens": 236,
+      "outputTokens": 107,
+      "cost": 0.000021824,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1001,
+      "inputTokens": 384,
+      "outputTokens": 57,
+      "cost": 0.00001911,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2196,
+      "inputTokens": 375,
+      "outputTokens": 81,
+      "cost": 0.00002276,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 867,
+      "inputTokens": 314,
+      "outputTokens": 36,
+      "cost": 0.00001178,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 787,
+      "inputTokens": 255,
+      "outputTokens": 61,
+      "cost": 0.00001619,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1541,
+      "inputTokens": 258,
+      "outputTokens": 55,
+      "cost": 0.000015182,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 11348,
+      "inputTokens": 462,
+      "outputTokens": 44,
+      "cost": 0.00001958,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 767,
+      "inputTokens": 324,
+      "outputTokens": 59,
+      "cost": 0.00001798,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1471,
+      "inputTokens": 257,
+      "outputTokens": 47,
+      "cost": 0.00000984,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 901,
+      "inputTokens": 348,
+      "outputTokens": 40,
+      "cost": 0.00001548,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2794,
+      "inputTokens": 281,
+      "outputTokens": 111,
+      "cost": 0.00001672,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 743,
+      "inputTokens": 545,
+      "outputTokens": 42,
+      "cost": 0.00002181,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 943,
+      "inputTokens": 484,
+      "outputTokens": 67,
+      "cost": 0.00001638,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 752,
+      "inputTokens": 259,
+      "outputTokens": 45,
+      "cost": 0.00001362,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 3132,
+      "inputTokens": 273,
+      "outputTokens": 67,
+      "cost": 0.00001552,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1544,
+      "inputTokens": 368,
+      "outputTokens": 45,
+      "cost": 0.00001683,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2466,
+      "inputTokens": 614,
+      "outputTokens": 53,
+      "cost": 0.00002573,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1362,
+      "inputTokens": 215,
+      "outputTokens": 93,
+      "cost": 0.00001854,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 11601,
+      "inputTokens": 411,
+      "outputTokens": 47,
+      "cost": 0.00001292,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1483,
+      "inputTokens": 344,
+      "outputTokens": 57,
+      "cost": 0.00001773,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1251,
+      "inputTokens": 310,
+      "outputTokens": 78,
+      "cost": 0.00001796,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1531,
+      "inputTokens": 215,
+      "outputTokens": 74,
+      "cost": 0.0000117,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1530,
+      "inputTokens": 214,
+      "outputTokens": 29,
+      "cost": 0.000010266,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 11165,
+      "inputTokens": 215,
+      "outputTokens": 42,
+      "cost": 0.00001191,
+      "question": "q2"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 988,
+      "inputTokens": 364,
+      "outputTokens": 61,
+      "cost": 0.00001338,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 818,
+      "inputTokens": 448,
+      "outputTokens": 57,
+      "cost": 0.00001466,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1236,
+      "inputTokens": 350,
+      "outputTokens": 107,
+      "cost": 0.00002441,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1383,
+      "inputTokens": 242,
+      "outputTokens": 45,
+      "cost": 0.00000934,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 960,
+      "inputTokens": 254,
+      "outputTokens": 79,
+      "cost": 0.00001789,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1115,
+      "inputTokens": 284,
+      "outputTokens": 105,
+      "cost": 0.00001618,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1407,
+      "inputTokens": 327,
+      "outputTokens": 45,
+      "cost": 0.000015783,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1534,
+      "inputTokens": 198,
+      "outputTokens": 51,
+      "cost": 0.00001308,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2673,
+      "inputTokens": 274,
+      "outputTokens": 116,
+      "cost": 0.00001708,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1567,
+      "inputTokens": 234,
+      "outputTokens": 53,
+      "cost": 0.00000998,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 779,
+      "inputTokens": 261,
+      "outputTokens": 54,
+      "cost": 0.00001485,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1432,
+      "inputTokens": 294,
+      "outputTokens": 39,
+      "cost": 0.00001403,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2055,
+      "inputTokens": 217,
+      "outputTokens": 96,
+      "cost": 0.00001394,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2152,
+      "inputTokens": 266,
+      "outputTokens": 109,
+      "cost": 0.00001622,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 12057,
+      "inputTokens": 328,
+      "outputTokens": 72,
+      "cost": 0.00002,
+      "question": "q3"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1875,
+      "inputTokens": 273,
+      "outputTokens": 66,
+      "cost": 0.00001745,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1944,
+      "inputTokens": 283,
+      "outputTokens": 51,
+      "cost": 0.00001342,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1036,
+      "inputTokens": 288,
+      "outputTokens": 68,
+      "cost": 0.00001256,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 899,
+      "inputTokens": 236,
+      "outputTokens": 38,
+      "cost": 0.00000852,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1718,
+      "inputTokens": 209,
+      "outputTokens": 75,
+      "cost": 0.00001544,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 649,
+      "inputTokens": 209,
+      "outputTokens": 38,
+      "cost": 0.00001121,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2875,
+      "inputTokens": 238,
+      "outputTokens": 40,
+      "cost": 0.00000876,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1372,
+      "inputTokens": 242,
+      "outputTokens": 48,
+      "cost": 0.0000135,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1287,
+      "inputTokens": 226,
+      "outputTokens": 52,
+      "cost": 0.00001354,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 742,
+      "inputTokens": 319,
+      "outputTokens": 67,
+      "cost": 0.00001828,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 790,
+      "inputTokens": 253,
+      "outputTokens": 66,
+      "cost": 0.00001617,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1889,
+      "inputTokens": 346,
+      "outputTokens": 48,
+      "cost": 0.000016754,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1252,
+      "inputTokens": 240,
+      "outputTokens": 40,
+      "cost": 0.0000088,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2050,
+      "inputTokens": 442,
+      "outputTokens": 92,
+      "cost": 0.00001804,
+      "question": "q4"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1986,
+      "inputTokens": 270,
+      "outputTokens": 122,
+      "cost": 0.0000176,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1361,
+      "inputTokens": 231,
+      "outputTokens": 77,
+      "cost": 0.00001694,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2476,
+      "inputTokens": 290,
+      "outputTokens": 69,
+      "cost": 0.0000127,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 3207,
+      "inputTokens": 238,
+      "outputTokens": 83,
+      "cost": 0.00001895,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2378,
+      "inputTokens": 252,
+      "outputTokens": 83,
+      "cost": 0.000018928,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 798,
+      "inputTokens": 348,
+      "outputTokens": 37,
+      "cost": 0.00001066,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2971,
+      "inputTokens": 233,
+      "outputTokens": 119,
+      "cost": 0.000023417,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2272,
+      "inputTokens": 298,
+      "outputTokens": 64,
+      "cost": 0.000017602,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 3605,
+      "inputTokens": 409,
+      "outputTokens": 58,
+      "cost": 0.00001398,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 964,
+      "inputTokens": 442,
+      "outputTokens": 54,
+      "cost": 0.00002028,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1179,
+      "inputTokens": 260,
+      "outputTokens": 90,
+      "cost": 0.0000195,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1246,
+      "inputTokens": 257,
+      "outputTokens": 5,
+      "cost": 0.00001118,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2944,
+      "inputTokens": 242,
+      "outputTokens": 61,
+      "cost": 0.00001094,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1947,
+      "inputTokens": 223,
+      "outputTokens": 74,
+      "cost": 0.000016827,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 12090,
+      "inputTokens": 261,
+      "outputTokens": 38,
+      "cost": 0.00000902,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 979,
+      "inputTokens": 356,
+      "outputTokens": 86,
+      "cost": 0.00002272,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2069,
+      "inputTokens": 224,
+      "outputTokens": 39,
+      "cost": 0.00001193,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1022,
+      "inputTokens": 227,
+      "outputTokens": 101,
+      "cost": 0.00002095,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 913,
+      "inputTokens": 308,
+      "outputTokens": 26,
+      "cost": 0.000012572,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 806,
+      "inputTokens": 234,
+      "outputTokens": 36,
+      "cost": 0.0000117,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2376,
+      "inputTokens": 213,
+      "outputTokens": 39,
+      "cost": 0.00000816,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1444,
+      "inputTokens": 210,
+      "outputTokens": 74,
+      "cost": 0.00001666,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1384,
+      "inputTokens": 318,
+      "outputTokens": 66,
+      "cost": 0.00001812,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1293,
+      "inputTokens": 216,
+      "outputTokens": 78,
+      "cost": 0.00001662,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2337,
+      "inputTokens": 223,
+      "outputTokens": 65,
+      "cost": 0.00001096,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 11401,
+      "inputTokens": 250,
+      "outputTokens": 34,
+      "cost": 0.00001201,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1938,
+      "inputTokens": 216,
+      "outputTokens": 59,
+      "cost": 0.00001469,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1069,
+      "inputTokens": 223,
+      "outputTokens": 35,
+      "cost": 0.00000796,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 4088,
+      "inputTokens": 377,
+      "outputTokens": 37,
+      "cost": 0.00001124,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1582,
+      "inputTokens": 597,
+      "outputTokens": 69,
+      "cost": 0.00001884,
+      "question": "q5"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1311,
+      "inputTokens": 257,
+      "outputTokens": 44,
+      "cost": 0.00000954,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1100,
+      "inputTokens": 281,
+      "outputTokens": 63,
+      "cost": 0.00001662,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2988,
+      "inputTokens": 337,
+      "outputTokens": 122,
+      "cost": 0.00002505,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1517,
+      "inputTokens": 375,
+      "outputTokens": 86,
+      "cost": 0.0000161,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1486,
+      "inputTokens": 371,
+      "outputTokens": 91,
+      "cost": 0.00002387,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1012,
+      "inputTokens": 545,
+      "outputTokens": 96,
+      "cost": 0.00002883,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 3042,
+      "inputTokens": 424,
+      "outputTokens": 79,
+      "cost": 0.00001638,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1703,
+      "inputTokens": 241,
+      "outputTokens": 34,
+      "cost": 0.00000822,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1059,
+      "inputTokens": 210,
+      "outputTokens": 44,
+      "cost": 0.00001246,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1331,
+      "inputTokens": 338,
+      "outputTokens": 42,
+      "cost": 0.000015682,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2226,
+      "inputTokens": 374,
+      "outputTokens": 54,
+      "cost": 0.00001288,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 757,
+      "inputTokens": 241,
+      "outputTokens": 38,
+      "cost": 0.00000862,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 3073,
+      "inputTokens": 313,
+      "outputTokens": 103,
+      "cost": 0.0000242,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2633,
+      "inputTokens": 411,
+      "outputTokens": 54,
+      "cost": 0.00001643,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1781,
+      "inputTokens": 312,
+      "outputTokens": 64,
+      "cost": 0.000018008,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 705,
+      "inputTokens": 368,
+      "outputTokens": 93,
+      "cost": 0.00001666,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1611,
+      "inputTokens": 219,
+      "outputTokens": 50,
+      "cost": 0.00001343,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 622,
+      "inputTokens": 206,
+      "outputTokens": 41,
+      "cost": 0.00001192,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 582,
+      "inputTokens": 450,
+      "outputTokens": 36,
+      "cost": 0.00001854,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 891,
+      "inputTokens": 261,
+      "outputTokens": 44,
+      "cost": 0.00000962,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1111,
+      "inputTokens": 223,
+      "outputTokens": 109,
+      "cost": 0.00002195,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2006,
+      "inputTokens": 322,
+      "outputTokens": 59,
+      "cost": 0.00001755,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 751,
+      "inputTokens": 212,
+      "outputTokens": 27,
+      "cost": 0.00000694,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1166,
+      "inputTokens": 319,
+      "outputTokens": 71,
+      "cost": 0.00001348,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 945,
+      "inputTokens": 471,
+      "outputTokens": 90,
+      "cost": 0.00002673,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1043,
+      "inputTokens": 356,
+      "outputTokens": 74,
+      "cost": 0.00001452,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1572,
+      "inputTokens": 383,
+      "outputTokens": 43,
+      "cost": 0.0000173,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 668,
+      "inputTokens": 583,
+      "outputTokens": 38,
+      "cost": 0.00002243,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1527,
+      "inputTokens": 269,
+      "outputTokens": 63,
+      "cost": 0.000016621,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1010,
+      "inputTokens": 255,
+      "outputTokens": 29,
+      "cost": 0.000011455,
+      "question": "q6"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2811,
+      "inputTokens": 236,
+      "outputTokens": 67,
+      "cost": 0.00001489,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1553,
+      "inputTokens": 484,
+      "outputTokens": 108,
+      "cost": 0.00002048,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1192,
+      "inputTokens": 321,
+      "outputTokens": 38,
+      "cost": 0.000014629,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 899,
+      "inputTokens": 249,
+      "outputTokens": 25,
+      "cost": 0.000010721,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1111,
+      "inputTokens": 547,
+      "outputTokens": 67,
+      "cost": 0.00001764,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1124,
+      "inputTokens": 314,
+      "outputTokens": 65,
+      "cost": 0.00001278,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 852,
+      "inputTokens": 382,
+      "outputTokens": 65,
+      "cost": 0.00001991,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1057,
+      "inputTokens": 254,
+      "outputTokens": 26,
+      "cost": 0.00001088,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 975,
+      "inputTokens": 268,
+      "outputTokens": 42,
+      "cost": 0.00000956,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 845,
+      "inputTokens": 373,
+      "outputTokens": 40,
+      "cost": 0.00001639,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1091,
+      "inputTokens": 209,
+      "outputTokens": 70,
+      "cost": 0.00001537,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 881,
+      "inputTokens": 366,
+      "outputTokens": 52,
+      "cost": 0.00001774,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 939,
+      "inputTokens": 409,
+      "outputTokens": 57,
+      "cost": 0.00001968,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2256,
+      "inputTokens": 238,
+      "outputTokens": 83,
+      "cost": 0.00001895,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1672,
+      "inputTokens": 288,
+      "outputTokens": 38,
+      "cost": 0.00000956,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1645,
+      "inputTokens": 246,
+      "outputTokens": 71,
+      "cost": 0.00001732,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 499,
+      "inputTokens": 307,
+      "outputTokens": 73,
+      "cost": 0.000044925,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1173,
+      "inputTokens": 348,
+      "outputTokens": 54,
+      "cost": 0.00001518,
+      "question": "q7"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1936,
+      "inputTokens": 619,
+      "outputTokens": 66,
+      "cost": 0.000027191,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1027,
+      "inputTokens": 241,
+      "outputTokens": 40,
+      "cost": 0.00000882,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1170,
+      "inputTokens": 236,
+      "outputTokens": 63,
+      "cost": 0.00001102,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 3170,
+      "inputTokens": 260,
+      "outputTokens": 79,
+      "cost": 0.00001901,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1160,
+      "inputTokens": 241,
+      "outputTokens": 69,
+      "cost": 0.00001689,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1412,
+      "inputTokens": 410,
+      "outputTokens": 60,
+      "cost": 0.0000201,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1768,
+      "inputTokens": 469,
+      "outputTokens": 53,
+      "cost": 0.000021021,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1300,
+      "inputTokens": 468,
+      "outputTokens": 74,
+      "cost": 0.00001676,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 867,
+      "inputTokens": 216,
+      "outputTokens": 54,
+      "cost": 0.00000972,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 757,
+      "inputTokens": 291,
+      "outputTokens": 37,
+      "cost": 0.00001354,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1807,
+      "inputTokens": 245,
+      "outputTokens": 116,
+      "cost": 0.00002411,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2877,
+      "inputTokens": 236,
+      "outputTokens": 123,
+      "cost": 0.000024064,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 727,
+      "inputTokens": 489,
+      "outputTokens": 46,
+      "cost": 0.00001438,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 629,
+      "inputTokens": 293,
+      "outputTokens": 40,
+      "cost": 0.00001399,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 679,
+      "inputTokens": 394,
+      "outputTokens": 35,
+      "cost": 0.00001138,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1764,
+      "inputTokens": 372,
+      "outputTokens": 54,
+      "cost": 0.00001862,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1291,
+      "inputTokens": 266,
+      "outputTokens": 51,
+      "cost": 0.000014854,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 829,
+      "inputTokens": 271,
+      "outputTokens": 59,
+      "cost": 0.0000158,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1063,
+      "inputTokens": 351,
+      "outputTokens": 61,
+      "cost": 0.00001312,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 938,
+      "inputTokens": 264,
+      "outputTokens": 32,
+      "cost": 0.000012136,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1814,
+      "inputTokens": 262,
+      "outputTokens": 75,
+      "cost": 0.00001655,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 873,
+      "inputTokens": 245,
+      "outputTokens": 58,
+      "cost": 0.0000107,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1043,
+      "inputTokens": 616,
+      "outputTokens": 26,
+      "cost": 0.000021504,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1040,
+      "inputTokens": 297,
+      "outputTokens": 55,
+      "cost": 0.00001661,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1223,
+      "inputTokens": 429,
+      "outputTokens": 40,
+      "cost": 0.000018041,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1233,
+      "inputTokens": 224,
+      "outputTokens": 33,
+      "cost": 0.00001101,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1884,
+      "inputTokens": 226,
+      "outputTokens": 158,
+      "cost": 0.00002032,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1489,
+      "inputTokens": 240,
+      "outputTokens": 47,
+      "cost": 0.00001378,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 679,
+      "inputTokens": 340,
+      "outputTokens": 42,
+      "cost": 0.00001608,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1257,
+      "inputTokens": 587,
+      "outputTokens": 34,
+      "cost": 0.00002237,
+      "question": "q8"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 697,
+      "inputTokens": 247,
+      "outputTokens": 39,
+      "cost": 0.00001248,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 939,
+      "inputTokens": 359,
+      "outputTokens": 73,
+      "cost": 0.00002026,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2040,
+      "inputTokens": 262,
+      "outputTokens": 72,
+      "cost": 0.000017678,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1279,
+      "inputTokens": 627,
+      "outputTokens": 44,
+      "cost": 0.00001694,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1260,
+      "inputTokens": 253,
+      "outputTokens": 55,
+      "cost": 0.0000152,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 685,
+      "inputTokens": 475,
+      "outputTokens": 40,
+      "cost": 0.00001945,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1438,
+      "inputTokens": 624,
+      "outputTokens": 51,
+      "cost": 0.000025236,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 797,
+      "inputTokens": 318,
+      "outputTokens": 23,
+      "cost": 0.000012442,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1227,
+      "inputTokens": 455,
+      "outputTokens": 51,
+      "cost": 0.00001682,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2749,
+      "inputTokens": 497,
+      "outputTokens": 106,
+      "cost": 0.00003017,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1400,
+      "inputTokens": 294,
+      "outputTokens": 73,
+      "cost": 0.00001865,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2785,
+      "inputTokens": 224,
+      "outputTokens": 82,
+      "cost": 0.00001694,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1670,
+      "inputTokens": 405,
+      "outputTokens": 39,
+      "cost": 0.000014,
+      "question": "q9"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 5137,
+      "inputTokens": 606,
+      "outputTokens": 118,
+      "cost": 0.00002392,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 3897,
+      "inputTokens": 278,
+      "outputTokens": 47,
+      "cost": 0.00001026,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1108,
+      "inputTokens": 212,
+      "outputTokens": 40,
+      "cost": 0.000011748,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 912,
+      "inputTokens": 353,
+      "outputTokens": 75,
+      "cost": 0.00002109,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2189,
+      "inputTokens": 367,
+      "outputTokens": 63,
+      "cost": 0.00001694,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 4107,
+      "inputTokens": 261,
+      "outputTokens": 59,
+      "cost": 0.00001112,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1600,
+      "inputTokens": 243,
+      "outputTokens": 61,
+      "cost": 0.00001404,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 4663,
+      "inputTokens": 254,
+      "outputTokens": 137,
+      "cost": 0.00001878,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2642,
+      "inputTokens": 249,
+      "outputTokens": 58,
+      "cost": 0.00001377,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1073,
+      "inputTokens": 442,
+      "outputTokens": 52,
+      "cost": 0.00001404,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 939,
+      "inputTokens": 341,
+      "outputTokens": 33,
+      "cost": 0.000014509,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1250,
+      "inputTokens": 458,
+      "outputTokens": 45,
+      "cost": 0.000019582,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1040,
+      "inputTokens": 231,
+      "outputTokens": 32,
+      "cost": 0.000011179,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1514,
+      "inputTokens": 438,
+      "outputTokens": 88,
+      "cost": 0.00001756,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2964,
+      "inputTokens": 363,
+      "outputTokens": 49,
+      "cost": 0.00001216,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 745,
+      "inputTokens": 210,
+      "outputTokens": 36,
+      "cost": 0.00001098,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1022,
+      "inputTokens": 219,
+      "outputTokens": 44,
+      "cost": 0.00000878,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 2291,
+      "inputTokens": 282,
+      "outputTokens": 55,
+      "cost": 0.00001114,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1209,
+      "inputTokens": 256,
+      "outputTokens": 54,
+      "cost": 0.00001052,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1827,
+      "inputTokens": 590,
+      "outputTokens": 58,
+      "cost": 0.00002576,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1209,
+      "inputTokens": 208,
+      "outputTokens": 92,
+      "cost": 0.0000182,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1484,
+      "inputTokens": 304,
+      "outputTokens": 43,
+      "cost": 0.00001038,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1026,
+      "inputTokens": 607,
+      "outputTokens": 41,
+      "cost": 0.00002354,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1954,
+      "inputTokens": 215,
+      "outputTokens": 69,
+      "cost": 0.0000112,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1209,
+      "inputTokens": 297,
+      "outputTokens": 34,
+      "cost": 0.00000934,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 4775,
+      "inputTokens": 216,
+      "outputTokens": 77,
+      "cost": 0.00001202,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1833,
+      "inputTokens": 209,
+      "outputTokens": 41,
+      "cost": 0.00001178,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 4407,
+      "inputTokens": 555,
+      "outputTokens": 36,
+      "cost": 0.0000147,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 1551,
+      "inputTokens": 216,
+      "outputTokens": 50,
+      "cost": 0.00001318,
+      "question": "q10"
+    },
+    {
+      "mode": "gpt-oss-file",
+      "ms": 889,
+      "inputTokens": 470,
+      "outputTokens": 33,
+      "cost": 0.00001872,
+      "question": "q10"
+    }
+  ],
+  "results": [
+    {
+      "id": "q1",
+      "question": "When does TrueForge decide to compact a Session's context, and what replaces the old messages?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+          "symbols": [
+            "ContextCompaction.processPreLLM",
+            "resolveCompactionThresholdTokens"
+          ],
+          "why": "processPreLLM:208-240 checks prompt+completion tokens against the threshold, summarises with a second model call and yields AGENT_CONTEXT_OVERWRITE with the summary plus CONTINUATION_MESSAGE"
+        },
+        {
+          "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+          "symbols": [
+            "contextCompaction"
+          ],
+          "why": "builtinsFromSpec.ts:35 wires the capability and its threshold from the Agent spec"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "symbols": [
+            "AgentThread.executeContextProcessors"
+          ],
+          "why": "executeContextProcessors:970-991 runs the pre-LLM processors and applies their overwrite"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+        "packages/trueforge/src/db/sqlite/migrations/20260821_000001_agent_compaction.ts",
+        "packages/trueforge/src/db/postgres/migrations/20260821_000001_agent_compaction.ts",
+        "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+        "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+        "packages/trueforge-core/src/core/events/schema.ts",
+        "packages/trueforge-core/src/core/index.ts",
+        "packages/trueforge-core/src/core/runtime/metrics.ts",
+        "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+        "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+        "packages/trueforge/src/runtime/catalogUsage.ts",
+        "packages/trueforge/src/db/postgres/types.ts",
+        "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/WebSearch.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.6666666666666666,
+            "recallAt5": 0.6666666666666666,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+              "score": 29,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260821_000001_agent_compaction.ts",
+              "score": 22,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260821_000001_agent_compaction.ts",
+              "score": 21,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 10,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/metrics.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/runtime/catalogUsage.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/WebSearch.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.6071428571428571,
+            "recallAt5": 0.3333333333333333,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 17,
+            "msTotal": 23153,
+            "msMax": 2407,
+            "inputTokens": 5091,
+            "outputTokens": 782,
+            "cost": 0.00023413599999999997
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260821_000001_agent_compaction.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260821_000001_agent_compaction.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/metrics.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/runtime/catalogUsage.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/WebSearch.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q2",
+      "question": "How does TrueForge track how many tokens the context holds between LLM calls?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/runtime/contextUsage.ts",
+          "symbols": [
+            "CurrentContextUsageSchema",
+            "mergeCurrentContextUsage",
+            "currentContextUsageFromCompletion"
+          ],
+          "why": "contextUsage.ts:4-39 defines the live, persisted-per-thread context budget and how a completion's usage maps onto it"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+          "symbols": [
+            "estimateTokensForContextMessages"
+          ],
+          "why": "contextUtils.ts:150 estimates tokens for messages appended since the last LLM call"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/llm/usage.ts",
+          "symbols": [
+            "estimateTokensForString"
+          ],
+          "why": "usage.ts:3 the estimate itself is characters / 4"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "symbols": [
+            "AgentThread"
+          ],
+          "why": "AgentThread.ts:700-738 merges the estimate after appends and replaces it on overwrite"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+        "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+        "packages/trueforge/src/db/postgres/session-store/queries/threads.ts",
+        "packages/trueforge/src/db/sqlite/session-store/queries/threads.ts",
+        "packages/trueforge-core/src/core/runtime/contextUsage.ts",
+        "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+        "packages/trueforge-core/src/agent-session/store/InMemorySessionStore.ts",
+        "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+        "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+        "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+        "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts",
+        "packages/trueforge/src/db/postgres/types.ts",
+        "packages/trueforge-core/src/core/events/schema.ts",
+        "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+        "packages/trueforge/src/db/sqlite/types.ts",
+        "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+        "packages/trueforge-core/src/core/capabilities/AgentContextProcessor.ts",
+        "packages/trueforge-core/src/core/llm/usage.ts",
+        "packages/trueforge/src/db/sqlite/client.ts",
+        "packages/trueforge/src/db/sqlite/migrations/20260730_000002_session_store.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.6625,
+            "recallAt5": 0.25,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 29,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+              "score": 19,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+              "score": 19,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/threads.ts",
+              "score": 16,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/threads.ts",
+              "score": 14,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/contextUsage.ts",
+              "score": 11,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+              "score": 9,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/InMemorySessionStore.ts",
+              "score": 7,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+              "score": 5,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/types.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/AgentContextProcessor.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/usage.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/client.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260730_000002_session_store.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.925,
+            "recallAt5": 0.75,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 24,
+            "msTotal": 65306,
+            "msMax": 11601,
+            "inputTokens": 7961,
+            "outputTokens": 1437,
+            "cost": 0.000397362
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/runtime/contextUsage.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260730_000002_session_store.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/threads.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/usage.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/threads.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/InMemorySessionStore.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/AgentContextProcessor.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/client.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q3",
+      "question": "How is the system prompt assembled from the Agent's instructions, its capabilities, the sandbox and the deferred tools?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/InstructionBuilder.ts",
+          "symbols": [
+            "InstructionBuilder"
+          ],
+          "why": "InstructionBuilder.ts:1-127 builds the XML-sectioned system prompt tree"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "symbols": [
+            "AgentThread.buildInstruction"
+          ],
+          "why": "buildInstruction:582-600 orders identity, agent-capabilities (sandbox, deferred tools, capability builders) and user-instructions (root thread only)"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/capabilities/AgentCapability.ts",
+          "symbols": [
+            "AgentCapability.instructionBuilders"
+          ],
+          "why": "AgentCapability.ts:27 the hook every capability uses to add its own prompt section"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/InstructionBuilder.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+        "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge-core/src/core/sandbox/skills/SkillMounter.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/WebSearch.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+        "packages/trueforge-core/src/core/sandbox/skills/ISkillMounter.ts",
+        "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+        "packages/trueforge-core/src/core/capabilities/AgentCapability.ts",
+        "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+        "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+        "packages/trueforge-core/src/core/index.ts",
+        "packages/trueforge-core/src/core/sandbox/skills/constants.ts",
+        "packages/trueforge-core/src/core/sandbox/provider/Provider.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.7361111111111112,
+            "recallAt5": 0.6666666666666666,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/InstructionBuilder.ts",
+              "score": 16,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+              "score": 16,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 12,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 11,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/SkillMounter.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/WebSearch.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/ISkillMounter.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/AgentCapability.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/constants.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/Provider.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.5138888888888888,
+            "recallAt5": 0.3333333333333333,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 15,
+            "msTotal": 32156,
+            "msMax": 12057,
+            "inputTokens": 4341,
+            "outputTokens": 1089,
+            "cost": 0.000230823
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/InstructionBuilder.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/SkillMounter.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/WebSearch.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/ISkillMounter.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/AgentCapability.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/constants.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/Provider.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q4",
+      "question": "What happens when a tool returns a response too large to put into the context?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts",
+          "symbols": [
+            "LargeToolResponseProcessor",
+            "DEFAULT_INDIVIDUAL_TOOL_TOKEN_THRESHOLD"
+          ],
+          "why": "LargeToolResponse.ts:13-241 thresholds of 6,000 tokens per response and 10,000 in total, replaced by a preview"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/capabilities/ToolResponseProcessor.ts",
+          "symbols": [
+            "ToolResponseProcessor"
+          ],
+          "why": "ToolResponseProcessor.ts:6-16 the interface the processor implements"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "symbols": [
+            "AgentThread.toolResponseProcessors"
+          ],
+          "why": "AgentThread.ts:1292 runs every capability's tool response processors on each result"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts",
+        "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+        "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge-core/src/core/capabilities/ToolResponseProcessor.ts",
+        "packages/trueforge-core/src/core/index.ts",
+        "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+        "packages/trueforge-core/src/core/sandbox/constants.ts",
+        "packages/trueforge-core/src/core/capabilities/AgentCapability.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+        "packages/trueforge/src/catalog/modelCatalog.gen.ts",
+        "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+        "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.8636363636363636,
+            "recallAt5": 1,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts",
+              "score": 32,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+              "score": 12,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 9,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/ToolResponseProcessor.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/constants.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/AgentCapability.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/catalog/modelCatalog.gen.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.7878787878787878,
+            "recallAt5": 0.6666666666666666,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 14,
+            "msTotal": 20378,
+            "msMax": 2875,
+            "inputTokens": 3804,
+            "outputTokens": 789,
+            "cost": 0.00019244400000000003
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/ToolResponseProcessor.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/constants.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/AgentCapability.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/catalog/modelCatalog.gen.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q5",
+      "question": "How does TrueForge keep tool definitions out of the context until the model asks for them?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+          "symbols": [
+            "DeferredTool",
+            "LIST_TOOLS_NAME",
+            "GET_TOOL_INFO_NAME"
+          ],
+          "why": "DeferredTool.ts:22-351 the meta-tools (list_tools, get_tool_info, get_tool_output_schema) that stand in for non-preloaded tools"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+          "symbols": [
+            "ToolSet.preload"
+          ],
+          "why": "ToolSet.ts:19-50 each tool set carries its preload decision"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/mcp/ToolSelectorPolicy.ts",
+          "symbols": [
+            "ToolSelectorConfig"
+          ],
+          "why": "ToolSelectorPolicy.ts:1-25 the preload selectors (@all, @read-only) per MCP server"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "symbols": [
+            "AgentThread"
+          ],
+          "why": "AgentThread.ts:573 creates the DeferredTool and :1063 registers it as a managed server"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+        "packages/trueforge-core/src/core/mcp/ToolSelectorPolicy.ts",
+        "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge-core/src/core/sandbox/skills/SkillMounter.ts",
+        "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+        "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+        "packages/trueforge/src/truefoundry/TrueFoundrySkillStore.ts",
+        "packages/trueforge-core/src/core/mcp/IMCPServer.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+        "packages/trueforge-core/src/core/sandbox/skills/constants.ts",
+        "packages/trueforge-core/src/core/mcp/LocalToolMCP.ts",
+        "packages/trueforge-core/src/core/mcp/convertMCPServers.ts",
+        "packages/trueforge/src/db/gitSkillMounts.ts",
+        "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+        "packages/trueforge-core/src/core/mcp/toolSelectors.ts",
+        "packages/trueforge/src/db/sqlite/migrations/20260813_000001_mcp_oauth_user_scoped.ts",
+        "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+        "packages/trueforge/src/routes/mcpServerRoutes.ts",
+        "packages/trueforge-core/src/core/events/PassthroughEvents.ts",
+        "packages/trueforge-core/src/core/index.ts",
+        "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+        "packages/trueforge-core/src/core/sandbox/codeMode/types.ts",
+        "packages/trueforge-core/src/core/sandbox/codeMode/CodeModeDispatcher.ts",
+        "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+        "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+        "packages/trueforge/src/db/sqlite/client.ts",
+        "packages/trueforge/src/db/sqlite/migrations/20260818_000001_mcp_pending_auth_return_to.ts",
+        "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+        "packages/trueforge-core/src/core/llm/LLMTypes.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.9519230769230769,
+            "recallAt5": 0.75,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+              "score": 31,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/ToolSelectorPolicy.ts",
+              "score": 17,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 15,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 9,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/SkillMounter.ts",
+              "score": 9,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 9,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+              "score": 7,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/TrueFoundrySkillStore.ts",
+              "score": 5,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/IMCPServer.ts",
+              "score": 5,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+              "score": 5,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/constants.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/LocalToolMCP.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/convertMCPServers.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/gitSkillMounts.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/toolSelectors.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260813_000001_mcp_oauth_user_scoped.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/routes/mcpServerRoutes.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/PassthroughEvents.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/codeMode/types.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/codeMode/CodeModeDispatcher.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/client.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260818_000001_mcp_pending_auth_return_to.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/LLMTypes.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.7596153846153846,
+            "recallAt5": 0.5,
+            "mrr": 0.5,
+            "unscored": 0,
+            "calls": 30,
+            "msTotal": 76125,
+            "msMax": 12090,
+            "inputTokens": 8446,
+            "outputTokens": 1878,
+            "cost": 0.0004536559999999999
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/SkillMounter.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/LocalToolMCP.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/gitSkillMounts.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/ToolSelectorPolicy.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/skills/constants.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/TrueFoundrySkillStore.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/IMCPServer.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/convertMCPServers.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/toolSelectors.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260813_000001_mcp_oauth_user_scoped.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/routes/mcpServerRoutes.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/PassthroughEvents.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/codeMode/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/codeMode/CodeModeDispatcher.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/client.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260818_000001_mcp_pending_auth_return_to.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/LLMTypes.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q6",
+      "question": "How does a new Turn get the conversation history of the Session's earlier Turns?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+          "symbols": [
+            "SessionHandle.createTurn",
+            "toNewThreadInit"
+          ],
+          "why": "SessionHandle.ts:164-302 resolves previous_turn_id (auto = tip) and builds the threads from the previous Turn's snapshot"
+        },
+        {
+          "path": "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+          "symbols": [
+            "ISessionStore"
+          ],
+          "why": "ISessionStore.ts:331-372 a Turn's snapshot is assembled on top of the previous Turn's, with fork semantics"
+        },
+        {
+          "path": "packages/trueforge-core/src/agent-session/models/TurnRecord.ts",
+          "symbols": [
+            "TurnSnapshot"
+          ],
+          "why": "the persisted per-Turn snapshot shape (threads, context, usage)"
+        },
+        {
+          "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+          "symbols": [],
+          "why": "the SQLite implementation that stores and assembles Turn snapshots"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+        "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+        "packages/trueforge-core/src/agent-session/store/InMemorySessionStore.ts",
+        "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+        "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+        "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+        "packages/trueforge/src/apis/turns.ts",
+        "packages/trueforge-core/src/core/sandbox/provider/DaytonaSandboxEnvironment.ts",
+        "packages/trueforge-core/src/agent-session/models/TurnRecord.ts",
+        "packages/trueforge-core/src/agent-session/store/SessionStoreErrors.ts",
+        "packages/trueforge/src/sandbox/sandboxEnvironmentVersion.ts",
+        "packages/trueforge/src/sandbox/progressSandboxEnvironmentVersion.ts",
+        "packages/trueforge/src/db/sqlite/session-store/SqliteSessionStore.ts",
+        "packages/trueforge/src/db/sqlite/types.ts",
+        "packages/trueforge/src/db/postgres/session-store/PostgresSessionStore.ts",
+        "packages/trueforge/src/db/postgres/types.ts",
+        "packages/trueforge/src/db/sqlite/migrations/20260815_000001_sandbox_provider_status.ts",
+        "packages/trueforge/src/db/postgres/migrations/20260815_000001_sandbox_provider_status.ts",
+        "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+        "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge-core/src/core/sandbox/provider/Provider.ts",
+        "packages/trueforge-core/src/agent-session/index.ts",
+        "packages/trueforge/src/controller/scheduleDispatch.ts",
+        "packages/trueforge-core/src/agent-session/schemas/session.ts",
+        "packages/trueforge/src/truefoundry/TrueFoundrySandboxEnvironmentStore.ts",
+        "packages/trueforge/src/sandbox/providerUtils.ts",
+        "packages/trueforge/src/schemas/sandboxEnvironment.ts",
+        "packages/trueforge/src/runtime/activeTurns.ts",
+        "packages/trueforge/src/truefoundry/synthesizeTrueFoundryDefaultSandboxEnvironment.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.8942307692307693,
+            "recallAt5": 0.5,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 43,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+              "score": 43,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/InMemorySessionStore.ts",
+              "score": 31,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+              "score": 18,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+              "score": 18,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+              "score": 15,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/apis/turns.ts",
+              "score": 9,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/DaytonaSandboxEnvironment.ts",
+              "score": 7,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/models/TurnRecord.ts",
+              "score": 5,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/SessionStoreErrors.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/sandboxEnvironmentVersion.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/progressSandboxEnvironmentVersion.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/SqliteSessionStore.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/types.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/PostgresSessionStore.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260815_000001_sandbox_provider_status.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260815_000001_sandbox_provider_status.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/Provider.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/index.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/controller/scheduleDispatch.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/session.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/TrueFoundrySandboxEnvironmentStore.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/providerUtils.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/schemas/sandboxEnvironment.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/runtime/activeTurns.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/synthesizeTrueFoundryDefaultSandboxEnvironment.ts",
+              "score": 2,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.7355769230769231,
+            "recallAt5": 0.5,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 30,
+            "msTotal": 43229,
+            "msMax": 3073,
+            "inputTokens": 9927,
+            "outputTokens": 1881,
+            "cost": 0.000492036
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/InMemorySessionStore.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/apis/turns.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/SqliteSessionStore.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/index.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/DaytonaSandboxEnvironment.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/models/TurnRecord.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/SessionStoreErrors.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/sandboxEnvironmentVersion.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/progressSandboxEnvironmentVersion.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/PostgresSessionStore.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/migrations/20260815_000001_sandbox_provider_status.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260815_000001_sandbox_provider_status.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/Provider.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/controller/scheduleDispatch.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/session.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/TrueFoundrySandboxEnvironmentStore.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/providerUtils.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/schemas/sandboxEnvironment.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/runtime/activeTurns.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/synthesizeTrueFoundryDefaultSandboxEnvironment.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q7",
+      "question": "How does a Subagent's result get back into the parent agent's context?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+          "symbols": [
+            "AgentThreadOrchestrator"
+          ],
+          "why": "AgentThreadOrchestrator.ts:425-441 turns a finished child's send_to_parent into a tool response on the parent's open create_sub_agent call"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+          "symbols": [
+            "SUB_AGENT_TOOL_NAME",
+            "dynamicSubAgents"
+          ],
+          "why": "DynamicSubAgents.ts the create_sub_agent tool and its guidance"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "symbols": [
+            "AgentThread"
+          ],
+          "why": "AgentThread.ts:698-751 a child thread's completion carries send_to_parent"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+        "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+        "packages/trueforge/src/db/postgres/session-store/queries/threads.ts",
+        "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+        "packages/trueforge-core/src/core/runtime/metrics.ts",
+        "packages/trueforge/src/db/sqlite/session-store/queries/threads.ts",
+        "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+        "packages/trueforge-core/src/core/index.ts",
+        "packages/trueforge/src/db/postgres/types.ts",
+        "packages/trueforge/src/db/sqlite/types.ts",
+        "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+        "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+        "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+        "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+        "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.9555555555555556,
+            "recallAt5": 1,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 17,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+              "score": 10,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+              "score": 9,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/threads.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/metrics.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/threads.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/types.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 1,
+            "recallAt5": 1,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 18,
+            "msTotal": 22575,
+            "msMax": 2811,
+            "inputTokens": 5839,
+            "outputTokens": 1041,
+            "cost": 0.00030660500000000005
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/turns.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/session-store/queries/threads.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/metrics.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/threads.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q8",
+      "question": "How does a tool call that needs an Approval pause the Turn, and how does the decision resume it?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "symbols": [
+            "AgentThread.stepToolResponse",
+            "AgentThread.send"
+          ],
+          "why": "stepToolResponse:1235-1267 stops on approval-required calls; send:603-659 appends the decisions as context and resumes"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+          "symbols": [
+            "ToolSet"
+          ],
+          "why": "ToolSet.ts:113-156 decides is_approval_required per tool and blocks a call without a decision"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+          "symbols": [
+            "scanApprovalDecisions",
+            "isApprovalDecisionMessage"
+          ],
+          "why": "contextUtils.ts:55-97 reads approval decisions back out of the context"
+        },
+        {
+          "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+          "symbols": [
+            "TurnHandle"
+          ],
+          "why": "TurnHandle surfaces the pause as required_actions on the Turn"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/events/schema.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+        "packages/trueforge-core/src/core/mcp/LocalToolMCP.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+        "packages/trueforge-core/src/core/mcp/IMCPServer.ts",
+        "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+        "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+        "packages/trueforge-core/src/core/index.ts",
+        "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+        "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+        "packages/trueforge-core/src/core/mcp/ToolSelectorPolicy.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+        "packages/trueforge/src/schemas/events.ts",
+        "packages/trueforge-core/src/agent-session/schemas/events.ts",
+        "packages/trueforge-core/src/core/mcp/toolSelectors.ts",
+        "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+        "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+        "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+        "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+        "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+        "packages/trueforge-core/src/core/mcp/convertMCPServers.ts",
+        "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+        "packages/trueforge/src/routes/turnRoutes.ts",
+        "packages/trueforge/src/apis/turns.ts",
+        "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+        "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+        "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+        "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+        "packages/trueforge-core/src/core/llm/LLMTypes.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.8028846153846154,
+            "recallAt5": 0.5,
+            "mrr": 0.5,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 54,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 49,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+              "score": 20,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/LocalToolMCP.ts",
+              "score": 18,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+              "score": 16,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/IMCPServer.ts",
+              "score": 13,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+              "score": 12,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+              "score": 12,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 12,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 11,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+              "score": 11,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/ToolSelectorPolicy.ts",
+              "score": 10,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+              "score": 9,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/schemas/events.ts",
+              "score": 8,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/events.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/toolSelectors.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+              "score": 5,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+              "score": 5,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/convertMCPServers.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/routes/turnRoutes.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/apis/turns.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/LLMTypes.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.6298076923076923,
+            "recallAt5": 0.25,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 30,
+            "msTotal": 39706,
+            "msMax": 3170,
+            "inputTokens": 10098,
+            "outputTokens": 1780,
+            "cost": 0.000493491
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/LocalToolMCP.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/IMCPServer.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/ToolSelectorPolicy.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/toolSelectors.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/index.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/agentSpec.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/schemas/events.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/events.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/convertMCPServers.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/routes/turnRoutes.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/apis/turns.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/LLMTypes.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q9",
+      "question": "Before calling the model again, what does TrueForge do with tool calls that never got a response, for example after a failure or a cancel?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+          "symbols": [
+            "OpenToolCallCloser",
+            "getClosableOpenToolCallIds"
+          ],
+          "why": "OpenToolCallCloser.ts:1-97 a pre-send processor that appends dummy tool responses for the last assistant message, leaving Subagent calls open"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "symbols": [
+            "AgentThread"
+          ],
+          "why": "AgentThread.ts:181-183 open calls the closer will repair don't block a new user message"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+        "packages/trueforge-core/src/core/events/schema.ts",
+        "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+        "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+        "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+        "packages/trueforge/src/routes/turnRoutes.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+        "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+        "packages/trueforge-core/src/core/llm/toOpenAIChatMessage.ts",
+        "packages/trueforge-core/src/core/llm/openaiSchemas.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 1,
+            "recallAt5": 1,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 56,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+              "score": 5,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/routes/turnRoutes.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/toOpenAIChatMessage.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/openaiSchemas.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.9090909090909091,
+            "recallAt5": 1,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 13,
+            "msTotal": 18966,
+            "msMax": 2785,
+            "inputTokens": 5040,
+            "outputTokens": 748,
+            "cost": 0.00023626599999999995
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/executeToolCalls.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/routes/turnRoutes.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/OpenUI.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/toOpenAIChatMessage.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/openaiSchemas.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "q10",
+      "question": "How does TrueForge apply prompt caching to model requests?",
+      "labels": [
+        {
+          "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+          "symbols": [
+            "anthropicProviderOptions"
+          ],
+          "why": "VercelAILLM.ts:385-405 caching defaults on (ephemeral cache_control) for the Anthropic provider only, overridable from the request body"
+        }
+      ],
+      "pool": [
+        "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+        "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+        "packages/trueforge/src/frontend.ts",
+        "packages/trueforge/src/truefoundry/TrueFoundryServiceFoundryServerClient.ts",
+        "packages/trueforge/src/truefoundry/accessToken.ts",
+        "packages/trueforge/src/sandbox/localRuntime.ts",
+        "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+        "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+        "packages/trueforge-core/src/core/runtime/metrics.ts",
+        "packages/trueforge/src/sandbox/local/core/CodeModeUdsTransport.ts",
+        "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+        "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+        "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "packages/trueforge/src/runtime/sessionResources.ts",
+        "packages/trueforge/src/db/postgres/types.ts",
+        "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+        "packages/trueforge-core/src/core/sandbox/codeMode/nats/CodeModeNatsTransport.ts",
+        "packages/trueforge-core/src/core/sandbox/provider/TFYSandboxProvider.ts",
+        "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+        "packages/trueforge-core/src/core/llm/LLMTypes.ts",
+        "packages/trueforge-core/src/core/llm/usage.ts",
+        "packages/trueforge/src/main.ts",
+        "packages/trueforge-core/src/core/events/schema.ts",
+        "packages/trueforge-core/src/agent-session/ITurnResourceResolver.ts",
+        "packages/trueforge/src/mcp/auth/types.ts",
+        "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+        "packages/trueforge/src/db/sqlite/client.ts",
+        "packages/trueforge/src/sandbox/local/core/hostRun.ts",
+        "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+        "packages/trueforge/src/db/mcpServerStore.ts"
+      ],
+      "modes": {
+        "ripgrep": {
+          "metrics": {
+            "auc": 0.9827586206896551,
+            "recallAt5": 1,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 0,
+            "msTotal": 0,
+            "msMax": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cost": 0
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+              "score": 16,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+              "score": 16,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/frontend.ts",
+              "score": 12,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/TrueFoundryServiceFoundryServerClient.ts",
+              "score": 10,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/accessToken.ts",
+              "score": 8,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/localRuntime.ts",
+              "score": 8,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+              "score": 8,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 7,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/metrics.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/core/CodeModeUdsTransport.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 6,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 4,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/runtime/sessionResources.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/codeMode/nats/CodeModeNatsTransport.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/TFYSandboxProvider.ts",
+              "score": 3,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/LLMTypes.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/usage.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/main.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/ITurnResourceResolver.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/mcp/auth/types.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/client.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/core/hostRun.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+              "score": 1,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/mcpServerStore.ts",
+              "score": 1,
+              "confidence": null
+            }
+          ]
+        },
+        "gpt-oss-file": {
+          "metrics": {
+            "auc": 0.9827586206896551,
+            "recallAt5": 1,
+            "mrr": 1,
+            "unscored": 0,
+            "calls": 30,
+            "msTotal": 62466,
+            "msMax": 5137,
+            "inputTokens": 9950,
+            "outputTokens": 1720,
+            "cost": 0.000440938
+          },
+          "scored": [
+            {
+              "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnResourceResolver.ts",
+              "score": 2,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/DaytonaProvider.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/frontend.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/TrueFoundryServiceFoundryServerClient.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/truefoundry/accessToken.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/localRuntime.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/mcp/RemoteMCP.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/metrics.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/core/CodeModeUdsTransport.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/Sandbox.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/schemas/turn.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/runtime/sessionResources.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/postgres/migrations/20260728_000001_session_store.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/codeMode/nats/CodeModeNatsTransport.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/provider/TFYSandboxProvider.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/LLMTypes.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/llm/usage.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/main.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/events/schema.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/agent-session/ITurnResourceResolver.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/mcp/auth/types.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/sandboxScripts.gen.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/sqlite/client.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/sandbox/local/core/hostRun.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge-core/src/core/sandbox/sandboxScripts.gen.ts",
+              "score": 0,
+              "confidence": null
+            },
+            {
+              "path": "packages/trueforge/src/db/mcpServerStore.ts",
+              "score": 0,
+              "confidence": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

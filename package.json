@@ -5,7 +5,8 @@
   "workspaces": [
     "agents",
     "harness",
-    "lib"
+    "lib",
+    "mcp/triage-prototype"
   ],
   "scripts": {
     "dev": "bun scripts/dev.ts",

@@ -1,0 +1,227 @@
+[
+  {
+    "id": "q1",
+    "question": "When does TrueForge decide to compact a Session's context, and what replaces the old messages?",
+    "keywords": ["compact", "summari"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+        "symbols": ["ContextCompaction.processPreLLM", "resolveCompactionThresholdTokens"],
+        "why": "processPreLLM:208-240 checks prompt+completion tokens against the threshold, summarises with a second model call and yields AGENT_CONTEXT_OVERWRITE with the summary plus CONTINUATION_MESSAGE"
+      },
+      {
+        "path": "packages/trueforge-core/src/agent-session/builtinsFromSpec.ts",
+        "symbols": ["contextCompaction"],
+        "why": "builtinsFromSpec.ts:35 wires the capability and its threshold from the Agent spec"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "symbols": ["AgentThread.executeContextProcessors"],
+        "why": "executeContextProcessors:970-991 runs the pre-LLM processors and applies their overwrite"
+      }
+    ]
+  },
+  {
+    "id": "q2",
+    "question": "How does TrueForge track how many tokens the context holds between LLM calls?",
+    "keywords": ["context_usage", "ContextUsage", "estimateTokens", "prompt_tokens"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/runtime/contextUsage.ts",
+        "symbols": ["CurrentContextUsageSchema", "mergeCurrentContextUsage", "currentContextUsageFromCompletion"],
+        "why": "contextUsage.ts:4-39 defines the live, persisted-per-thread context budget and how a completion's usage maps onto it"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+        "symbols": ["estimateTokensForContextMessages"],
+        "why": "contextUtils.ts:150 estimates tokens for messages appended since the last LLM call"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/llm/usage.ts",
+        "symbols": ["estimateTokensForString"],
+        "why": "usage.ts:3 the estimate itself is characters / 4"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "symbols": ["AgentThread"],
+        "why": "AgentThread.ts:700-738 merges the estimate after appends and replaces it on overwrite"
+      }
+    ]
+  },
+  {
+    "id": "q3",
+    "question": "How is the system prompt assembled from the Agent's instructions, its capabilities, the sandbox and the deferred tools?",
+    "keywords": ["InstructionBuilder", "buildInstruction", "system prompt", "addSection"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/InstructionBuilder.ts",
+        "symbols": ["InstructionBuilder"],
+        "why": "InstructionBuilder.ts:1-127 builds the XML-sectioned system prompt tree"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "symbols": ["AgentThread.buildInstruction"],
+        "why": "buildInstruction:582-600 orders identity, agent-capabilities (sandbox, deferred tools, capability builders) and user-instructions (root thread only)"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/capabilities/AgentCapability.ts",
+        "symbols": ["AgentCapability.instructionBuilders"],
+        "why": "AgentCapability.ts:27 the hook every capability uses to add its own prompt section"
+      }
+    ]
+  },
+  {
+    "id": "q4",
+    "question": "What happens when a tool returns a response too large to put into the context?",
+    "keywords": ["LargeToolResponse", "ToolResponseProcessor", "preview"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/capabilities/builtins/LargeToolResponse.ts",
+        "symbols": ["LargeToolResponseProcessor", "DEFAULT_INDIVIDUAL_TOOL_TOKEN_THRESHOLD"],
+        "why": "LargeToolResponse.ts:13-241 thresholds of 6,000 tokens per response and 10,000 in total, replaced by a preview"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/capabilities/ToolResponseProcessor.ts",
+        "symbols": ["ToolResponseProcessor"],
+        "why": "ToolResponseProcessor.ts:6-16 the interface the processor implements"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "symbols": ["AgentThread.toolResponseProcessors"],
+        "why": "AgentThread.ts:1292 runs every capability's tool response processors on each result"
+      }
+    ]
+  },
+  {
+    "id": "q5",
+    "question": "How does TrueForge keep tool definitions out of the context until the model asks for them?",
+    "keywords": ["deferred", "preload", "list_tools", "get_tool_info"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/runtime/DeferredTool.ts",
+        "symbols": ["DeferredTool", "LIST_TOOLS_NAME", "GET_TOOL_INFO_NAME"],
+        "why": "DeferredTool.ts:22-351 the meta-tools (list_tools, get_tool_info, get_tool_output_schema) that stand in for non-preloaded tools"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+        "symbols": ["ToolSet.preload"],
+        "why": "ToolSet.ts:19-50 each tool set carries its preload decision"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/mcp/ToolSelectorPolicy.ts",
+        "symbols": ["ToolSelectorConfig"],
+        "why": "ToolSelectorPolicy.ts:1-25 the preload selectors (@all, @read-only) per MCP server"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "symbols": ["AgentThread"],
+        "why": "AgentThread.ts:573 creates the DeferredTool and :1063 registers it as a managed server"
+      }
+    ]
+  },
+  {
+    "id": "q6",
+    "question": "How does a new Turn get the conversation history of the Session's earlier Turns?",
+    "keywords": ["snapshot", "previous_turn_id", "toSnapshot"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/agent-session/SessionHandle.ts",
+        "symbols": ["SessionHandle.createTurn", "toNewThreadInit"],
+        "why": "SessionHandle.ts:164-302 resolves previous_turn_id (auto = tip) and builds the threads from the previous Turn's snapshot"
+      },
+      {
+        "path": "packages/trueforge-core/src/agent-session/store/ISessionStore.ts",
+        "symbols": ["ISessionStore"],
+        "why": "ISessionStore.ts:331-372 a Turn's snapshot is assembled on top of the previous Turn's, with fork semantics"
+      },
+      {
+        "path": "packages/trueforge-core/src/agent-session/models/TurnRecord.ts",
+        "symbols": ["TurnSnapshot"],
+        "why": "the persisted per-Turn snapshot shape (threads, context, usage)"
+      },
+      {
+        "path": "packages/trueforge/src/db/sqlite/session-store/queries/turns.ts",
+        "symbols": [],
+        "why": "the SQLite implementation that stores and assembles Turn snapshots"
+      }
+    ]
+  },
+  {
+    "id": "q7",
+    "question": "How does a Subagent's result get back into the parent agent's context?",
+    "keywords": ["send_to_parent", "sub_agent", "SubAgentCompletion"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+        "symbols": ["AgentThreadOrchestrator"],
+        "why": "AgentThreadOrchestrator.ts:425-441 turns a finished child's send_to_parent into a tool response on the parent's open create_sub_agent call"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/capabilities/builtins/DynamicSubAgents.ts",
+        "symbols": ["SUB_AGENT_TOOL_NAME", "dynamicSubAgents"],
+        "why": "DynamicSubAgents.ts the create_sub_agent tool and its guidance"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "symbols": ["AgentThread"],
+        "why": "AgentThread.ts:698-751 a child thread's completion carries send_to_parent"
+      }
+    ]
+  },
+  {
+    "id": "q8",
+    "question": "How does a tool call that needs an Approval pause the Turn, and how does the decision resume it?",
+    "keywords": ["approval", "required_actions"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "symbols": ["AgentThread.stepToolResponse", "AgentThread.send"],
+        "why": "stepToolResponse:1235-1267 stops on approval-required calls; send:603-659 appends the decisions as context and resumes"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/mcp/ToolSet.ts",
+        "symbols": ["ToolSet"],
+        "why": "ToolSet.ts:113-156 decides is_approval_required per tool and blocks a call without a decision"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/contextUtils.ts",
+        "symbols": ["scanApprovalDecisions", "isApprovalDecisionMessage"],
+        "why": "contextUtils.ts:55-97 reads approval decisions back out of the context"
+      },
+      {
+        "path": "packages/trueforge-core/src/agent-session/TurnHandle.ts",
+        "symbols": ["TurnHandle"],
+        "why": "TurnHandle surfaces the pause as required_actions on the Turn"
+      }
+    ]
+  },
+  {
+    "id": "q9",
+    "question": "Before calling the model again, what does TrueForge do with tool calls that never got a response, for example after a failure or a cancel?",
+    "keywords": ["OpenToolCall", "tool_call_id", "unresolved"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/runtime/OpenToolCallCloser.ts",
+        "symbols": ["OpenToolCallCloser", "getClosableOpenToolCallIds"],
+        "why": "OpenToolCallCloser.ts:1-97 a pre-send processor that appends dummy tool responses for the last assistant message, leaving Subagent calls open"
+      },
+      {
+        "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+        "symbols": ["AgentThread"],
+        "why": "AgentThread.ts:181-183 open calls the closer will repair don't block a new user message"
+      }
+    ]
+  },
+  {
+    "id": "q10",
+    "question": "How does TrueForge apply prompt caching to model requests?",
+    "keywords": ["cache"],
+    "labels": [
+      {
+        "path": "packages/trueforge-core/src/core/llm/VercelAILLM.ts",
+        "symbols": ["anthropicProviderOptions"],
+        "why": "VercelAILLM.ts:385-405 caching defaults on (ephemeral cache_control) for the Anthropic provider only, overridable from the request body"
+      }
+    ]
+  }
+]

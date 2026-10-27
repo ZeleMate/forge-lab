@@ -1,0 +1,4806 @@
+{
+  "predicates": [
+    {
+      "name": "delegates",
+      "instructions": "In this event, the agent hands a subtask to a subagent (a child agent)."
+    },
+    {
+      "name": "runs_code",
+      "instructions": "In this event, the agent runs code or a shell command in a sandbox."
+    },
+    {
+      "name": "discovers_tools",
+      "instructions": "In this event, the agent looks up which tools exist or fetches a tool's definition before using it."
+    },
+    {
+      "name": "final_answer",
+      "instructions": "This event is the model's final reply for the turn: it answers without calling any tool."
+    },
+    {
+      "name": "waits_for_human",
+      "instructions": "This event pauses the run until a human approves a tool call or answers a question.",
+      "hideType": true
+    }
+  ],
+  "results": {
+    "decisions": {
+      "calls": [
+        {
+          "mode": "decisions",
+          "ms": 735,
+          "inputTokens": 1308,
+          "outputTokens": 0,
+          "cost": 0.0001308
+        },
+        {
+          "mode": "decisions",
+          "ms": 828,
+          "inputTokens": 1202,
+          "outputTokens": 0,
+          "cost": 0.00012020000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 540,
+          "inputTokens": 1236,
+          "outputTokens": 0,
+          "cost": 0.00012360000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 711,
+          "inputTokens": 992,
+          "outputTokens": 0,
+          "cost": 0.00009920000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 655,
+          "inputTokens": 1024,
+          "outputTokens": 0,
+          "cost": 0.00010240000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 677,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 559,
+          "inputTokens": 1336,
+          "outputTokens": 0,
+          "cost": 0.0001336
+        },
+        {
+          "mode": "decisions",
+          "ms": 426,
+          "inputTokens": 1192,
+          "outputTokens": 0,
+          "cost": 0.00011920000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 284,
+          "inputTokens": 1174,
+          "outputTokens": 0,
+          "cost": 0.00011740000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 662,
+          "inputTokens": 990,
+          "outputTokens": 0,
+          "cost": 0.00009900000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 538,
+          "inputTokens": 937,
+          "outputTokens": 0,
+          "cost": 0.00009370000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 380,
+          "inputTokens": 896,
+          "outputTokens": 0,
+          "cost": 0.00008960000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 397,
+          "inputTokens": 1058,
+          "outputTokens": 0,
+          "cost": 0.00010580000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 395,
+          "inputTokens": 994,
+          "outputTokens": 0,
+          "cost": 0.0000994
+        },
+        {
+          "mode": "decisions",
+          "ms": 379,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 560,
+          "inputTokens": 1028,
+          "outputTokens": 0,
+          "cost": 0.0001028
+        },
+        {
+          "mode": "decisions",
+          "ms": 486,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 406,
+          "inputTokens": 992,
+          "outputTokens": 0,
+          "cost": 0.00009920000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 455,
+          "inputTokens": 868,
+          "outputTokens": 0,
+          "cost": 0.00008680000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 611,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 448,
+          "inputTokens": 994,
+          "outputTokens": 0,
+          "cost": 0.0000994
+        },
+        {
+          "mode": "decisions",
+          "ms": 369,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 437,
+          "inputTokens": 1794,
+          "outputTokens": 0,
+          "cost": 0.00017940000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 419,
+          "inputTokens": 1188,
+          "outputTokens": 0,
+          "cost": 0.00011880000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 224,
+          "inputTokens": 1184,
+          "outputTokens": 0,
+          "cost": 0.0001184
+        },
+        {
+          "mode": "decisions",
+          "ms": 610,
+          "inputTokens": 928,
+          "outputTokens": 0,
+          "cost": 0.0000928
+        },
+        {
+          "mode": "decisions",
+          "ms": 387,
+          "inputTokens": 988,
+          "outputTokens": 0,
+          "cost": 0.0000988
+        },
+        {
+          "mode": "decisions",
+          "ms": 543,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 436,
+          "inputTokens": 1330,
+          "outputTokens": 0,
+          "cost": 0.000133
+        },
+        {
+          "mode": "decisions",
+          "ms": 373,
+          "inputTokens": 1206,
+          "outputTokens": 0,
+          "cost": 0.0001206
+        },
+        {
+          "mode": "decisions",
+          "ms": 389,
+          "inputTokens": 1188,
+          "outputTokens": 0,
+          "cost": 0.00011880000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 504,
+          "inputTokens": 994,
+          "outputTokens": 0,
+          "cost": 0.0000994
+        },
+        {
+          "mode": "decisions",
+          "ms": 243,
+          "inputTokens": 939,
+          "outputTokens": 0,
+          "cost": 0.00009390000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 621,
+          "inputTokens": 936,
+          "outputTokens": 0,
+          "cost": 0.00009360000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 571,
+          "inputTokens": 974,
+          "outputTokens": 0,
+          "cost": 0.00009740000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 504,
+          "inputTokens": 998,
+          "outputTokens": 0,
+          "cost": 0.00009980000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 595,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 466,
+          "inputTokens": 1080,
+          "outputTokens": 0,
+          "cost": 0.00010800000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 521,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 337,
+          "inputTokens": 996,
+          "outputTokens": 0,
+          "cost": 0.00009960000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 562,
+          "inputTokens": 868,
+          "outputTokens": 0,
+          "cost": 0.00008680000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 528,
+          "inputTokens": 894,
+          "outputTokens": 0,
+          "cost": 0.0000894
+        },
+        {
+          "mode": "decisions",
+          "ms": 373,
+          "inputTokens": 990,
+          "outputTokens": 0,
+          "cost": 0.00009900000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 210,
+          "inputTokens": 866,
+          "outputTokens": 0,
+          "cost": 0.0000866
+        },
+        {
+          "mode": "decisions",
+          "ms": 395,
+          "inputTokens": 1230,
+          "outputTokens": 0,
+          "cost": 0.000123
+        },
+        {
+          "mode": "decisions",
+          "ms": 430,
+          "inputTokens": 1184,
+          "outputTokens": 0,
+          "cost": 0.0001184
+        },
+        {
+          "mode": "decisions",
+          "ms": 414,
+          "inputTokens": 1064,
+          "outputTokens": 0,
+          "cost": 0.00010640000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 527,
+          "inputTokens": 1340,
+          "outputTokens": 0,
+          "cost": 0.000134
+        },
+        {
+          "mode": "decisions",
+          "ms": 362,
+          "inputTokens": 1006,
+          "outputTokens": 0,
+          "cost": 0.0001006
+        },
+        {
+          "mode": "decisions",
+          "ms": 407,
+          "inputTokens": 2092,
+          "outputTokens": 0,
+          "cost": 0.0002092
+        },
+        {
+          "mode": "decisions",
+          "ms": 493,
+          "inputTokens": 1250,
+          "outputTokens": 0,
+          "cost": 0.000125
+        },
+        {
+          "mode": "decisions",
+          "ms": 455,
+          "inputTokens": 2150,
+          "outputTokens": 0,
+          "cost": 0.00021500000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 359,
+          "inputTokens": 1126,
+          "outputTokens": 0,
+          "cost": 0.0001126
+        },
+        {
+          "mode": "decisions",
+          "ms": 672,
+          "inputTokens": 1304,
+          "outputTokens": 0,
+          "cost": 0.00013040000000000003
+        },
+        {
+          "mode": "decisions",
+          "ms": 537,
+          "inputTokens": 1228,
+          "outputTokens": 0,
+          "cost": 0.0001228
+        },
+        {
+          "mode": "decisions",
+          "ms": 621,
+          "inputTokens": 1224,
+          "outputTokens": 0,
+          "cost": 0.0001224
+        },
+        {
+          "mode": "decisions",
+          "ms": 573,
+          "inputTokens": 1384,
+          "outputTokens": 0,
+          "cost": 0.0001384
+        },
+        {
+          "mode": "decisions",
+          "ms": 432,
+          "inputTokens": 1070,
+          "outputTokens": 0,
+          "cost": 0.00010700000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 417,
+          "inputTokens": 1888,
+          "outputTokens": 0,
+          "cost": 0.00018880000000000004
+        },
+        {
+          "mode": "decisions",
+          "ms": 554,
+          "inputTokens": 1316,
+          "outputTokens": 0,
+          "cost": 0.0001316
+        },
+        {
+          "mode": "decisions",
+          "ms": 531,
+          "inputTokens": 2125,
+          "outputTokens": 0,
+          "cost": 0.00021250000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 503,
+          "inputTokens": 1626,
+          "outputTokens": 0,
+          "cost": 0.0001626
+        },
+        {
+          "mode": "decisions",
+          "ms": 461,
+          "inputTokens": 1200,
+          "outputTokens": 0,
+          "cost": 0.00012
+        },
+        {
+          "mode": "decisions",
+          "ms": 508,
+          "inputTokens": 1260,
+          "outputTokens": 0,
+          "cost": 0.000126
+        },
+        {
+          "mode": "decisions",
+          "ms": 614,
+          "inputTokens": 1214,
+          "outputTokens": 0,
+          "cost": 0.00012140000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 388,
+          "inputTokens": 1966,
+          "outputTokens": 0,
+          "cost": 0.0001966
+        },
+        {
+          "mode": "decisions",
+          "ms": 463,
+          "inputTokens": 1340,
+          "outputTokens": 0,
+          "cost": 0.000134
+        },
+        {
+          "mode": "decisions",
+          "ms": 551,
+          "inputTokens": 1208,
+          "outputTokens": 0,
+          "cost": 0.00012080000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 569,
+          "inputTokens": 2040,
+          "outputTokens": 0,
+          "cost": 0.00020400000000000003
+        },
+        {
+          "mode": "decisions",
+          "ms": 679,
+          "inputTokens": 1268,
+          "outputTokens": 0,
+          "cost": 0.0001268
+        },
+        {
+          "mode": "decisions",
+          "ms": 428,
+          "inputTokens": 2104,
+          "outputTokens": 0,
+          "cost": 0.00021040000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 526,
+          "inputTokens": 941,
+          "outputTokens": 0,
+          "cost": 0.00009410000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 443,
+          "inputTokens": 1504,
+          "outputTokens": 0,
+          "cost": 0.00015040000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 314,
+          "inputTokens": 1464,
+          "outputTokens": 0,
+          "cost": 0.0001464
+        },
+        {
+          "mode": "decisions",
+          "ms": 402,
+          "inputTokens": 1548,
+          "outputTokens": 0,
+          "cost": 0.00015480000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 439,
+          "inputTokens": 994,
+          "outputTokens": 0,
+          "cost": 0.0000994
+        },
+        {
+          "mode": "decisions",
+          "ms": 423,
+          "inputTokens": 1018,
+          "outputTokens": 0,
+          "cost": 0.00010180000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 651,
+          "inputTokens": 1088,
+          "outputTokens": 0,
+          "cost": 0.0001088
+        },
+        {
+          "mode": "decisions",
+          "ms": 565,
+          "inputTokens": 1210,
+          "outputTokens": 0,
+          "cost": 0.00012100000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 373,
+          "inputTokens": 1096,
+          "outputTokens": 0,
+          "cost": 0.00010960000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 589,
+          "inputTokens": 988,
+          "outputTokens": 0,
+          "cost": 0.0000988
+        },
+        {
+          "mode": "decisions",
+          "ms": 470,
+          "inputTokens": 1016,
+          "outputTokens": 0,
+          "cost": 0.0001016
+        },
+        {
+          "mode": "decisions",
+          "ms": 474,
+          "inputTokens": 1102,
+          "outputTokens": 0,
+          "cost": 0.00011020000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 474,
+          "inputTokens": 1036,
+          "outputTokens": 0,
+          "cost": 0.00010360000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 507,
+          "inputTokens": 958,
+          "outputTokens": 0,
+          "cost": 0.00009580000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 991,
+          "inputTokens": 1110,
+          "outputTokens": 0,
+          "cost": 0.000111
+        },
+        {
+          "mode": "decisions",
+          "ms": 564,
+          "inputTokens": 1374,
+          "outputTokens": 0,
+          "cost": 0.0001374
+        },
+        {
+          "mode": "decisions",
+          "ms": 502,
+          "inputTokens": 1152,
+          "outputTokens": 0,
+          "cost": 0.00011520000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 435,
+          "inputTokens": 971,
+          "outputTokens": 0,
+          "cost": 0.00009710000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 585,
+          "inputTokens": 2070,
+          "outputTokens": 0,
+          "cost": 0.000207
+        },
+        {
+          "mode": "decisions",
+          "ms": 408,
+          "inputTokens": 1126,
+          "outputTokens": 0,
+          "cost": 0.0001126
+        },
+        {
+          "mode": "decisions",
+          "ms": 526,
+          "inputTokens": 1034,
+          "outputTokens": 0,
+          "cost": 0.0001034
+        },
+        {
+          "mode": "decisions",
+          "ms": 439,
+          "inputTokens": 1006,
+          "outputTokens": 0,
+          "cost": 0.0001006
+        },
+        {
+          "mode": "decisions",
+          "ms": 478,
+          "inputTokens": 1114,
+          "outputTokens": 0,
+          "cost": 0.00011140000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 252,
+          "inputTokens": 1110,
+          "outputTokens": 0,
+          "cost": 0.000111
+        },
+        {
+          "mode": "decisions",
+          "ms": 564,
+          "inputTokens": 1128,
+          "outputTokens": 0,
+          "cost": 0.0001128
+        },
+        {
+          "mode": "decisions",
+          "ms": 647,
+          "inputTokens": 962,
+          "outputTokens": 0,
+          "cost": 0.00009620000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 603,
+          "inputTokens": 1524,
+          "outputTokens": 0,
+          "cost": 0.00015240000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 679,
+          "inputTokens": 986,
+          "outputTokens": 0,
+          "cost": 0.00009860000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 632,
+          "inputTokens": 990,
+          "outputTokens": 0,
+          "cost": 0.00009900000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 661,
+          "inputTokens": 1012,
+          "outputTokens": 0,
+          "cost": 0.00010120000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 516,
+          "inputTokens": 1008,
+          "outputTokens": 0,
+          "cost": 0.00010080000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 585,
+          "inputTokens": 1132,
+          "outputTokens": 0,
+          "cost": 0.00011320000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 460,
+          "inputTokens": 1118,
+          "outputTokens": 0,
+          "cost": 0.00011180000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 641,
+          "inputTokens": 1652,
+          "outputTokens": 0,
+          "cost": 0.0001652
+        },
+        {
+          "mode": "decisions",
+          "ms": 426,
+          "inputTokens": 1480,
+          "outputTokens": 0,
+          "cost": 0.00014800000000000002
+        },
+        {
+          "mode": "decisions",
+          "ms": 328,
+          "inputTokens": 1410,
+          "outputTokens": 0,
+          "cost": 0.000141
+        },
+        {
+          "mode": "decisions",
+          "ms": 420,
+          "inputTokens": 966,
+          "outputTokens": 0,
+          "cost": 0.0000966
+        },
+        {
+          "mode": "decisions",
+          "ms": 398,
+          "inputTokens": 1000,
+          "outputTokens": 0,
+          "cost": 0.0001
+        },
+        {
+          "mode": "decisions",
+          "ms": 437,
+          "inputTokens": 964,
+          "outputTokens": 0,
+          "cost": 0.00009640000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 294,
+          "inputTokens": 958,
+          "outputTokens": 0,
+          "cost": 0.00009580000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 506,
+          "inputTokens": 954,
+          "outputTokens": 0,
+          "cost": 0.0000954
+        },
+        {
+          "mode": "decisions",
+          "ms": 428,
+          "inputTokens": 1002,
+          "outputTokens": 0,
+          "cost": 0.00010020000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 432,
+          "inputTokens": 982,
+          "outputTokens": 0,
+          "cost": 0.0000982
+        },
+        {
+          "mode": "decisions",
+          "ms": 508,
+          "inputTokens": 951,
+          "outputTokens": 0,
+          "cost": 0.00009510000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 534,
+          "inputTokens": 1260,
+          "outputTokens": 0,
+          "cost": 0.000126
+        },
+        {
+          "mode": "decisions",
+          "ms": 472,
+          "inputTokens": 959,
+          "outputTokens": 0,
+          "cost": 0.00009590000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 536,
+          "inputTokens": 957,
+          "outputTokens": 0,
+          "cost": 0.00009570000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 406,
+          "inputTokens": 986,
+          "outputTokens": 0,
+          "cost": 0.00009860000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 580,
+          "inputTokens": 902,
+          "outputTokens": 0,
+          "cost": 0.00009020000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 568,
+          "inputTokens": 1226,
+          "outputTokens": 0,
+          "cost": 0.0001226
+        },
+        {
+          "mode": "decisions",
+          "ms": 411,
+          "inputTokens": 1074,
+          "outputTokens": 0,
+          "cost": 0.00010740000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 320,
+          "inputTokens": 1152,
+          "outputTokens": 0,
+          "cost": 0.00011520000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 501,
+          "inputTokens": 1082,
+          "outputTokens": 0,
+          "cost": 0.00010820000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 543,
+          "inputTokens": 1154,
+          "outputTokens": 0,
+          "cost": 0.00011540000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 540,
+          "inputTokens": 1192,
+          "outputTokens": 0,
+          "cost": 0.00011920000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 610,
+          "inputTokens": 895,
+          "outputTokens": 0,
+          "cost": 0.00008950000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 436,
+          "inputTokens": 1188,
+          "outputTokens": 0,
+          "cost": 0.00011880000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 540,
+          "inputTokens": 994,
+          "outputTokens": 0,
+          "cost": 0.0000994
+        },
+        {
+          "mode": "decisions",
+          "ms": 884,
+          "inputTokens": 1430,
+          "outputTokens": 0,
+          "cost": 0.000143
+        },
+        {
+          "mode": "decisions",
+          "ms": 670,
+          "inputTokens": 986,
+          "outputTokens": 0,
+          "cost": 0.00009860000000000001
+        },
+        {
+          "mode": "decisions",
+          "ms": 661,
+          "inputTokens": 1210,
+          "outputTokens": 0,
+          "cost": 0.00012100000000000001
+        }
+      ],
+      "perPredicate": {
+        "delegates": {
+          "tp": 1,
+          "fp": 3,
+          "fn": 0,
+          "unscored": 0,
+          "brier": 0.015644696969696968,
+          "wrong": [
+            "model.message-@0.67",
+            "model.message-@0.62",
+            "model.message-@0.98"
+          ]
+        },
+        "runs_code": {
+          "tp": 13,
+          "fp": 7,
+          "fn": 2,
+          "unscored": 0,
+          "brier": 0.0645090909090909,
+          "wrong": [
+            "model.message-@0.89",
+            "model.message-@0.97",
+            "model.message+@0.20",
+            "model.message-@0.99",
+            "model.message+@0.02",
+            "tool.response-@0.99",
+            "tool.response-@0.97",
+            "tool.response-@0.73",
+            "tool.response-@0.82"
+          ]
+        },
+        "discovers_tools": {
+          "tp": 17,
+          "fp": 4,
+          "fn": 0,
+          "unscored": 0,
+          "brier": 0.024834090909090913,
+          "wrong": [
+            "model.message-@1.00",
+            "model.message-@0.85",
+            "model.message-@1.00",
+            "model.message-@0.74"
+          ]
+        },
+        "final_answer": {
+          "tp": 47,
+          "fp": 5,
+          "fn": 1,
+          "unscored": 0,
+          "brier": 0.03742878787878788,
+          "wrong": [
+            "model.message-@0.70",
+            "model.message-@0.94",
+            "model.message+@0.31",
+            "turn.done-@1.00",
+            "turn.done-@1.00",
+            "turn.done-@1.00"
+          ]
+        },
+        "waits_for_human": {
+          "tp": 0,
+          "fp": 10,
+          "fn": 4,
+          "unscored": 0,
+          "brier": 0.07759924242424242,
+          "wrong": [
+            "tool.approval_required+@0.22",
+            "model.message-@0.50",
+            "tool.approval_required+@0.21",
+            "model.message-@0.83",
+            "model.message-@0.88",
+            "tool.response_required+@0.27",
+            "model.message-@0.96",
+            "tool.response_required+@0.22",
+            "model.message-@0.96",
+            "model.message-@0.96",
+            "tool.response-@0.87",
+            "tool.response-@0.67",
+            "turn.done-@0.94",
+            "turn.done-@0.94"
+          ]
+        }
+      },
+      "answers": [
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0.01,
+            "final_answer": 0,
+            "waits_for_human": 0.03
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.93,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.37
+          }
+        },
+        {
+          "type": "tool.approval_required",
+          "answers": {
+            "delegates": 0.12,
+            "runs_code": 0.11,
+            "discovers_tools": 0.01,
+            "final_answer": 0.06,
+            "waits_for_human": 0.22
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0.09
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.98,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.98,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0.67,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.06
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0.62,
+            "runs_code": 0.04,
+            "discovers_tools": 0,
+            "final_answer": 0.86,
+            "waits_for_human": 0.06
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.93,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.98,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.99,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.97,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.93,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.5
+          }
+        },
+        {
+          "type": "tool.approval_required",
+          "answers": {
+            "delegates": 0.06,
+            "runs_code": 0.07,
+            "discovers_tools": 0.02,
+            "final_answer": 0.04,
+            "waits_for_human": 0.21
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.99,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.03
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.99,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0.15,
+            "runs_code": 0.01,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.02
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0.39,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.98,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.99,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.47,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.02,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.96,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0.18
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.89,
+            "discovers_tools": 0,
+            "final_answer": 0.97,
+            "waits_for_human": 0.83
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.91,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.97,
+            "discovers_tools": 0,
+            "final_answer": 0.95,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.43,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.01,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0.02
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0.85,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.38,
+            "discovers_tools": 0,
+            "final_answer": 0.93,
+            "waits_for_human": 0.88
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.2,
+            "discovers_tools": 0,
+            "final_answer": 0.7,
+            "waits_for_human": 0.24
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.99,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.99,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.89,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.72,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.08,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.01,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0.05
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0.03
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0.07,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.02,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.42,
+            "discovers_tools": 1,
+            "final_answer": 0.94,
+            "waits_for_human": 0.02
+          }
+        },
+        {
+          "type": "tool.response_required",
+          "answers": {
+            "delegates": 0.05,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.01,
+            "waits_for_human": 0.27
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.97,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0.09
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.99,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.96
+          }
+        },
+        {
+          "type": "tool.response_required",
+          "answers": {
+            "delegates": 0.02,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.22
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.99,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.98,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 1,
+            "runs_code": 0,
+            "discovers_tools": 0.74,
+            "final_answer": 0,
+            "waits_for_human": 0.05
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0.01,
+            "final_answer": 0,
+            "waits_for_human": 0.34
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0.11,
+            "runs_code": 0,
+            "discovers_tools": 0.01,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0.25,
+            "runs_code": 0.03,
+            "discovers_tools": 0.02,
+            "final_answer": 0.95,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.01,
+            "discovers_tools": 0.03,
+            "final_answer": 0.31,
+            "waits_for_human": 0.96
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0.98,
+            "runs_code": 0.47,
+            "discovers_tools": 0.01,
+            "final_answer": 0.96,
+            "waits_for_human": 0.96
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.01,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.02,
+            "waits_for_human": 0.17
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.11,
+            "waits_for_human": 0.03
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.06,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "mcp.initialize",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0.02,
+            "final_answer": 0,
+            "waits_for_human": 0.06
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "mcp.initialize",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.02
+          }
+        },
+        {
+          "type": "mcp.initialize",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0.01,
+            "final_answer": 0,
+            "waits_for_human": 0.06
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.02,
+            "waits_for_human": 0.06
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.99,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.87
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.97,
+            "discovers_tools": 0,
+            "final_answer": 0.02,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.73,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.67
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0.82,
+            "discovers_tools": 0,
+            "final_answer": 0.12,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "mcp.initialize",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0.02,
+            "final_answer": 0.06,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0.02,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.94
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.01
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0.02,
+            "waits_for_human": 0.02
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0.03,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0.94
+          }
+        }
+      ]
+    },
+    "gpt-oss": {
+      "calls": [
+        {
+          "mode": "gpt-oss",
+          "ms": 3816,
+          "inputTokens": 751,
+          "outputTokens": 130,
+          "cost": 0.000039776999999999995
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2594,
+          "inputTokens": 643,
+          "outputTokens": 183,
+          "cost": 0.00004308
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 6708,
+          "inputTokens": 681,
+          "outputTokens": 179,
+          "cost": 0.000039353
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4524,
+          "inputTokens": 437,
+          "outputTokens": 140,
+          "cost": 0.000032345
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 11921,
+          "inputTokens": 469,
+          "outputTokens": 256,
+          "cost": 0.00003498
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3088,
+          "inputTokens": 309,
+          "outputTokens": 174,
+          "cost": 0.000032489999999999996
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3564,
+          "inputTokens": 779,
+          "outputTokens": 169,
+          "cost": 0.00003952
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 8707,
+          "inputTokens": 637,
+          "outputTokens": 256,
+          "cost": 0.00004357
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2707,
+          "inputTokens": 615,
+          "outputTokens": 172,
+          "cost": 0.00004081
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3254,
+          "inputTokens": 435,
+          "outputTokens": 172,
+          "cost": 0.000032066
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2795,
+          "inputTokens": 384,
+          "outputTokens": 102,
+          "cost": 0.000020266
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 10750,
+          "inputTokens": 328,
+          "outputTokens": 208,
+          "cost": 0.00003482
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3087,
+          "inputTokens": 578,
+          "outputTokens": 119,
+          "cost": 0.00006116
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5047,
+          "inputTokens": 437,
+          "outputTokens": 255,
+          "cost": 0.00004197
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3427,
+          "inputTokens": 311,
+          "outputTokens": 169,
+          "cost": 0.000026871
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5085,
+          "inputTokens": 473,
+          "outputTokens": 214,
+          "cost": 0.00003086
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2660,
+          "inputTokens": 309,
+          "outputTokens": 167,
+          "cost": 0.000025160000000000003
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3022,
+          "inputTokens": 435,
+          "outputTokens": 188,
+          "cost": 0.00003125
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2866,
+          "inputTokens": 311,
+          "outputTokens": 167,
+          "cost": 0.00003168
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3301,
+          "inputTokens": 311,
+          "outputTokens": 179,
+          "cost": 0.00002699
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4396,
+          "inputTokens": 437,
+          "outputTokens": 238,
+          "cost": 0.00004677
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2736,
+          "inputTokens": 311,
+          "outputTokens": 132,
+          "cost": 0.000027499000000000002
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3202,
+          "inputTokens": 1239,
+          "outputTokens": 148,
+          "cost": 0.000046907
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3092,
+          "inputTokens": 633,
+          "outputTokens": 145,
+          "cost": 0.00003232
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2762,
+          "inputTokens": 627,
+          "outputTokens": 170,
+          "cost": 0.000034280000000000004
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3320,
+          "inputTokens": 371,
+          "outputTokens": 146,
+          "cost": 0.00003091
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2733,
+          "inputTokens": 431,
+          "outputTokens": 148,
+          "cost": 0.00003262
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2645,
+          "inputTokens": 309,
+          "outputTokens": 139,
+          "cost": 0.00002686
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3410,
+          "inputTokens": 775,
+          "outputTokens": 174,
+          "cost": 0.00004135
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3249,
+          "inputTokens": 649,
+          "outputTokens": 180,
+          "cost": 0.00003583
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3005,
+          "inputTokens": 631,
+          "outputTokens": 173,
+          "cost": 0.00003622
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4009,
+          "inputTokens": 439,
+          "outputTokens": 177,
+          "cost": 0.000031287
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5260,
+          "inputTokens": 386,
+          "outputTokens": 194,
+          "cost": 0.00003579
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2614,
+          "inputTokens": 381,
+          "outputTokens": 158,
+          "cost": 0.00002342
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2146,
+          "inputTokens": 463,
+          "outputTokens": 162,
+          "cost": 0.000055005000000000006
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3722,
+          "inputTokens": 441,
+          "outputTokens": 297,
+          "cost": 0.00004765
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3445,
+          "inputTokens": 311,
+          "outputTokens": 159,
+          "cost": 0.000025951000000000003
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4199,
+          "inputTokens": 525,
+          "outputTokens": 209,
+          "cost": 0.000035394
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2945,
+          "inputTokens": 311,
+          "outputTokens": 156,
+          "cost": 0.00002182
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 19134,
+          "inputTokens": 441,
+          "outputTokens": 149,
+          "cost": 0.00002717
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3405,
+          "inputTokens": 313,
+          "outputTokens": 130,
+          "cost": 0.000027247
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3338,
+          "inputTokens": 339,
+          "outputTokens": 138,
+          "cost": 0.000029063999999999998
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1869,
+          "inputTokens": 433,
+          "outputTokens": 157,
+          "cost": 0.00002792
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2780,
+          "inputTokens": 309,
+          "outputTokens": 176,
+          "cost": 0.00003269
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3191,
+          "inputTokens": 673,
+          "outputTokens": 198,
+          "cost": 0.00004667
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1954,
+          "inputTokens": 625,
+          "outputTokens": 143,
+          "cost": 0.00003734
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4197,
+          "inputTokens": 509,
+          "outputTokens": 260,
+          "cost": 0.000041160000000000006
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2500,
+          "inputTokens": 785,
+          "outputTokens": 123,
+          "cost": 0.00003246
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 6408,
+          "inputTokens": 451,
+          "outputTokens": 304,
+          "cost": 0.000051098
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3516,
+          "inputTokens": 1535,
+          "outputTokens": 164,
+          "cost": 0.00006780999999999999
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3187,
+          "inputTokens": 693,
+          "outputTokens": 160,
+          "cost": 0.000041799
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5018,
+          "inputTokens": 1595,
+          "outputTokens": 151,
+          "cost": 0.00006921999999999999
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3835,
+          "inputTokens": 569,
+          "outputTokens": 178,
+          "cost": 0.00003321
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4691,
+          "inputTokens": 749,
+          "outputTokens": 228,
+          "cost": 0.00003778
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5107,
+          "inputTokens": 673,
+          "outputTokens": 300,
+          "cost": 0.00006375
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1089,
+          "inputTokens": 744,
+          "outputTokens": 148,
+          "cost": 0.00007641
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 6026,
+          "inputTokens": 829,
+          "outputTokens": 244,
+          "cost": 0.000052249999999999996
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2655,
+          "inputTokens": 515,
+          "outputTokens": 176,
+          "cost": 0.0000279
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3808,
+          "inputTokens": 1333,
+          "outputTokens": 207,
+          "cost": 0.000059850000000000005
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2889,
+          "inputTokens": 759,
+          "outputTokens": 158,
+          "cost": 0.00003846
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3063,
+          "inputTokens": 1570,
+          "outputTokens": 169,
+          "cost": 0.00007113
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3708,
+          "inputTokens": 1071,
+          "outputTokens": 264,
+          "cost": 0.00006048800000000001
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2728,
+          "inputTokens": 645,
+          "outputTokens": 185,
+          "cost": 0.000035734
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3938,
+          "inputTokens": 705,
+          "outputTokens": 226,
+          "cost": 0.00004207
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3187,
+          "inputTokens": 659,
+          "outputTokens": 196,
+          "cost": 0.000046551
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2842,
+          "inputTokens": 1411,
+          "outputTokens": 284,
+          "cost": 0.000064881
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2953,
+          "inputTokens": 783,
+          "outputTokens": 152,
+          "cost": 0.000044011
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3505,
+          "inputTokens": 653,
+          "outputTokens": 167,
+          "cost": 0.00003489
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3199,
+          "inputTokens": 1485,
+          "outputTokens": 171,
+          "cost": 0.000054954
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3875,
+          "inputTokens": 713,
+          "outputTokens": 245,
+          "cost": 0.0000567
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2939,
+          "inputTokens": 1551,
+          "outputTokens": 152,
+          "cost": 0.000066259
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2947,
+          "inputTokens": 388,
+          "outputTokens": 170,
+          "cost": 0.00002476
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4467,
+          "inputTokens": 949,
+          "outputTokens": 194,
+          "cost": 0.000046359999999999997
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4026,
+          "inputTokens": 909,
+          "outputTokens": 237,
+          "cost": 0.00004188
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3107,
+          "inputTokens": 991,
+          "outputTokens": 174,
+          "cost": 0.000052587
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4721,
+          "inputTokens": 439,
+          "outputTokens": 210,
+          "cost": 0.00004307
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3446,
+          "inputTokens": 463,
+          "outputTokens": 230,
+          "cost": 0.00003226
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3118,
+          "inputTokens": 533,
+          "outputTokens": 200,
+          "cost": 0.00003994
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2888,
+          "inputTokens": 655,
+          "outputTokens": 183,
+          "cost": 0.000037298999999999996
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1613,
+          "inputTokens": 574,
+          "outputTokens": 181,
+          "cost": 0.00007004
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5606,
+          "inputTokens": 433,
+          "outputTokens": 245,
+          "cost": 0.00004435
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2573,
+          "inputTokens": 461,
+          "outputTokens": 162,
+          "cost": 0.00002977
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2592,
+          "inputTokens": 547,
+          "outputTokens": 142,
+          "cost": 0.000029353000000000002
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5708,
+          "inputTokens": 479,
+          "outputTokens": 167,
+          "cost": 0.00003724
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5636,
+          "inputTokens": 401,
+          "outputTokens": 213,
+          "cost": 0.000041400000000000003
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5321,
+          "inputTokens": 553,
+          "outputTokens": 163,
+          "cost": 0.000039280000000000003
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2721,
+          "inputTokens": 817,
+          "outputTokens": 215,
+          "cost": 0.000046359999999999997
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2671,
+          "inputTokens": 595,
+          "outputTokens": 143,
+          "cost": 0.000036935
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3703,
+          "inputTokens": 418,
+          "outputTokens": 165,
+          "cost": 0.000024860000000000003
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3297,
+          "inputTokens": 1515,
+          "outputTokens": 170,
+          "cost": 0.000067735
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3341,
+          "inputTokens": 571,
+          "outputTokens": 155,
+          "cost": 0.000038259
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2172,
+          "inputTokens": 479,
+          "outputTokens": 100,
+          "cost": 0.00001958
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 7036,
+          "inputTokens": 451,
+          "outputTokens": 271,
+          "cost": 0.000053011
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3930,
+          "inputTokens": 559,
+          "outputTokens": 197,
+          "cost": 0.00003088
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 6949,
+          "inputTokens": 553,
+          "outputTokens": 358,
+          "cost": 0.00005192
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3518,
+          "inputTokens": 573,
+          "outputTokens": 183,
+          "cost": 0.00002976
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5160,
+          "inputTokens": 407,
+          "outputTokens": 158,
+          "cost": 0.00002942
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4226,
+          "inputTokens": 969,
+          "outputTokens": 227,
+          "cost": 0.000060929
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3350,
+          "inputTokens": 429,
+          "outputTokens": 172,
+          "cost": 0.000036048000000000005
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3303,
+          "inputTokens": 431,
+          "outputTokens": 284,
+          "cost": 0.000049850000000000006
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 7794,
+          "inputTokens": 457,
+          "outputTokens": 290,
+          "cost": 0.000050740000000000005
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3804,
+          "inputTokens": 451,
+          "outputTokens": 200,
+          "cost": 0.00003348
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 7405,
+          "inputTokens": 577,
+          "outputTokens": 277,
+          "cost": 0.000051885
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3740,
+          "inputTokens": 561,
+          "outputTokens": 244,
+          "cost": 0.00004334
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4429,
+          "inputTokens": 1097,
+          "outputTokens": 203,
+          "cost": 0.000061085
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2413,
+          "inputTokens": 923,
+          "outputTokens": 140,
+          "cost": 0.00003989
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 5852,
+          "inputTokens": 855,
+          "outputTokens": 221,
+          "cost": 0.00005736
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4669,
+          "inputTokens": 413,
+          "outputTokens": 167,
+          "cost": 0.000024959999999999998
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4969,
+          "inputTokens": 447,
+          "outputTokens": 140,
+          "cost": 0.00002692
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1946,
+          "inputTokens": 409,
+          "outputTokens": 165,
+          "cost": 0.00002896
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2580,
+          "inputTokens": 405,
+          "outputTokens": 162,
+          "cost": 0.000029811000000000003
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2485,
+          "inputTokens": 397,
+          "outputTokens": 130,
+          "cost": 0.000029197
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4154,
+          "inputTokens": 449,
+          "outputTokens": 216,
+          "cost": 0.00003557
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2623,
+          "inputTokens": 427,
+          "outputTokens": 148,
+          "cost": 0.000032372
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2012,
+          "inputTokens": 396,
+          "outputTokens": 150,
+          "cost": 0.00002683
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2202,
+          "inputTokens": 692,
+          "outputTokens": 194,
+          "cost": 0.00004136
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3252,
+          "inputTokens": 406,
+          "outputTokens": 114,
+          "cost": 0.000028000000000000003
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1799,
+          "inputTokens": 404,
+          "outputTokens": 117,
+          "cost": 0.000022539999999999998
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1574,
+          "inputTokens": 433,
+          "outputTokens": 155,
+          "cost": 0.00002416
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3143,
+          "inputTokens": 347,
+          "outputTokens": 141,
+          "cost": 0.00002697
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3681,
+          "inputTokens": 669,
+          "outputTokens": 168,
+          "cost": 0.000042448
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 4827,
+          "inputTokens": 519,
+          "outputTokens": 187,
+          "cost": 0.000036184000000000005
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3510,
+          "inputTokens": 597,
+          "outputTokens": 188,
+          "cost": 0.000043633
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 3313,
+          "inputTokens": 525,
+          "outputTokens": 213,
+          "cost": 0.0000385
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1725,
+          "inputTokens": 599,
+          "outputTokens": 177,
+          "cost": 0.00002968
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2377,
+          "inputTokens": 635,
+          "outputTokens": 209,
+          "cost": 0.00004109
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2095,
+          "inputTokens": 340,
+          "outputTokens": 158,
+          "cost": 0.00002563
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2674,
+          "inputTokens": 708,
+          "outputTokens": 198,
+          "cost": 0.00008381
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 1555,
+          "inputTokens": 516,
+          "outputTokens": 168,
+          "cost": 0.00006318
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2565,
+          "inputTokens": 875,
+          "outputTokens": 118,
+          "cost": 0.00003437
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2056,
+          "inputTokens": 433,
+          "outputTokens": 99,
+          "cost": 0.000023117
+        },
+        {
+          "mode": "gpt-oss",
+          "ms": 2616,
+          "inputTokens": 653,
+          "outputTokens": 170,
+          "cost": 0.00003451
+        }
+      ],
+      "perPredicate": {
+        "delegates": {
+          "tp": 1,
+          "fp": 6,
+          "fn": 0,
+          "unscored": 0,
+          "brier": 0.045454545454545456,
+          "wrong": [
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00"
+          ]
+        },
+        "runs_code": {
+          "tp": 15,
+          "fp": 7,
+          "fn": 0,
+          "unscored": 0,
+          "brier": 0.05303030303030303,
+          "wrong": [
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "tool.response-@1.00",
+            "tool.response-@1.00",
+            "tool.response-@1.00"
+          ]
+        },
+        "discovers_tools": {
+          "tp": 17,
+          "fp": 3,
+          "fn": 0,
+          "unscored": 0,
+          "brier": 0.022727272727272728,
+          "wrong": [
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00"
+          ]
+        },
+        "final_answer": {
+          "tp": 34,
+          "fp": 4,
+          "fn": 14,
+          "unscored": 0,
+          "brier": 0.13636363636363635,
+          "wrong": [
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "model.message+@0.00",
+            "turn.created-@1.00",
+            "turn.done-@1.00",
+            "turn.done-@1.00",
+            "turn.done-@1.00"
+          ]
+        },
+        "waits_for_human": {
+          "tp": 4,
+          "fp": 115,
+          "fn": 0,
+          "unscored": 1,
+          "brier": 0.8778625954198473,
+          "wrong": [
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "model.message-@1.00",
+            "turn.created-@1.00",
+            "turn.created-@1.00",
+            "turn.created-@1.00",
+            "turn.created-@1.00",
+            "turn.done-@1.00",
+            "turn.created-@1.00",
+            "turn.created-@1.00",
+            "mcp.initialize-@1.00",
+            "turn.done-@1.00",
+            "mcp.initialize-@1.00",
+            "turn.created-@1.00",
+            "tool.response-@1.00",
+            "turn.done-@1.00",
+            "tool.response-@1.00",
+            "tool.response-@1.00",
+            "tool.response-@1.00",
+            "tool.response-@1.00",
+            "tool.response-@1.00",
+            "turn.done-@1.00",
+            "turn.created-@1.00",
+            "turn.done-@1.00",
+            "turn.created-@1.00",
+            "turn.done-@1.00"
+          ]
+        }
+      },
+      "answers": [
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.approval_required",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 1,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 1,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.approval_required",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 1,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 1,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.response_required",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.response_required",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": null
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 1,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 1,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 1,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "model.message",
+          "answers": {
+            "delegates": 1,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "mcp.initialize",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "mcp.initialize",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "mcp.initialize",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "tool.response",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 1,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "mcp.initialize",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 0
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 1,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.created",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        },
+        {
+          "type": "turn.done",
+          "answers": {
+            "delegates": 0,
+            "runs_code": 0,
+            "discovers_tools": 0,
+            "final_answer": 0,
+            "waits_for_human": 1
+          }
+        }
+      ]
+    }
+  }
+}

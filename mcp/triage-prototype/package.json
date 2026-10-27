@@ -1,0 +1,17 @@
+{
+  "name": "@forge-lab/triage-prototype",
+  "private": true,
+  "description": "PROTOTYPE, throwaway (#17): how well does the OpenAI Decisions API triage Source Snapshot files and Session events? Lives only on the prototype/decisions-triage branch.",
+  "type": "module",
+  "scripts": {
+    "pools": "bun run.ts --dry-run",
+    "events": "bun --env-file=../.env --env-file=../../.env events.ts",
+    "triage": "bun --env-file=../.env --env-file=../../.env run.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@forge-lab/lib": "workspace:*",
+    "openai": "7.39.0",
+    "ts-morph": "28.0.0"
+  }
+}
