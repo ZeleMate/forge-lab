@@ -76,7 +76,7 @@ export async function ensureDeepWiki() {
 // List endpoints cap `limit` differently, and asking for more is a 400, not a
 // shorter page (`trueforge/src/schemas/common.ts:28-33` at 198a2ead): sessions,
 // their turns, schedules and schedule runs allow 25; agents and events allow 100.
-const PAGE_LIMIT = 25;
+const CAPPED_PAGE_SIZE = 25; // TrueForge's own name for it is PAGE_LIMIT
 const MAX_PAGE_SIZE = 100;
 // It also matches single resources such as /sessions/{id}; that's harmless, since
 // only list paths reach listAll, and /schedules/runs has the same shape as /schedules/{id}.
@@ -84,7 +84,7 @@ const CAPPED_LISTS = /^\/(sessions|schedules)(\/[^/]+(\/(turns|runs))?)?$/;
 
 function pageSize(path: string): number {
   const route = path.split("?")[0] ?? path; // `split` always returns at least one element; `??` satisfies the type
-  return CAPPED_LISTS.test(route) ? PAGE_LIMIT : MAX_PAGE_SIZE;
+  return CAPPED_LISTS.test(route) ? CAPPED_PAGE_SIZE : MAX_PAGE_SIZE;
 }
 
 // Every item of a list endpoint, following `next_page_token` across pages.
