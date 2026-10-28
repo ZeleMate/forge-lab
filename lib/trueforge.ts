@@ -78,6 +78,8 @@ export async function ensureDeepWiki() {
 // their turns, schedules and schedule runs allow 25; agents and events allow 100.
 const PAGE_LIMIT = 25;
 const MAX_PAGE_SIZE = 100;
+// It also matches single resources such as /sessions/{id}; that's harmless, since
+// only list paths reach listAll, and /schedules/runs has the same shape as /schedules/{id}.
 const CAPPED_LISTS = /^\/(sessions|schedules)(\/[^/]+(\/(turns|runs))?)?$/;
 
 function pageSize(path: string): number {
