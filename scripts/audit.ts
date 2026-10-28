@@ -15,9 +15,9 @@ type Accepted = { ghsa: string; pkg: string; reviewBy: string; reason: string };
 
 // All three come in through TrueForge itself (@truefoundry/trueforge's own
 // dependencies), so only a TrueForge bump can fix them. (undici is forced to
-// 7.30.1 by the root `overrides` instead, which fixed its entry.) Re-check this list on
-// every bump, and by `reviewBy` at the latest; after that date the entry stops
-// applying and the job fails until someone looks again.
+// 7.30.1 by the root `overrides` instead, which fixed its entry.) Re-check
+// this list on every bump, and by `reviewBy` at the latest; after that date
+// the entry stops applying and the job fails until someone looks again.
 const ACCEPTED: Accepted[] = [
   {
     ghsa: "GHSA-86w9-cpqp-85rv",
