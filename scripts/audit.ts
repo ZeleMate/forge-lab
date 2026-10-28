@@ -13,8 +13,9 @@ type AuditReport = Record<string, Advisory[]>;
 
 type Accepted = { ghsa: string; pkg: string; reviewBy: string; reason: string };
 
-// All four come in through TrueForge itself (@truefoundry/trueforge's own
-// dependencies), so only a TrueForge bump can fix them. Re-check this list on
+// All three come in through TrueForge itself (@truefoundry/trueforge's own
+// dependencies), so only a TrueForge bump can fix them. (undici is forced to
+// 7.30.1 by the root `overrides` instead, which fixed its entry.) Re-check this list on
 // every bump, and by `reviewBy` at the latest; after that date the entry stops
 // applying and the job fails until someone looks again.
 const ACCEPTED: Accepted[] = [
@@ -29,12 +30,6 @@ const ACCEPTED: Accepted[] = [
     pkg: "body-parser",
     reviewBy: "2027-01-24",
     reason: "DoS on compressed request bodies; the server listens on 127.0.0.1 only, and only while working",
-  },
-  {
-    ghsa: "GHSA-xjj6-f33q-929c",
-    pkg: "undici",
-    reviewBy: "2027-01-24",
-    reason: "DoS via excessive content-encodings; worst case crashes the local dev server",
   },
   {
     ghsa: "GHSA-mrhx-c7xc-m3w5",
