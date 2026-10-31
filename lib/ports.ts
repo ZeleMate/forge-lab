@@ -24,3 +24,8 @@ export function isLoopbackUrl(url: string): boolean {
     return false;
   }
 }
+
+// The port for a named service, so callers don't index PORTS with an unchecked string.
+export function portFor(name: string): number {
+  return (PORTS as Record<string, number>)[name] ?? 0;
+}
