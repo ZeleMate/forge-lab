@@ -13,3 +13,8 @@ export const PORTS = {
 } as const;
 
 export const TRUEFORGE_ORIGIN = `http://${HOST}:${PORTS.trueforge}`;
+
+// True when `url` is on the local stack, so callers can refuse anything off loopback.
+export function isLoopbackUrl(url: string): boolean {
+  return url.startsWith(`http://${HOST}`);
+}
