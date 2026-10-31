@@ -16,5 +16,12 @@ export const TRUEFORGE_ORIGIN = `http://${HOST}:${PORTS.trueforge}`;
 
 // True when `url` is on the local stack, so callers can refuse anything off loopback.
 export function isLoopbackUrl(url: string): boolean {
-  return url.startsWith(`http://${HOST}`);
+  // `new URL` parses the address and throws on bad input, unlike a string prefix check,
+  // which `http://127.0.0.1.evil.example` would pass; the catch turns a throw into false.
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" && parsed.hostname === HOST;
+  } catch {
+    return false;
+  }
 }
