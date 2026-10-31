@@ -30,3 +30,8 @@ export function isLoopbackUrl(url: string): boolean {
 export function portFor(name: keyof typeof PORTS): number {
   return PORTS[name];
 }
+
+// The `host:port` address for a port on the local stack.
+export function hostPort(port: number): string {
+  return HOST + port;
+}
