@@ -12,7 +12,7 @@ export const PORTS = {
   probe: 8799, // throwaway MCP servers in Experiments (scripts/lib/probe-mcp.ts)
 } as const;
 
-export const TRUEFORGE_ORIGIN = `http://${HOST}:${PORTS.trueforge}`;
+export const TRUEFORGE_ORIGIN = `http://${hostPort(PORTS.trueforge)}`; // hostPort is a hoisted function declaration, so it's callable here.
 
 // True when `url` is an http URL whose host is exactly loopback (any port), so callers can refuse anything else.
 export function isLoopbackUrl(url: string): boolean {
@@ -33,5 +33,5 @@ export function portFor(name: keyof typeof PORTS): number {
 
 // The `host:port` address for a port on the local stack.
 export function hostPort(port: number): string {
-  return HOST + port;
+  return `${HOST}:${port}`;
 }
