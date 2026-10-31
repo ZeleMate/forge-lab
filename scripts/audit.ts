@@ -13,19 +13,14 @@ type AuditReport = Record<string, Advisory[]>;
 
 type Accepted = { ghsa: string; pkg: string; reviewBy: string; reason: string };
 
-// All three come in through TrueForge itself (@truefoundry/trueforge's own
-// dependencies), so only a TrueForge bump can fix them. (undici is forced to
-// 7.30.1 by the root `overrides` instead, which fixed its entry; drop that
-// override at the next TrueForge bump if it ships undici 7.30.1 or later.)
+// Both come in through TrueForge itself (@truefoundry/trueforge's own
+// dependencies), so only a TrueForge bump can fix them. (undici, node-forge and
+// follow-redirects are forced by the root `overrides` instead: undici 7.30.1,
+// node-forge 1.4.2 and follow-redirects 1.16.2. Drop each override at the next
+// TrueForge bump that ships that version or later.)
 // Re-check this list on every bump, and by `reviewBy` at the latest; after
 // that date the entry stops applying and the job fails until someone looks again.
 const ACCEPTED: Accepted[] = [
-  {
-    ghsa: "GHSA-86w9-cpqp-85rv",
-    pkg: "node-forge",
-    reviewBy: "2027-01-24",
-    reason: "sandbox-runtime uses it for its local proxy certificates, not to verify third-party signatures",
-  },
   {
     ghsa: "GHSA-27r3-jxmh-p828",
     pkg: "body-parser",
