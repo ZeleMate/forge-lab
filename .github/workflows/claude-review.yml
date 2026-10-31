@@ -18,8 +18,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # The fix job's push can start this workflow again (with CLAUDE_FIX_TOKEN set). The reviews
-  # skip that commit, so Claude doesn't keep fixing its own fixes; CI still checks it.
+  # The fix job's push starts this workflow again. The reviews skip that commit, so Claude
+  # doesn't keep fixing its own fixes; CI still checks it.
   gate:
     name: skip fix commits
     # Same-repo PRs only: the action isn't hardened against prompt injection from untrusted diffs.
@@ -217,13 +217,13 @@ jobs:
           claude_args: >-
             --model claude-sonnet-5-5
             --allowedTools "Read,Glob,Grep,Edit,Write,Bash(git diff:*),Bash(git log:*),Bash(git show:*)"
-      # One commit with a Claude-Fix trailer, which the gate job looks for. The comment goes first:
-      # with CLAUDE_FIX_TOKEN set, the push starts a new run, which cancels this one.
+      # One commit with a Claude-Fix trailer, which the gate job looks for. The comment goes first,
+      # because the push can start a new run, which cancels this one.
       - name: Commit, comment and push
         if: steps.findings.outputs.count != '0'
         env:
-          # A fine-grained token (contents: write on this repo) makes the push start CI. A push
-          # with the job's own token starts no workflows, so CI wouldn't check the fix.
+          # A push with the job's own token starts workflows only once someone approves them on
+          # the PR. A fine-grained token (contents: write on this repo) starts them right away.
           PUSH_TOKEN: ${{ secrets.CLAUDE_FIX_TOKEN || github.token }}
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
