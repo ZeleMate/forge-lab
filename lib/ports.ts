@@ -26,6 +26,7 @@ export function isLoopbackUrl(url: string): boolean {
 }
 
 // The port for a named service, so callers don't index PORTS with an unchecked string.
-export function portFor(name: string): number {
-  return (PORTS as Record<string, number>)[name] ?? 0;
+// `keyof typeof PORTS` is the union of its key names, so a typo fails to compile.
+export function portFor(name: keyof typeof PORTS): number {
+  return PORTS[name];
 }
