@@ -14,7 +14,13 @@ export const PORTS = {
 
 export const TRUEFORGE_ORIGIN = `http://${HOST}:${PORTS.trueforge}`;
 
-// True when `url` is on the local stack, so callers can refuse anything off loopback.
+// True when `url` is an http URL whose host is exactly loopback (any port), so callers can refuse anything else.
 export function isLoopbackUrl(url: string): boolean {
-  return url.startsWith(`http://${HOST}`);
+  // `new URL` throws on input it can't parse, so catch that and treat it as "not loopback".
+  try {
+    const { protocol, hostname } = new URL(url);
+    return protocol === "http:" && hostname === HOST;
+  } catch {
+    return false;
+  }
 }
