@@ -3,13 +3,15 @@
 //
 // The Source Snapshot and its ts-morph index are built before the listener opens
 // (#23: about 0.3 s warm, a few seconds on a cold disk), so no tool call ever
-// waits on a half-built index. A missing snapshot stops the server.
+// waits on a half-built index. A missing snapshot or ripgrep stops the server.
 
 import { HOST, PORTS } from "@forge-lab/lib/ports";
 import { createApp, ENDPOINTS } from "./src/app";
+import { RG } from "./src/source/ripgrep";
 import { openSourceSnapshot } from "./src/source/snapshot";
 
 const started = performance.now();
+if (!RG) throw new Error("ripgrep (rg) isn't on PATH; install it with `brew install ripgrep`");
 const source = openSourceSnapshot();
 const files = source.project.getSourceFiles().length;
 console.log(`source: ${source.version} @ ${source.sha.slice(0, 7)}, ${files} files indexed`);

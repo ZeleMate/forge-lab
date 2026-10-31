@@ -1,7 +1,7 @@
 {
   "name": "@forge-lab/mcp",
   "private": true,
-  "description": "Cartographer's MCP server (#8): one Bun process on 127.0.0.1:8791 with the source, sessions and triage endpoints. `bun run dev` starts it. TypeScript source, no build step.",
+  "description": "Cartographer's MCP server (#8): one Bun process on 127.0.0.1:8791 with the source, sessions and triage endpoints. The root `bun run dev` starts it. TypeScript source, no build step.",
   "type": "module",
   "scripts": {
     "smoke": "bun scripts/smoke.ts",

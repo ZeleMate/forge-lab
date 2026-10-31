@@ -32,6 +32,12 @@ describe("refusals", () => {
     expect(r.text).toStartWith("refused: the path is a symlink that leads out of the snapshot");
   });
 
+  test("read_file refuses a directory", async () => {
+    const r = await call(client, "read_file", { path: "packages/trueforge/src" });
+    expect(r.isError).toBe(true);
+    expect(r.text).toStartWith("refused: packages/trueforge/src is a directory");
+  });
+
   test("search_text refuses an absolute or climbing glob", async () => {
     for (const glob of ["/etc/*", "../*", "!../*"]) {
       const r = await call(client, "search_text", { pattern: "secret", globs: [glob] });

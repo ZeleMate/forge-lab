@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "bun scripts/dev.ts",
     "apply": "bun scripts/apply.ts",
+    "smoke:mcp": "bun run --filter @forge-lab/mcp smoke",
     "snapshot": "bun scripts/snapshot.ts ensure",
     "snapshot:pin": "bun scripts/snapshot.ts pin",
     "check:pins": "bun scripts/check-pins.ts",

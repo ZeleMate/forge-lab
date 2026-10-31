@@ -2,7 +2,7 @@
 // search and file reads first, then the three ts-morph tools. All read-only; every
 // result cites `{path, line, sha}` and is labelled `source`.
 
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import type { CallToolResult, McpServer, ToolAnnotations } from "@modelcontextprotocol/server";
 import { type Identifier, Node, type Project, type SourceFile } from "ts-morph";
 import { z } from "zod";
@@ -21,7 +21,8 @@ export const SOURCE_ANNOTATIONS: ToolAnnotations = {
 };
 
 const SNIPPET = 160;
-const position = {
+// Input fields shared by the tools that point at one identifier.
+const positionInput = {
   path: z.string().describe("File path relative to the snapshot root, as other source tools return it."),
   line: z.number().int().min(1).describe("1-based line."),
   column: z.number().int().min(1).describe("1-based column of the identifier, as find_declaration returns it."),
@@ -150,7 +151,7 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
       description:
         "Read numbered lines from any file in the snapshot. Reads up to 200 lines unless end_line says otherwise.",
       inputSchema: z.object({
-        path: position.path,
+        path: positionInput.path,
         start_line: z.number().int().min(1).default(1),
         end_line: z.number().int().min(1).optional().describe("Inclusive. At most 400 lines after start_line."),
         max_chars: maxChars,
@@ -170,7 +171,7 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
       const file = resolveInside(snap.root, args.path);
       if (!file.ok)
         return refuse(file.reason, "a path relative to the snapshot root, from search_text or find_declaration");
-      if (!(await Bun.file(file.path).exists()))
+      if (!statSync(file.path).isFile())
         return refuse(`${args.path} is a directory`, "search_text with a glob for that folder");
       const lines = readFileSync(file.path, "utf8").split("\n");
       if (args.start_line > lines.length)
@@ -235,7 +236,11 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
       title: "Find references (ts-morph)",
       description:
         "Every reference to the identifier at path:line:column across the indexed packages, definition first. Type-aware, not text matching.",
-      inputSchema: z.object({ ...position, limit: z.number().int().min(1).max(200).default(50), max_chars: maxChars }),
+      inputSchema: z.object({
+        ...positionInput,
+        limit: z.number().int().min(1).max(200).default(50),
+        max_chars: maxChars,
+      }),
       outputSchema: z.object({
         provenance: z.literal("source"),
         total: z.number().int(),
@@ -258,6 +263,8 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
       if (!at.ok) return at.result;
       const refs = at.node
         .findReferences()
+        // One referenced symbol per definition (more through re-exports); `flatMap`
+        // maps each to its references and flattens the lists into one.
         .flatMap((symbol) => symbol.getReferences())
         .map((entry) => {
           const node = entry.getNode();
@@ -267,9 +274,10 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
             .getAncestors()
             .find((a) => Node.isFunctionDeclaration(a) || Node.isMethodDeclaration(a) || Node.isClassDeclaration(a));
           return {
-            citation: cite(rel(snap, file), pos.line),
+            citation: cite(relPath(snap.root, file), pos.line),
             column: pos.column,
-            is_definition: entry.isDefinition() ?? false,
+            is_definition: entry.isDefinition() ?? false, // `??` falls back only on null/undefined
+            // Spreading `{}` adds nothing, so the field is present only when there's a name.
             ...(enclosing && Node.hasName(enclosing) ? { enclosing_symbol: enclosing.getName() } : {}),
             snippet: lineText(file, pos.line),
           };
@@ -298,7 +306,7 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
       title: "Type of an identifier (ts-morph)",
       description:
         "The TypeScript type of the identifier at path:line:column. Third-party types are unresolved in the snapshot, so they come back as `any`, and is_any flags it.",
-      inputSchema: z.object(position),
+      inputSchema: z.object(positionInput),
       outputSchema: z.object({
         provenance: z.literal("source"),
         citation: SourceCitation,
@@ -358,7 +366,7 @@ export function findDeclarations(project: Project, root: string, name: string): 
       const nameNode = (Node.hasName(decl) ? decl.getNameNode() : undefined) ?? decl;
       const start = file.getLineAndColumnAtPos(nameNode.getStart());
       out.push({
-        path: rel({ root }, file),
+        path: relPath(root, file),
         line: start.line,
         column: start.column,
         kind: decl.getKindName(),
@@ -380,39 +388,30 @@ type IdentifierAt = { ok: true; node: Identifier; rel: string } | { ok: false; r
 
 function identifierAt(snap: Snapshot, path: string, line: number, column: number): IdentifierAt {
   const where = `${path}:${line}:${column}`;
+  const fail = (reason: string, hint: string): IdentifierAt => ({ ok: false, result: refuse(reason, hint) });
   const file = resolveInside(snap.root, path);
-  if (!file.ok) return { ok: false, result: refuse(file.reason, "a path from find_declaration or search_text") };
+  if (!file.ok) return fail(file.reason, "a path from find_declaration or search_text");
   const source = snap.project.getSourceFile(file.path);
   if (!source)
-    return {
-      ok: false,
-      result: refuse(
-        `${file.rel} isn't in the ts-morph index`,
-        "read_file or search_text; only the indexed packages' src/*.ts are indexed",
-      ),
-    };
+    return fail(
+      `${file.rel} isn't in the ts-morph index`,
+      "read_file or search_text; only the indexed packages' src/*.ts are indexed",
+    );
   const starts = source.compilerNode.getLineStarts();
-  if (line > starts.length)
-    return { ok: false, result: refuse(`${file.rel} has only ${starts.length} lines`, "a line from find_declaration") };
+  if (line > starts.length) return fail(`${file.rel} has only ${starts.length} lines`, "a line from find_declaration");
   // TypeScript asserts (throws) on a column past the end of the line, so check first.
   const lineEnd = (starts[line] ?? source.getEnd() + 1) - (starts[line - 1] ?? 0);
   if (column > lineEnd)
-    return {
-      ok: false,
-      result: refuse(`line ${line} of ${file.rel} is shorter than column ${column}`, "a column from find_declaration"),
-    };
+    return fail(`line ${line} of ${file.rel} is shorter than column ${column}`, "a column from find_declaration");
   const pos = source.compilerNode.getPositionOfLineAndCharacter(line - 1, column - 1);
   const node = source.getDescendantAtPos(pos);
   if (!node || !Node.isIdentifier(node))
-    return {
-      ok: false,
-      result: refuse(`no identifier at ${where}`, "the column find_declaration returns for the name"),
-    };
+    return fail(`no identifier at ${where}`, "the column find_declaration returns for the name");
   return { ok: true, node, rel: file.rel };
 }
 
-function rel(snap: { root: string }, file: SourceFile): string {
-  return file.getFilePath().slice(snap.root.length + 1);
+function relPath(root: string, file: SourceFile): string {
+  return file.getFilePath().slice(root.length + 1);
 }
 
 function lineText(file: SourceFile, line: number): string {

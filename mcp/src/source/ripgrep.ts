@@ -14,8 +14,9 @@ export type SearchResult = { ok: true; hits: Hit[]; limitReached: boolean } | { 
 const MAX_LINE = 200; // characters kept per line; minified files have huge ones
 
 // Resolved from PATH once, at import: `bun run dev` passes the shell's PATH on,
-// CI installs a pinned ripgrep into /usr/local/bin.
-const RG = Bun.which("rg");
+// CI installs a pinned ripgrep into /usr/local/bin. server.ts refuses to start
+// without it (#32: no degraded mode); the check in `search` covers other callers.
+export const RG = Bun.which("rg");
 
 // What `rg --json` prints, one object per line; only the fields read here.
 type RgLine = {

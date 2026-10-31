@@ -16,9 +16,9 @@ export const SourceCitation = z.object({ path: z.string(), line: z.number().int(
 // `z.infer` turns a schema into the TypeScript type it validates.
 export type SourceCitation = z.infer<typeof SourceCitation>;
 
-// About 6k tokens is where TrueForge offloads a tool result to a file; at roughly
-// 4 characters per token, 24,000 characters stays under it.
-export const MAX_CHARS_LIMIT = 24_000;
+// About 6k tokens is where TrueForge offloads a tool result to a file. Code and
+// JSON tokenize nearer 3 characters per token than 4, so 18,000 stays under it.
+export const MAX_CHARS_LIMIT = 18_000;
 export const DEFAULT_MAX_CHARS = 16_000;
 export const maxChars = z
   .number()
