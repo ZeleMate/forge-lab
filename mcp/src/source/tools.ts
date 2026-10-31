@@ -6,7 +6,7 @@ import { readFileSync, statSync } from "node:fs";
 import type { CallToolResult, McpServer, ToolAnnotations } from "@modelcontextprotocol/server";
 import { type Identifier, Node, type Project, type SourceFile } from "ts-morph";
 import { z } from "zod";
-import { fitList, guarded, maxChars, ok, refuse, SourceCitation } from "../result";
+import { fitList, guarded, listCut, maxChars, ok, refuse, SourceCitation } from "../result";
 import { checkGlob, resolveInside } from "./paths";
 import { search } from "./ripgrep";
 import { HARNESS_PACKAGES, type Snapshot } from "./snapshot";
@@ -103,8 +103,7 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
           }),
         ),
         limit_reached: z.boolean(),
-        truncated: z.boolean(),
-        omitted: z.number().int(),
+        ...listCut,
       }),
       annotations: SOURCE_ANNOTATIONS,
     },
@@ -211,8 +210,7 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
       outputSchema: z.object({
         provenance: z.literal("source"),
         declarations: z.array(Declaration),
-        truncated: z.boolean(),
-        omitted: z.number().int(),
+        ...listCut,
       }),
       annotations: SOURCE_ANNOTATIONS,
     },
@@ -253,8 +251,7 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
             snippet: z.string(),
           }),
         ),
-        truncated: z.boolean(),
-        omitted: z.number().int(),
+        ...listCut,
       }),
       annotations: SOURCE_ANNOTATIONS,
     },

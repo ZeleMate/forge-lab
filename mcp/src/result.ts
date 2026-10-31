@@ -51,6 +51,10 @@ export function guarded<A>(handler: (args: A) => Promise<CallToolResult>) {
   };
 }
 
+// The two fields `fitList` adds, for a list tool's outputSchema to spread in
+// (`...listCut`), so the schema and the helper can't drift apart.
+export const listCut = { truncated: z.boolean(), omitted: z.number().int() };
+
 // Puts `items` under `key` next to `fields`, dropping items from the end until
 // the JSON is at most `limit` characters. Callers sort best-first, so what's
 // dropped is what matters least. `truncated` and `omitted` say what happened.
