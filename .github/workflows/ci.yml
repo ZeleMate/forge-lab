@@ -60,7 +60,22 @@ jobs:
         with:
           persist-credentials: false
       - uses: ./.github/actions/setup
-      - run: bun test --pass-with-no-tests
+      # search_text runs ripgrep; this is the version Homebrew has locally.
+      - uses: ./.github/actions/fetch-binary
+        with:
+          name: rg
+          url: https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-unknown-linux-musl.tar.gz
+          sha256: 33e15bcf1624b25cdd2a55813a47a2f95dbe126268203e76aa6a585d1e7b149c
+      # The source tools' tests read the real pinned Source Snapshot (#54). It's
+      # fetched read-only from TrueForge's public repo; nothing in it runs.
+      # (`runner.temp` exists only at step level, so both steps name the folder.)
+      - run: bun run snapshot
+        env:
+          SOURCE_SNAPSHOT_DIR: ${{ runner.temp }}/trueforge-src
+      # No --pass-with-no-tests: a run that finds no tests is a failure.
+      - run: bun test
+        env:
+          SOURCE_SNAPSHOT_DIR: ${{ runner.temp }}/trueforge-src
 
   deps:
     runs-on: ubuntu-24.04

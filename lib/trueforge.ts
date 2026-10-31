@@ -126,6 +126,17 @@ export async function openExperimentSession(agent: string, experiment: string) {
   return data.id;
 }
 
+// Opens an inline Experiment Session: it carries its own copy of an Agent spec
+// (snake_case, as GET /agents returns it), so changing it never touches the
+// named Agent (#9, #24).
+export async function openInlineExperimentSession(spec: Record<string, unknown>, experiment: string) {
+  const { data } = await api<{ id: string }>("POST", "/sessions", {
+    agent: { spec },
+    metadata: { experiment, depth: "0" },
+  });
+  return data.id;
+}
+
 // ---------- running turns ----------
 
 // Starts a Turn and returns at once (`stream: false`), still `running`.

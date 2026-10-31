@@ -1,0 +1,48 @@
+{
+  "version": "0.179.2",
+  "model": "openrouter/glm-5-3-flash",
+  "source": {
+    "session": "01m68a938wry637gqkca88qaes",
+    "question": "Where is the AgentThread class declared in TrueForge, and which method runs the agent loop? Cite the lines.",
+    "checks": {
+      "turnDone": true,
+      "toolResultLabelled": true,
+      "toolResultCited": true,
+      "answerCites": true
+    },
+    "answer": "**Answer:** `AgentThread` is declared at `packages/trueforge-core/src/core/runtime/AgentThread.ts:496`, and the agent loop is its `public async *execute()` method (line 1403), which runs the turn as an infinite state-machine loop.\n\n**Evidence** (`source`, all from `packages/trueforge-core/src/core/runtime/AgentThread.ts` @ `198a2ea`, TrueForge 0.179.2):\n\n- **Class declaration** — line 496: `export class AgentThread {`, with `threadId`, `definition`, `context: ContextMessage[]` and per-turn state among its fields (lines 497–530).\n- **The loop** — line 1403: `public async *execute(options?: { signal?... })`. The actual iteration is the `for (;;)` at line 1446, which:\n  1. derives the next state via `this.deriveState()` (line 1455; states are `'llm-call-required' | 'tool-response-required' | 'user-input-required'`, defined at line 103),\n  2. dispatches to `stepLLMCall` (line 1471), `stepToolResponse` (line 1480), or `stepUserInputRequired` (line 1486),\n  3. stops when a step returns `'exit'` (lines 1493–1495), or when the iteration limit is hit (line 1463; `DEFAULT_ITERATION_LIMIT = 25` at line 101).\n- **Structure worth noting**: `execute` is an *async generator* (`AsyncGenerator<AgentThreadEvent, void, unknown>`, line 1405) — it yields events as it runs rather than returning them, and wraps everything in a top-level try/catch that converts errors into error events (lines 1412, 1497–1501). The whole class is built as a pair of generator \"steps\" (`stepLLMCall` at 1084, `stepToolResponse` at 1235) driven by this loop.\n\n**Gaps:** I verified only this file, so I haven't traced who calls `execute` — the neighbouring `AgentThreadOrchestrator` (`AgentThreadOrchestrator.ts:237`) is the likely caller; say the word and I'll trace that next.",
+    "summary": {
+      "status": "done",
+      "wallMs": 16053,
+      "metrics": {
+        "total_input_tokens": 57046,
+        "total_output_tokens": 1808,
+        "total_tokens": 58854,
+        "total_cache_read_tokens": 42240,
+        "total_reasoning_tokens": 922
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "mcp.initialize": 1,
+        "model.message": 7,
+        "tool.response": 10,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "source_status",
+        "search_text",
+        "read_file",
+        "search_text",
+        "search_text",
+        "search_text",
+        "search_text",
+        "search_text",
+        "read_file",
+        "read_file"
+      ],
+      "usedMetaTools": false,
+      "usedSubagent": false,
+      "cacheReadTokens": 42240
+    }
+  }
+}
