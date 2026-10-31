@@ -49,7 +49,7 @@ jobs:
           if git log -1 --format=%B | grep -q '^Claude-Fix: ' && [ "$(git log -1 --format=%ae)" = "$bot" ]; then
             echo "fix-commit=true" >> "$GITHUB_OUTPUT"
             # The findings the fixer left ride in its commit, for claude-leftovers.
-            echo "left=$(git log -1 --format=%B | sed -n 's/^Claude-Fix-Left: //p')" >> "$GITHUB_OUTPUT"
+            echo "left=$(git log -1 --format=%B | sed -n 's/^Claude-Fix-Left: //p' | head -n1)" >> "$GITHUB_OUTPUT"
           else
             echo "fix-commit=false" >> "$GITHUB_OUTPUT"
           fi
@@ -222,6 +222,9 @@ jobs:
       - name: Note git's hooks and settings
         id: git-before
         if: steps.findings.outputs.count != '0'
+        env:
+          GIT_CONFIG_GLOBAL: /dev/null # Claude can write ~/.gitconfig; git reads only the repo's
+          GIT_CONFIG_NOSYSTEM: "1"
         run: |
           state=$(
             find .git/hooks -type f ! -name '*.sample' | sort
@@ -263,6 +266,8 @@ jobs:
         env:
           RESULT: ${{ steps.fix.outputs.structured_output }}
           GIT_BEFORE: ${{ steps.git-before.outputs.state }}
+          GIT_CONFIG_GLOBAL: /dev/null
+          GIT_CONFIG_NOSYSTEM: "1"
         run: |
           state=$(
             find .git/hooks -type f ! -name '*.sample' | sort
@@ -278,9 +283,10 @@ jobs:
           [ -f .review/comment.md ] || echo "The fix job didn't write a summary." > .review/comment.md
           git -c core.hooksPath=/dev/null -c core.fsmonitor=false add -A -- . ':(exclude).review'
           git -c core.fsmonitor=false diff --cached --binary --no-ext-diff --no-textconv > "$RUNNER_TEMP/fix.patch"
-          # Job outputs hold 1 MB in all, and base64 adds a third. A fix this big isn't small anyway.
-          if [ "$(wc -c < "$RUNNER_TEMP/fix.patch")" -gt 500000 ]; then
-            echo "::error::the fix is over 500 kB, too big to hand over"; exit 1
+          # A job's outputs hold 1 MB in all, base64 adds a third, and the findings ride along too.
+          # A fix this big isn't small anyway.
+          if [ "$(wc -c < "$RUNNER_TEMP/fix.patch")" -gt 300000 ]; then
+            echo "::error::the fix is over 300 kB, too big to hand over"; exit 1
           fi
           {
             echo "patch=$(base64 -w0 < "$RUNNER_TEMP/fix.patch")"
@@ -401,7 +407,8 @@ jobs:
           fi
           # One line per finding: a newline in a description could start a workflow command.
           jq -r '.[] | (if .severity == "low" then "notice" else "error" end) as $level
-            | "::\($level) file=\(.file),line=\(.line // 1)::[\(.severity)] \(.description) (left: \(.reason))"
+            | (.file | gsub("%"; "%25") | gsub(":"; "%3A") | gsub(","; "%2C")) as $file
+            | "::\($level) file=\($file),line=\(.line // 1)::[\(.severity)] \(.description) (left: \(.reason))"
             | gsub("[\r\n]+"; " ")' left.json
           if [ "$FIX_RESULT" = failure ] || jq -e 'any(.[]; .severity != "low")' left.json >/dev/null; then
             exit 1
