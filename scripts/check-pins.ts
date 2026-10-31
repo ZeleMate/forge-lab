@@ -5,7 +5,8 @@
 // Fails when any workspace package.json has a version that isn't exact (`^`, `~`,
 // `*`, `latest`, ranges, tags, URLs), sets `trustedDependencies`, or when the root
 // bunfig.toml stops enforcing `ignoreScripts`, `env = false`, `exact` or the 7-day
-// minimum release age. Reads files only: no network, safe on every commit.
+// minimum release age, including an exception to it that's unknown or past its date.
+// Reads files only: no network, safe on every commit.
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -24,6 +25,16 @@ const DEP_FIELDS = [
   "overrides",
 ] as const;
 const MIN_RELEASE_AGE = 7 * 24 * 60 * 60;
+
+// The packages bunfig.toml may let skip the release-age wait. TrueForge's own were
+// reviewed by hand for 0.179.2 and stay. The others are temporary: each fails this
+// check after its date, so the exception can't outlive the versions it was made for.
+const AGE_EXCLUDES = new Set(["@truefoundry/trueforge", "@truefoundry/trueforge-core", "@truefoundry/trueforge-sdk"]);
+const TEMPORARY_AGE_EXCLUDES: Record<string, string> = {
+  // #62: node-forge 1.4.2 and follow-redirects 1.16.2 are 7 days old by then.
+  "follow-redirects": "2026-11-03",
+  "node-forge": "2026-11-03",
+};
 
 // `Record<string, unknown>` is "an object with string keys whose values we haven't checked yet".
 type Manifest = Record<string, unknown> & { workspaces?: string[] };
@@ -60,7 +71,12 @@ function checkBunfig(): void {
   // Bun ships a TOML parser, so there's no dependency for this.
   const config = Bun.TOML.parse(readFileSync(join(REPO_ROOT, "bunfig.toml"), "utf8")) as {
     env?: unknown;
-    install?: { ignoreScripts?: unknown; exact?: unknown; minimumReleaseAge?: unknown };
+    install?: {
+      ignoreScripts?: unknown;
+      exact?: unknown;
+      minimumReleaseAge?: unknown;
+      minimumReleaseAgeExcludes?: unknown;
+    };
   };
   // `?.` stops at a missing `install` table instead of throwing.
   if (config.env !== false) problems.push("bunfig.toml: keep `env = false` (no implicit .env loading)");
@@ -69,6 +85,22 @@ function checkBunfig(): void {
   const age = config.install?.minimumReleaseAge;
   if (typeof age !== "number" || age < MIN_RELEASE_AGE) {
     problems.push(`bunfig.toml: keep minimumReleaseAge at ${MIN_RELEASE_AGE} (7 days) or more`);
+  }
+  // `YYYY-MM-DD` strings sort the same as the dates they name, so plain `>` compares them.
+  const today = new Date().toISOString().slice(0, 10);
+  const excludes = config.install?.minimumReleaseAgeExcludes ?? [];
+  if (!Array.isArray(excludes)) {
+    problems.push("bunfig.toml: minimumReleaseAgeExcludes is not a list");
+    return;
+  }
+  for (const name of excludes) {
+    if (AGE_EXCLUDES.has(String(name))) continue;
+    const until = TEMPORARY_AGE_EXCLUDES[String(name)];
+    if (until === undefined) {
+      problems.push(`bunfig.toml: "${name}" skips the release-age wait; add it to check-pins.ts with a date`);
+    } else if (today > until) {
+      problems.push(`bunfig.toml: the release-age exception for "${name}" ended ${until}; remove it`);
+    }
   }
 }
 

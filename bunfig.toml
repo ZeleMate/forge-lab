@@ -18,7 +18,8 @@ minimumReleaseAge = 604800
 # as the versions before, built from the matching git tags, no install scripts, and the
 # source diffs add no network, process or eval calls. Once both are 7 days old the
 # exception isn't needed, and it would otherwise let any later version of either
-# package skip the 7-day wait.
+# package skip the 7-day wait. scripts/check-pins.ts fails from 2026-11-04 until
+# they're removed.
 minimumReleaseAgeExcludes = [
   "@truefoundry/trueforge",
   "@truefoundry/trueforge-core",
