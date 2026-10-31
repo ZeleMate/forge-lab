@@ -54,7 +54,7 @@ jobs:
             echo "fix-commit=false" >> "$GITHUB_OUTPUT"
           fi
 
-  # Both Claude jobs run on the owner's Claude subscription (CLAUDE_CODE_OAUTH_TOKEN, from
+  # All three Claude jobs (the reviews and claude-fix) run on the owner's Claude subscription (CLAUDE_CODE_OAUTH_TOKEN, from
   # `claude setup-token`), so they share its usage limits with local Claude Code use.
   claude-code-review:
     name: code review (Claude)
@@ -165,7 +165,7 @@ jobs:
           fi
           n=$(jq '.findings | length' <<<"$RESULT")
           if [ "$n" -gt 0 ]; then
-            jq -r '.findings[] | "::error file=\(.file),line=\(.line // 1)::[\(.severity)] \(.description)"' <<<"$RESULT"
+            jq -r '.findings[] | "::error file=\(.file),line=\(.line // 1)::[\(.severity)] \(.description)" | gsub("[\r\n]+"; " ")' <<<"$RESULT"
             exit 1
           fi
           echo "No findings."
@@ -190,6 +190,7 @@ jobs:
       patch: ${{ steps.package.outputs.patch }}
       comment: ${{ steps.package.outputs.comment }}
       left: ${{ steps.package.outputs.left }}
+      findings: ${{ steps.findings.outputs.findings }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -212,7 +213,21 @@ jobs:
           }
           mkdir -p .review
           { collect code "$CODE"; collect security "$SECURITY"; } | jq -s . > .review/findings.json
-          echo "count=$(jq length .review/findings.json)" >> "$GITHUB_OUTPUT"
+          {
+            echo "count=$(jq length .review/findings.json)"
+            echo "findings=$(base64 -w0 < .review/findings.json)"
+          } >> "$GITHUB_OUTPUT"
+      # The git settings and hooks that could make git run a command, before Claude runs. Kept
+      # as a step output, which Claude can't change.
+      - name: Note git's hooks and settings
+        id: git-before
+        if: steps.findings.outputs.count != '0'
+        run: |
+          state=$(
+            find .git/hooks -type f ! -name '*.sample' | sort
+            git config --local --get-regexp '^(include|includeif|filter|diff|merge)\.|^core\.(fsmonitor|hookspath|attributesfile|sshcommand|gitproxy)$' || true
+          )
+          echo "state=$(sha256sum <<<"$state" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
       - id: fix
         if: steps.findings.outputs.count != '0'
         uses: anthropics/claude-code-action@925afb53776cf1a2b738c6bdbed37b4d4000ef13 # v1.0.262
@@ -239,13 +254,23 @@ jobs:
             --model claude-sonnet-5-5
             --allowedTools "Read,Glob,Grep,Edit,Write,Bash(git diff:*),Bash(git log:*),Bash(git show:*)"
             --json-schema '{"type":"object","required":["left"],"properties":{"left":{"type":"array","items":{"type":"object","required":["file","severity","description","reason"],"properties":{"file":{"type":"string"},"line":{"type":"integer"},"severity":{"type":"string","enum":["high","medium","low"]},"description":{"type":"string"},"reason":{"type":"string"}}}}}}'
-      # Git runs with hooks, fsmonitor and diff drivers off, in case Claude changed .git/.
+      # Git runs with hooks, fsmonitor and diff drivers off. If Claude added a hook or a setting
+      # that runs a command (a filter, say), git doesn't run at all: the job fails, and
+      # claude-leftovers lists every finding.
       - name: Package the fix
         id: package
         if: steps.findings.outputs.count != '0'
         env:
           RESULT: ${{ steps.fix.outputs.structured_output }}
+          GIT_BEFORE: ${{ steps.git-before.outputs.state }}
         run: |
+          state=$(
+            find .git/hooks -type f ! -name '*.sample' | sort
+            git config --local --get-regexp '^(include|includeif|filter|diff|merge)\.|^core\.(fsmonitor|hookspath|attributesfile|sshcommand|gitproxy)$' || true
+          )
+          if [ "$(sha256sum <<<"$state" | cut -d' ' -f1)" != "$GIT_BEFORE" ]; then
+            echo "::error::Claude changed git's hooks or settings, so the fix isn't packaged"; exit 1
+          fi
           # No valid result means the fixer didn't finish: leave every finding for the author.
           if ! jq -e '.left | type == "array"' <<<"$RESULT" >/dev/null 2>&1; then
             RESULT=$(jq -c '{left: map(. + {reason: "the fixer did not finish"})}' .review/findings.json)
@@ -355,20 +380,29 @@ jobs:
   # show as notices, so judgement calls don't keep waking it.
   claude-leftovers:
     name: findings left for the author
-    needs: [gate, claude-push]
+    needs: [gate, claude-fix, claude-push]
     if: >-
       !cancelled()
-      && (needs.gate.outputs.left != '' || needs.claude-push.outputs.left != '')
+      && (needs.gate.outputs.left != '' || needs.claude-push.outputs.left != ''
+        || needs.claude-fix.result == 'failure')
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions: {}
     steps:
       - env:
           LEFT: ${{ needs.gate.outputs.left || needs.claude-push.outputs.left }}
+          FINDINGS: ${{ needs.claude-fix.outputs.findings }}
+          FIX_RESULT: ${{ needs.claude-fix.result }}
         run: |
-          base64 -d <<<"$LEFT" > left.json
+          if [ "$FIX_RESULT" = failure ]; then
+            base64 -d <<<"$FINDINGS" | jq '[.[] | . + {reason: "the fix job failed"}]' > left.json
+          else
+            base64 -d <<<"$LEFT" > left.json
+          fi
           # One line per finding: a newline in a description could start a workflow command.
           jq -r '.[] | (if .severity == "low" then "notice" else "error" end) as $level
             | "::\($level) file=\(.file),line=\(.line // 1)::[\(.severity)] \(.description) (left: \(.reason))"
             | gsub("[\r\n]+"; " ")' left.json
-          if jq -e 'any(.[]; .severity != "low")' left.json >/dev/null; then exit 1; fi
+          if [ "$FIX_RESULT" = failure ] || jq -e 'any(.[]; .severity != "low")' left.json >/dev/null; then
+            exit 1
+          fi
