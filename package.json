@@ -24,7 +24,7 @@
   "dependencies": {
     "@forge-lab/agents": "workspace:*",
     "@forge-lab/lib": "workspace:*",
-    "@truefoundry/trueforge-sdk": "0.179.0"
+    "@truefoundry/trueforge-sdk": "0.180.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.2",
