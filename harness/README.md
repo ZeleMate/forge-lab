@@ -66,7 +66,7 @@ Shared API helpers and the port constants come from the `@forge-lab/lib` workspa
 
 ## What's pinned and why
 
-- `@truefoundry/trueforge` **0.180.0**, exact, with the root `bun.lock` committed. npm provenance names source commit `d15fbad7`.
+- `@truefoundry/trueforge` **0.180.0**, exact, with the root `bun.lock` committed. npm provenance names source commit `d15fbad7`. The pinned digest is the `subjectDigest` in [`snapshot.json`](../snapshot.json); unlike 0.179.2's, this tarball sha512 was not independently reviewed.
 - The root [`bunfig.toml`](../bunfig.toml) refuses packages published less than 7 days ago. The three first-party TrueForge packages are excluded from that rule on purpose: 0.179.2 was reviewed by hand while it was 2 days old. 0.180.0 came in through Dependabot (#53) without that review.
 - No install script runs, ours or any dependency's: the root `bunfig.toml` sets `ignoreScripts = true`. Without it, Bun runs scripts for packages on its built-in trust list even with no `trustedDependencies` (here better-sqlite3's implicit `node-gyp rebuild`; it loads a bundled prebuilt binary, so nothing needs it). `protobufjs`'s version-warning `postinstall` is skipped too. With the isolated linker `bun pm untrusted` no longer lists skipped scripts, so check with `bun install --verbose | grep Scripts` (expect no output).
 - The root `bunfig.toml` also sets `env = false`, so `bun run`, `bun <file>` and `bun -e` never load a `.env` on their own; `apply:provider` names `--env-file=../.env`. `bun install` still reads `.env` (Bun 1.4.3), another reason no install script may run. Bun reads `env = false` only from the folder a command starts in, so keep `.env` files at the repo root and in `mcp/`, never in `harness/`.
