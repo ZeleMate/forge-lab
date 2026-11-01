@@ -33,14 +33,13 @@ export async function search(root: string, opts: SearchOptions, limit: number): 
     "--sort=path", // single-threaded but deterministic, so citations and tests are stable
     "--max-columns=1000",
     `--context=${opts.context}`,
-    opts.regex ? "--regexp" : "--fixed-strings",
+    ...(opts.regex ? [] : ["--fixed-strings"]), // regex is ripgrep's default
     ...(opts.caseSensitive ? [] : ["--ignore-case"]),
     // Each glob is its own argument, never pasted into a shell string.
     ...opts.globs.flatMap((g) => ["--glob", g]),
   ];
-  // `--regexp` takes the next argument as the pattern even if it starts with `-`;
-  // with --fixed-strings, `--` ends the options instead.
-  const argv = opts.regex ? [RG, ...args, opts.pattern] : [RG, ...args, "--", opts.pattern];
+  // `--` ends the options, so a pattern that starts with `-` isn't read as a flag.
+  const argv = [RG, ...args, "--", opts.pattern];
   const proc = Bun.spawn(argv, { cwd: root, stdout: "pipe", stderr: "pipe", env: {} });
 
   const hits: Hit[] = [];

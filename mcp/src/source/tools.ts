@@ -172,7 +172,8 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
         return refuse(file.reason, "a path relative to the snapshot root, from search_text or find_declaration");
       if (!statSync(file.path).isFile())
         return refuse(`${args.path} is a directory`, "search_text with a glob for that folder");
-      const lines = readFileSync(file.path, "utf8").split("\n");
+      const lines = readFileSync(file.path, "utf8").split(/\r?\n/);
+      if (lines.at(-1) === "") lines.pop(); // a trailing newline isn't another line
       if (args.start_line > lines.length)
         return refuse(`${args.path} has only ${lines.length} lines`, "a smaller start_line");
       const wanted = Math.min(args.end_line ?? args.start_line + 199, args.start_line + 399, lines.length);
@@ -187,7 +188,8 @@ export function registerSourceTools(server: McpServer, snap: Snapshot): void {
         // padStart right-aligns the numbers so the code lines up.
         text: lines
           .slice(args.start_line - 1, end)
-          .map((l, i) => `${String(args.start_line + i).padStart(5)}| ${l}`)
+          // Cut each line so one minified line can't blow past max_chars.
+          .map((l, i) => `${String(args.start_line + i).padStart(5)}| ${l.slice(0, 1000)}`)
           .join("\n"),
       });
       let end = wanted;
