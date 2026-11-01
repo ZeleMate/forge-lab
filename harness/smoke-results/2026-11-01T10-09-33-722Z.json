@@ -1,0 +1,86 @@
+{
+  "glm-5-3-flash": {
+    "session": "01m6b99m0xwpbbpgd4f0wjrq9m",
+    "toolTurn": {
+      "status": "done",
+      "wallMs": 20084,
+      "metrics": {
+        "total_input_tokens": 9173,
+        "total_output_tokens": 391,
+        "total_tokens": 9564,
+        "total_cache_read_tokens": 4096,
+        "total_reasoning_tokens": 22
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 4,
+        "mcp.initialize": 1,
+        "tool.response": 3,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "list_tools",
+        "get_tool_info",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 4096
+    },
+    "followUp": {
+      "status": "done",
+      "wallMs": 2022,
+      "metrics": {
+        "total_input_tokens": 3339,
+        "total_output_tokens": 63,
+        "total_tokens": 3402,
+        "total_cache_read_tokens": 3328,
+        "total_reasoning_tokens": 1
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 1,
+        "turn.done": 1
+      },
+      "toolCalls": [],
+      "usedMetaTools": false,
+      "usedSubagent": false,
+      "cacheReadTokens": 3328
+    },
+    "subagentTurn": {
+      "status": "done",
+      "wallMs": 54160,
+      "metrics": {
+        "total_input_tokens": 27190,
+        "total_output_tokens": 3025,
+        "total_tokens": 30215,
+        "total_cache_read_tokens": 17472,
+        "total_reasoning_tokens": 804
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "model.message": 12,
+        "thread.created": 2,
+        "mcp.initialize": 1,
+        "tool.response": 10,
+        "thread.done": 2,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "create_sub_agent",
+        "create_sub_agent",
+        "list_tools",
+        "list_tools",
+        "get_tool_info",
+        "get_tool_info",
+        "call_tool",
+        "call_tool",
+        "call_tool",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": true,
+      "cacheReadTokens": 17472
+    }
+  }
+}
