@@ -64,6 +64,11 @@ pre-push:
     - name: lockfile matches manifests
       run: bun install --frozen-lockfile
 
+    # Versions this branch adds to bun.lock, against the merge base with origin/main.
+    # Needs the registry only when bun.lock changed; `--frozen-lockfile` doesn't check age.
+    - name: release age of added versions
+      run: bun scripts/check-release-age.ts
+
     - name: check
       run: bun run check
 
