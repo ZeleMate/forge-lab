@@ -68,4 +68,5 @@ pre-push:
       run: bun run check
 
     - name: test
-      run: bun test --pass-with-no-tests
+      # Real-snapshot tests fail with "run `bun run snapshot`" if it's missing (#54).
+      run: bun test

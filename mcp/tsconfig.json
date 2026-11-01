@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    // Only Bun's global types (Bun.*, import.meta.dir, bun:test); no DOM.
+    "types": ["bun"]
+  },
+  "include": ["**/*.ts"],
+  // The fixture tree imitates TrueForge's source for the tests; its imports point
+  // at packages that only exist inside the snapshot, so it isn't type-checked here.
+  "exclude": ["test/fixture-tree"]
+}
