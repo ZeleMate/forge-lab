@@ -11,6 +11,6 @@
   },
   "dependencies": {
     "@forge-lab/lib": "workspace:*",
-    "@truefoundry/trueforge-sdk": "0.179.0"
+    "@truefoundry/trueforge-sdk": "0.180.0"
   }
 }
