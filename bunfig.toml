@@ -9,10 +9,9 @@ env = false
 
 [install]
 # Only install versions published at least 7 days ago (research/security-review.md).
+# No exceptions: the one for TrueForge 0.179.2 (reviewed by hand at 2 days old)
+# was removed at the 0.180.0 bump, once both versions were past the age.
 minimumReleaseAge = 604800
-# Accepted exception: 0.179.2 and its first-party packages were reviewed by hand
-# (provenance, tarball hash, install scripts, telemetry) before they were 7 days old.
-minimumReleaseAgeExcludes = ["@truefoundry/trueforge", "@truefoundry/trueforge-core", "@truefoundry/trueforge-sdk"]
 exact = true
 # Run no install scripts at all, ours or any dependency's. Without this, Bun runs
 # scripts for packages on its built-in trust list even with no `trustedDependencies`
