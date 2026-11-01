@@ -13,11 +13,12 @@ type AuditReport = Record<string, Advisory[]>;
 
 type Accepted = { ghsa: string; pkg: string; reviewBy: string; reason: string };
 
-// Both come in through TrueForge itself (@truefoundry/trueforge's own
+// The root `overrides` in package.json (JSON has no comments, so this note lives here):
+// undici 7.30.1, node-forge 1.4.2 and follow-redirects 1.16.2 replaced their accept
+// entries. Drop each at the next TrueForge bump that ships that version or later.
+
+// body-parser and zod come in through TrueForge itself (@truefoundry/trueforge's own
 // dependencies), so only a TrueForge bump or a root `overrides` pin can fix them.
-// (undici 7.30.1, node-forge 1.4.2 and follow-redirects 1.16.2 are forced by
-// `overrides`, which fixed their entries; drop each override at the next TrueForge
-// bump that ships that version or later.)
 // Re-check this list on every bump, and by `reviewBy` at the latest; after
 // that date the entry stops applying and the job fails until someone looks again.
 const ACCEPTED: Accepted[] = [
