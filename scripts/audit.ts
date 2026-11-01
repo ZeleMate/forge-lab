@@ -7,9 +7,9 @@
 // don't fail: Dependabot alerts cover them. Needs the npm registry (network).
 //
 // Some advisories are fixed by the root `overrides` in package.json instead of
-// being accepted (JSON has no comments, so the note lives here): undici 7.30.1,
-// node-forge 1.4.2 and follow-redirects 1.16.2. Drop each at the next TrueForge
-// bump that ships that version or later.
+// being accepted (JSON has no comments, so the note lives here): undici, node-forge
+// and follow-redirects. Drop each override at the next TrueForge bump that ships
+// the overridden version or later.
 
 type Severity = "low" | "moderate" | "high" | "critical";
 type Advisory = { url: string; title: string; severity: Severity; vulnerable_versions: string };
