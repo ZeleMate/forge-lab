@@ -5,6 +5,11 @@
 // Fails on any high or critical advisory that isn't accepted below, or whose
 // acceptance has passed its review date. Moderate and low ones are counted but
 // don't fail: Dependabot alerts cover them. Needs the npm registry (network).
+//
+// Some advisories are fixed by the root `overrides` in package.json instead of
+// being accepted (JSON has no comments, so the note lives here): undici 7.30.1,
+// node-forge 1.4.2 and follow-redirects 1.16.2. Drop each at the next TrueForge
+// bump that ships that version or later.
 
 type Severity = "low" | "moderate" | "high" | "critical";
 type Advisory = { url: string; title: string; severity: Severity; vulnerable_versions: string };
@@ -12,10 +17,6 @@ type Advisory = { url: string; title: string; severity: Severity; vulnerable_ver
 type AuditReport = Record<string, Advisory[]>;
 
 type Accepted = { ghsa: string; pkg: string; reviewBy: string; reason: string };
-
-// The root `overrides` in package.json (JSON has no comments, so this note lives here):
-// undici 7.30.1, node-forge 1.4.2 and follow-redirects 1.16.2 replaced their accept
-// entries. Drop each at the next TrueForge bump that ships that version or later.
 
 // body-parser and zod come in through TrueForge itself (@truefoundry/trueforge's own
 // dependencies), so only a TrueForge bump or a root `overrides` pin can fix them.
