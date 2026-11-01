@@ -42,8 +42,9 @@ export function createApp(deps: AppDeps) {
   };
 
   // Open connections, keyed by endpoint and Mcp-Session-Id (MCP calls them
-  // sessions; here "Session" means a TrueForge Session, per CONTEXT.md). They live until the client sends DELETE or
-  // the process stops; TrueForge keeps one per Session, so this stays small locally.
+  // sessions; here "Session" means a TrueForge Session, per CONTEXT.md). They
+  // live until the client sends DELETE or the process stops; TrueForge keeps one
+  // per Session, so this stays small locally.
   const connections = new Map<string, WebStandardStreamableHTTPServerTransport>();
 
   async function handle(endpoint: Endpoint, req: Request): Promise<Response> {
