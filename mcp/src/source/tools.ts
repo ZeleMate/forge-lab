@@ -342,11 +342,12 @@ export function findDeclarations(project: Project, root: string, name: string): 
   if (!outer) return [];
   const out: FoundDeclaration[] = [];
   for (const file of project.getSourceFiles()) {
+    const iface = member ? file.getInterface(outer) : undefined;
     const candidates = member
       ? [
           file.getClass(outer)?.getMember(member),
           // Interfaces have no getMember: a member is a property or a method signature.
-          file.getInterface(outer)?.getProperty(member) ?? file.getInterface(outer)?.getMethod(member),
+          iface?.getProperty(member) ?? iface?.getMethod(member),
         ]
       : [
           file.getClass(outer),

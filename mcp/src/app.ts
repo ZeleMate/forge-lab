@@ -29,7 +29,7 @@ export type AppDeps = { source: Snapshot };
 const ALLOWED_HOSTS = [HOST, "localhost"];
 
 export function createApp(deps: AppDeps) {
-  // A factory per endpoint: each new MCP session gets its own McpServer instance.
+  // A factory per endpoint: each new connection gets its own McpServer instance.
   const factories: Record<Endpoint, () => McpServer> = {
     source: () => {
       const server = new McpServer({ name: "cartographer-source", version: deps.source.version });
@@ -41,9 +41,10 @@ export function createApp(deps: AppDeps) {
     triage: () => emptyServer("cartographer-triage"),
   };
 
-  // Open MCP sessions per endpoint. They live until the client sends DELETE or
+  // Open connections, keyed by endpoint and Mcp-Session-Id (MCP calls them
+  // sessions; here "Session" means a TrueForge Session, per CONTEXT.md). They live until the client sends DELETE or
   // the process stops; TrueForge keeps one per Session, so this stays small locally.
-  const sessions = new Map<string, WebStandardStreamableHTTPServerTransport>();
+  const connections = new Map<string, WebStandardStreamableHTTPServerTransport>();
 
   async function handle(endpoint: Endpoint, req: Request): Promise<Response> {
     // After initialize, a 2025-era client opens a GET stream for messages the
@@ -54,7 +55,7 @@ export function createApp(deps: AppDeps) {
       return new Response("Method not allowed", { status: 405, headers: { allow: "POST, DELETE" } });
     const id = req.headers.get("mcp-session-id");
     if (id) {
-      const transport = sessions.get(`${endpoint}:${id}`);
+      const transport = connections.get(`${endpoint}:${id}`);
       // 404 tells a client its session is gone, so it initializes a new one.
       return transport ? transport.handleRequest(req) : jsonRpcError(404, "Session not found");
     }
@@ -66,10 +67,10 @@ export function createApp(deps: AppDeps) {
       sessionIdGenerator: () => crypto.randomUUID(),
       enableJsonResponse: true, // plain JSON replies; no tool here streams progress
       onsessioninitialized: (sid) => {
-        sessions.set(`${endpoint}:${sid}`, transport);
+        connections.set(`${endpoint}:${sid}`, transport);
       },
       onsessionclosed: (sid) => {
-        sessions.delete(`${endpoint}:${sid}`);
+        connections.delete(`${endpoint}:${sid}`);
       },
     });
     await factories[endpoint]().connect(transport);
@@ -86,7 +87,7 @@ export function createApp(deps: AppDeps) {
       if (!endpoint) return new Response("Not found", { status: 404 });
       return handle(endpoint, req);
     },
-    openSessions: () => sessions.size,
+    openConnections: () => connections.size,
   };
 }
 

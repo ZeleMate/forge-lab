@@ -1,4 +1,4 @@
-// The HTTP layer: DNS-rebinding guards and MCP session routing.
+// The HTTP layer: DNS-rebinding guards and routing by Mcp-Session-Id.
 import { beforeAll, describe, expect, test } from "bun:test";
 import { HOST, PORTS } from "@forge-lab/lib/ports";
 import { createApp } from "../src/app";
@@ -46,23 +46,23 @@ describe("guards", () => {
   });
 });
 
-describe("sessions", () => {
-  test("initialize issues an Mcp-Session-Id and keeps the session", async () => {
+describe("connections", () => {
+  test("initialize issues an Mcp-Session-Id and keeps the connection", async () => {
     const app = createApp({ source });
     const res = await app.fetch(post({ host: `${HOST}:${PORTS.mcp}` }));
     expect(res.status).toBe(200);
     expect(res.headers.get("mcp-session-id")).toBeString();
-    expect(app.openSessions()).toBe(1);
+    expect(app.openConnections()).toBe(1);
   });
 
-  test("an unknown session id is a 404, so the client re-initializes", async () => {
+  test("an unknown Mcp-Session-Id is a 404, so the client re-initializes", async () => {
     const res = await createApp({ source }).fetch(
       post({ host: `${HOST}:${PORTS.mcp}`, "mcp-session-id": "nope" }, { jsonrpc: "2.0", id: 2, method: "tools/list" }),
     );
     expect(res.status).toBe(404);
   });
 
-  test("a request without a session that isn't initialize is a 400", async () => {
+  test("a request without an Mcp-Session-Id that isn't initialize is a 400", async () => {
     const res = await createApp({ source }).fetch(
       post({ host: `${HOST}:${PORTS.mcp}` }, { jsonrpc: "2.0", id: 2, method: "tools/list" }),
     );
@@ -81,7 +81,7 @@ describe("sessions", () => {
     expect(res.status).toBe(405);
   });
 
-  test("two clients get two sessions", async () => {
+  test("two clients get two connections", async () => {
     const a = await connect({ source }, "source");
     const b = await connect({ source }, "source");
     expect(a.client.transport?.sessionId).not.toBe(b.client.transport?.sessionId);
