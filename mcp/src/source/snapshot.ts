@@ -9,7 +9,7 @@ import { openSnapshot } from "@forge-lab/lib/snapshot";
 import { Project, ts } from "ts-morph";
 import { within } from "./paths";
 
-// The two packages that hold the harness internals (419 files at 198a2ead,
+// The two packages that hold the harness internals (423 files at d15fbad7,
 // counting the 7 generated `.gen.ts` files).
 export const HARNESS_PACKAGES = ["packages/trueforge", "packages/trueforge-core"] as const;
 
