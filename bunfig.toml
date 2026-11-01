@@ -12,21 +12,7 @@ env = false
 minimumReleaseAge = 604800
 # Accepted exception: 0.179.2 and its first-party packages were reviewed by hand
 # (provenance, tarball hash, install scripts, telemetry) before they were 7 days old.
-# Temporary exception, remove after 2026-11-03: node-forge 1.4.2 (2026-10-27) and
-# follow-redirects 1.16.2 (2026-10-25) fix six high advisories that reach us through
-# TrueForge, and are forced by the root `overrides`. Reviewed by hand: same maintainers
-# as the versions before, built from the matching git tags, no install scripts, and the
-# source diffs add no network, process or eval calls. Once both are 7 days old the
-# exception isn't needed, and it would otherwise let any later version of either
-# package skip the 7-day wait. scripts/check-pins.ts fails from 2026-11-04 until
-# they're removed.
-minimumReleaseAgeExcludes = [
-  "@truefoundry/trueforge",
-  "@truefoundry/trueforge-core",
-  "@truefoundry/trueforge-sdk",
-  "follow-redirects",
-  "node-forge",
-]
+minimumReleaseAgeExcludes = ["@truefoundry/trueforge", "@truefoundry/trueforge-core", "@truefoundry/trueforge-sdk"]
 exact = true
 # Run no install scripts at all, ours or any dependency's. Without this, Bun runs
 # scripts for packages on its built-in trust list even with no `trustedDependencies`

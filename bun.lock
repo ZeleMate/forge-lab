@@ -7,7 +7,7 @@
       "dependencies": {
         "@forge-lab/agents": "workspace:*",
         "@forge-lab/lib": "workspace:*",
-        "@truefoundry/trueforge-sdk": "0.179.0",
+        "@truefoundry/trueforge-sdk": "0.180.0",
       },
       "devDependencies": {
         "@biomejs/biome": "2.6.2",
@@ -19,7 +19,7 @@
       "name": "@forge-lab/agents",
       "dependencies": {
         "@forge-lab/lib": "workspace:*",
-        "@truefoundry/trueforge-sdk": "0.179.0",
+        "@truefoundry/trueforge-sdk": "0.180.0",
       },
     },
     "harness": {
@@ -28,8 +28,8 @@
         "@forge-lab/lib": "workspace:*",
       },
       "devDependencies": {
-        "@truefoundry/trueforge": "0.179.2",
-        "@truefoundry/trueforge-sdk": "0.179.0",
+        "@truefoundry/trueforge": "0.180.0",
+        "@truefoundry/trueforge-sdk": "0.180.0",
         "ts-morph": "28.0.0",
       },
     },
@@ -299,11 +299,11 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@truefoundry/trueforge": ["@truefoundry/trueforge@0.179.2", "", { "dependencies": { "@anthropic-ai/sandbox-runtime": "0.0.77", "@daytona/sdk": "^0.218.0", "@hono/node-server": "^2.1.1", "@hono/prometheus": "^1.0.3", "@hono/swagger-ui": "^0.6.1", "@hono/zod-openapi": "^1.6.3", "@modelcontextprotocol/sdk": "^1.31.0", "@sentry/node": "^10.75.3", "@truefoundry/trueforge-core": "0.179.0", "@truefoundry/trueforge-sdk": "0.179.0", "better-sqlite3": "^13.0.3", "cron-parser": "^5.10.1", "env-paths": "^4.0.0", "hono": "^4.13.9", "jose": "^6.2.12", "kysely": "^0.29.6", "lru-cache": "^11.5.3", "openid-client": "^6.8.8", "pg": "^8.23.0", "prom-client": "^15.1.3", "redis": "^5.12.1", "ulid": "^3.0.2", "undici": "7.30.0", "winston": "^3.19.0", "yaml": "^2.9.1", "zod": "^4.6.5" }, "bin": { "trueforge": "./dist/cli.js" } }, "sha512-bzGlNqIoXApiEsx6DYF3VbnoGeuBP3yIAc9kk+29fQNCZraEMk8c39g66r4Uz+L5lcQA/AqG7TAA6CdfgewK6Q=="],
+    "@truefoundry/trueforge": ["@truefoundry/trueforge@0.180.0", "", { "dependencies": { "@anthropic-ai/sandbox-runtime": "0.0.77", "@daytona/sdk": "^0.218.0", "@hono/node-server": "^2.1.1", "@hono/prometheus": "^1.0.3", "@hono/swagger-ui": "^0.6.1", "@hono/zod-openapi": "^1.6.3", "@modelcontextprotocol/sdk": "^1.31.0", "@sentry/node": "^10.75.3", "@truefoundry/trueforge-core": "0.180.0", "@truefoundry/trueforge-sdk": "0.180.0", "better-sqlite3": "^13.0.3", "cron-parser": "^5.10.1", "env-paths": "^4.0.0", "hono": "^4.13.9", "jose": "^6.2.12", "kysely": "^0.29.6", "lru-cache": "^11.5.3", "openid-client": "^6.8.8", "pg": "^8.23.0", "prom-client": "^15.1.3", "redis": "^5.12.1", "ulid": "^3.0.2", "undici": "7.30.0", "winston": "^3.19.0", "yaml": "^2.9.1", "zod": "^4.6.5" }, "bin": { "trueforge": "./dist/cli.js" } }, "sha512-4Ao2qUXin2ZYwgl2sEGUgY3S0s3DhCwUMQI82gBVQR7j3eLAUNQClF0wXO5c35CxxrZcKzUiPTurIOtMNHzTRQ=="],
 
-    "@truefoundry/trueforge-core": ["@truefoundry/trueforge-core@0.179.0", "", { "dependencies": { "@ai-sdk/alibaba": "^2.0.56", "@ai-sdk/anthropic": "^4.0.65", "@ai-sdk/google": "^4.0.82", "@ai-sdk/moonshotai": "^3.0.58", "@ai-sdk/openai": "^4.0.78", "@ai-sdk/openai-compatible": "^3.0.57", "@ai-sdk/provider": "^4.0.18", "@ai-sdk/provider-utils": "^5.0.49", "@daytona/sdk": "^0.218.0", "@hono/zod-openapi": "^1.6.3", "@modelcontextprotocol/sdk": "^1.31.0", "@nats-io/nats-core": "3.4.0", "@opentelemetry/api": "^1.9.1", "@opentelemetry/core": "^2.11.0", "ai": "^7.0.118", "dedent": "^1.7.2", "openai": "^7.23.0", "parallel-web": "^1.3.3", "ulid": "^3.0.2", "undici": "7.30.0", "winston": "^3.19.0", "ws": "^8.22.0", "zod": "^4.6.5" }, "peerDependencies": { "redis": "^5.10.0" } }, "sha512-j+5FqqrE4jXVzUMKmhV5pSSw0y0e2xN6wQiVuGmMREwhR+IVH3JYjwtOZIF9+Jf/f5kzp7dVFFKUx6DFXfdbzg=="],
+    "@truefoundry/trueforge-core": ["@truefoundry/trueforge-core@0.180.0", "", { "dependencies": { "@ai-sdk/alibaba": "^2.0.56", "@ai-sdk/anthropic": "^4.0.65", "@ai-sdk/google": "^4.0.82", "@ai-sdk/moonshotai": "^3.0.58", "@ai-sdk/openai": "^4.0.78", "@ai-sdk/openai-compatible": "^3.0.57", "@ai-sdk/provider": "^4.0.18", "@ai-sdk/provider-utils": "^5.0.49", "@daytona/sdk": "^0.218.0", "@hono/zod-openapi": "^1.6.3", "@modelcontextprotocol/sdk": "^1.31.0", "@nats-io/nats-core": "3.4.0", "@opentelemetry/api": "^1.9.1", "@opentelemetry/core": "^2.11.0", "ai": "^7.0.118", "dedent": "^1.7.2", "openai": "^7.23.0", "parallel-web": "^1.3.3", "ulid": "^3.0.2", "undici": "7.30.0", "winston": "^3.19.0", "ws": "^8.22.0", "zod": "^4.6.5" }, "peerDependencies": { "redis": "^5.10.0" } }, "sha512-eq9H17mdXHd2DEK8iyYIEDYcqXCt7Nr9SRsJoetPlCR1KL+/1AeT6mSlNkc7K7ZWtf4NIGn/m56yqowMrHU1/g=="],
 
-    "@truefoundry/trueforge-sdk": ["@truefoundry/trueforge-sdk@0.179.0", "", {}, "sha512-Eb4cJtj1682R3am6tjlzqcVHpUiLjz+DP8oGaa/pBjSxCq+71/AwDf7ElluJEKn5R5T2ZAje2NfK3l2U3oY5EA=="],
+    "@truefoundry/trueforge-sdk": ["@truefoundry/trueforge-sdk@0.180.0", "", {}, "sha512-lxiwxH6MtrfzCg97LqG+cr1Cta0LIhQ+ASaGL8+2PVwFOpC+uMWNXntuhF3E4UlYrbXfhibZW5iJor7A2tFzLQ=="],
 
     "@ts-morph/common": ["@ts-morph/common@0.29.0", "", { "dependencies": { "minimatch": "^10.0.1", "path-browserify": "^1.0.1", "tinyglobby": "^0.2.14" } }, "sha512-35oUmphHbJvQ/+UTwFNme/t2p3FoKiGJ5auTjjpNTop2dyREspirjMy82PLSC1pnDJ8ah1GU98hwpVt64YXQsg=="],
 
