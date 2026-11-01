@@ -154,6 +154,10 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
+          # claude-push pushes the fix commit with the job token, so that run's actor is this bot,
+          # and the action refuses bot actors unless listed. Only here: review and fix never run on
+          # the fix commit. The action compares case-insensitively with any `[bot]` suffix dropped.
+          allowed_bots: github-actions[bot]
           prompt: |
             Security review of pull request #${{ github.event.pull_request.number }}. The change
             (`git diff <base>...HEAD`) is in .review/pr.diff; you can't run git here. Read the
