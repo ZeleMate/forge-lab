@@ -97,7 +97,7 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
     );
   }
 
-  // `own is CallToolResult` is a type predicate: where it returns true,
+  // `v is CallToolResult` is a type predicate: where isRefusal returns true,
   // TypeScript narrows the value to a refusal.
   const isRefusal = (v: unknown): v is CallToolResult => typeof v === "object" && v !== null && "isError" in v;
 
@@ -373,13 +373,14 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       const started = clock.now();
       const deadline = started + args.timeout_s * 1000;
       let turn = await api.getTurn(args.session_id, args.turn_id);
-      while (turn.state.status === "running" && clock.now() < deadline) {
+      const unfinished = (t: Turn) => t.state.status === "running" || t.state.status === "paused";
+      while (unfinished(turn) && clock.now() < deadline) {
         await clock.sleep(Math.min(POLL_MS, deadline - clock.now()));
         turn = await api.getTurn(args.session_id, args.turn_id);
       }
       return ok({
         provenance: "observed" as const,
-        still_running: turn.state.status === "running",
+        still_running: unfinished(turn),
         waited_ms: clock.now() - started,
         turn: turnSummary(turn, 500),
       });
@@ -620,23 +621,31 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
   // Runs the replayed Turns one after another: each must finish before the next
   // chains on it, or creating the next would cancel it (#21 6.2).
   async function replay(newSessionId: string, tags: Record<string, string>, inputs: TurnInputItem[][]) {
-    let previous = "none";
-    for (const [index, input] of inputs.entries()) {
-      const created = await api.createTurn(newSessionId, { input, previousTurnId: previous });
-      const turn = await waitUntilDone(newSessionId, created.id);
-      const failed =
-        turn.state.status !== "done"
-          ? `turn ${index + 1} ended ${turn.state.status}`
-          : requiredActions(turn) > 0
-            ? `turn ${index + 1} wants an Approval`
-            : undefined;
-      if (failed) {
-        await api.updateSession(newSessionId, { metadata: { ...tags, replay: `failed:${failed}`.slice(0, 128) } });
-        return;
+    const markFailed = (reason: string) =>
+      api.updateSession(newSessionId, { metadata: { ...tags, replay: `failed:${reason}`.slice(0, 128) } });
+    try {
+      let previous = "none";
+      for (const [index, input] of inputs.entries()) {
+        const created = await api.createTurn(newSessionId, { input, previousTurnId: previous });
+        const turn = await waitUntilDone(newSessionId, created.id);
+        const failed =
+          turn.state.status !== "done"
+            ? `turn ${index + 1} ended ${turn.state.status}`
+            : requiredActions(turn) > 0
+              ? `turn ${index + 1} wants an Approval`
+              : undefined;
+        if (failed) {
+          await markFailed(failed);
+          return;
+        }
+        previous = turn.id;
       }
-      previous = turn.id;
+      await api.updateSession(newSessionId, { metadata: { ...tags, replay: "done" } });
+    } catch (error) {
+      // Best effort: if TrueForge is unreachable the tag can't be written either.
+      await markFailed(error instanceof Error ? error.message : String(error)).catch(() => undefined);
+      throw error;
     }
-    await api.updateSession(newSessionId, { metadata: { ...tags, replay: "done" } });
   }
 
   async function waitUntilDone(id: string, turnId: string): Promise<Turn> {

@@ -47,10 +47,11 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
     return undefined;
   }
 
-  // `override` is the tool's explicit `caller_session_id`, which always wins.
+  // `override` is the tool's explicit `caller_session_id`; it only counts when the
+  // scan finds nothing, so a model can't name another Session to dodge the refusals.
   return async function findOwn(override?: string): Promise<OwnSession | undefined> {
-    if (!override && !cached) cached = await scan();
-    const sessionId = override ?? cached;
+    if (!cached) cached = await scan();
+    const sessionId = cached ?? override;
     if (!sessionId) return undefined;
     const [session, turns] = await Promise.all([api.getSession(sessionId), api.listTurns(sessionId)]);
     return { sessionId, runningTurnId: running(turns), depth: depthOf(session.metadata) };
