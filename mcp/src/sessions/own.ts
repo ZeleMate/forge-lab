@@ -54,6 +54,8 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
     const sessionId = cached ?? override;
     if (!sessionId) return undefined;
     const [session, turns] = await Promise.all([api.getSession(sessionId), api.listTurns(sessionId)]);
+    // An override only counts for a Session that is mid-Turn, as the caller's is.
+    if (!cached && !running(turns)) return undefined;
     return { sessionId, runningTurnId: running(turns), depth: depthOf(session.metadata) };
   };
 }

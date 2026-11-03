@@ -691,7 +691,8 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
     const deadline = clock.now() + REPLAY_TURN_TIMEOUT_MS;
     for (;;) {
       const turn = await api.getTurn(id, turnId);
-      if (turn.state.status !== "running" || clock.now() >= deadline) return turn;
+      const unfinished = turn.state.status === "running" || turn.state.status === "paused";
+      if (!unfinished || clock.now() >= deadline) return turn;
       await clock.sleep(POLL_MS);
     }
   }
