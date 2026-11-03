@@ -64,6 +64,23 @@ export const Metrics = z.object({
   cost_usd: z.number().optional(),
 });
 
+// A Turn's `totalXxx` counters under the shorter names the model sees.
+export function metricsOf(m: {
+  totalInputTokens?: number;
+  totalOutputTokens?: number;
+  totalReasoningTokens?: number;
+  totalCacheReadTokens?: number;
+  totalCostInUsd?: number;
+}): z.infer<typeof Metrics> {
+  return {
+    input_tokens: m.totalInputTokens,
+    output_tokens: m.totalOutputTokens,
+    reasoning_tokens: m.totalReasoningTokens,
+    cache_read_tokens: m.totalCacheReadTokens,
+    cost_usd: m.totalCostInUsd,
+  };
+}
+
 export const TurnSummary = z.object({
   citation: SessionCitation,
   previous_turn_id: z.string().nullable(),
@@ -97,17 +114,7 @@ export function turnSummary(t: Turn, inputChars: number): TurnSummary {
     created_at: t.createdAt,
     ...("completedAt" in s ? { completed_at: s.completedAt } : {}),
     input: excerpt(inputText(t), inputChars),
-    ...(metrics
-      ? {
-          metrics: {
-            input_tokens: metrics.totalInputTokens,
-            output_tokens: metrics.totalOutputTokens,
-            reasoning_tokens: metrics.totalReasoningTokens,
-            cache_read_tokens: metrics.totalCacheReadTokens,
-            cost_usd: metrics.totalCostInUsd,
-          },
-        }
-      : {}),
+    ...(metrics ? { metrics: metricsOf(metrics) } : {}),
   };
 }
 
@@ -123,6 +130,7 @@ export const EventView = z.object({
   thread_id: z.string().optional(),
   text: z.string().optional(),
   tool_calls: z.array(z.object({ id: z.string(), name: z.string(), args_chars: z.number().int() })).optional(),
+  pending_tool_call_ids: z.array(z.string()).optional(),
   tool_call_id: z.string().optional(),
   content_chars: z.number().int().optional(),
   usage: z.object({ input_tokens: z.number(), output_tokens: z.number() }).optional(),
@@ -167,7 +175,7 @@ export function eventView(sessionId: string, turnId: string, e: SessionEvent, te
     case "mcp.initialize":
       return { ...base, servers: e.mcpServers.map((s) => s.name) };
     case "tool.approval_required":
-      return { ...base, tool_calls: e.toolCalls.map((c) => ({ id: c.id, name: "", args_chars: 0 })) };
+      return { ...base, pending_tool_call_ids: e.toolCalls.map((c) => c.id) };
     default:
       return base;
   }

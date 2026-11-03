@@ -24,6 +24,7 @@ import {
   eventView,
   excerpt,
   Metrics,
+  metricsOf,
   requiredActions,
   SessionCitation,
   SessionSummary,
@@ -353,13 +354,7 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
           status: s.status,
           ...("completedAt" in s ? { duration_ms: Date.parse(s.completedAt) - Date.parse(turn.createdAt) } : {}),
           metrics: m
-            ? {
-                input_tokens: m.totalInputTokens,
-                output_tokens: m.totalOutputTokens,
-                reasoning_tokens: m.totalReasoningTokens,
-                cache_read_tokens: m.totalCacheReadTokens,
-                cost_usd: m.totalCostInUsd,
-              }
+            ? metricsOf(m)
             : {
                 input_tokens: sum(usage.map((u) => u.inputTokens)),
                 output_tokens: sum(usage.map((u) => u.outputTokens)),
