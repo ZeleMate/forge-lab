@@ -2,8 +2,8 @@
 // reads' projections, wait_turn on the fake clock, and what each write sends.
 import { beforeAll, describe, expect, test } from "bun:test";
 import { serialization } from "@truefoundry/trueforge-sdk";
+import { branchTo } from "../src/sessions/replay";
 import { applyConfigPatch, deepMerge } from "../src/sessions/spec";
-import { branchTo } from "../src/sessions/tools";
 import type { Snapshot } from "../src/source/snapshot";
 import { call, connect, fakeClock, fixtureCopy, fixtureSnapshot, testDeps } from "./helpers";
 import { FakeSessionsApi, SPEC } from "./sessions-fake";

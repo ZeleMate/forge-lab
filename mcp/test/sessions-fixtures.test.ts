@@ -59,6 +59,15 @@ describe(`recorded fixtures (${newest}, TrueForge ${rec.version})`, () => {
     ).toBe(true);
   });
 
+  test("an Approval request carries only the waiting calls' ids", () => {
+    const approval = (rec.events.pending ?? []).find((e) => e.type === "tool.approval_required");
+    const pendingTurn = rec.turns.pending as Turn;
+    if (!approval) throw new Error("the recording has no tool.approval_required event");
+    expect(eventView(pendingTurn.sessionId, pendingTurn.id, approval, 100)).toMatchObject({
+      pending_tool_call_ids: [expect.any(String)],
+    });
+  });
+
   test("the fork carries its depth and origin tags", () => {
     expect(sessionSummary(rec.sessions.fork)).toMatchObject({ experiment: true, agent: "inline" });
     expect(rec.sessions.fork.metadata).toMatchObject({ depth: "1", origin: expect.stringContaining(":") });

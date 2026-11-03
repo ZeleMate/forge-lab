@@ -5,14 +5,17 @@
 
 import type { SessionsApi, Turn } from "./api";
 
-export type OwnSession = { sessionId: string; runningTurnId: string | undefined; depth: number };
+// `verified`: found by the scan. An unverified one came only from the tool's
+// `caller_session_id`, which nothing confirms, so the write checks distrust it.
+export type OwnSession = { sessionId: string; runningTurnId: string | undefined; depth: number; verified: boolean };
 
 // `mcp.initialize` comes right after `turn.created` on the Turn that connected,
 // so the first few events of a Turn are enough to look at.
 const EVENTS_SCANNED = 10;
 // The caller's Session was updated when its Turn started, so it's near the top
-// of the most-recently-updated list.
-const SESSIONS_SCANNED = 25;
+// of the most-recently-updated list; 4 pages leave room for a long Turn while
+// other Sessions keep updating.
+const SESSION_PAGES = 4;
 
 export function depthOf(metadata: Record<string, string>): number {
   // An untagged Session (the user's chat) is depth 0, like a script's root Experiment.
@@ -31,20 +34,29 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
 
   async function scan(): Promise<string | undefined> {
     if (!mcpSessionId) return undefined;
-    const { items } = await api.listSessions({ limit: SESSIONS_SCANNED });
-    for (const session of items) {
-      const turns = await api.listTurns(session.id);
-      if (!running(turns)) continue;
-      // Newest first: after an MCP server restart, the latest Turn re-initialized.
-      for (const turn of [...turns].reverse()) {
-        const { items: events } = await api.listTurnEvents(session.id, turn.id, { limit: EVENTS_SCANNED });
-        const match = events.some(
-          (e) => e.type === "mcp.initialize" && e.mcpServers.some((s) => s.sessionId === mcpSessionId),
-        );
-        if (match) return session.id;
-      }
+    let cursor: string | undefined;
+    for (let page = 0; page < SESSION_PAGES; page++) {
+      const res = await api.listSessions({ limit: 25, ...(cursor ? { cursor } : {}) });
+      for (const session of res.items) if (await initializedHere(session.id)) return session.id;
+      cursor = res.next;
+      if (!cursor) break;
     }
     return undefined;
+  }
+
+  // Whether this Session is running a Turn and was connected to us.
+  async function initializedHere(sessionId: string): Promise<boolean> {
+    const turns = await api.listTurns(sessionId);
+    if (!running(turns)) return false;
+    // Newest first: after an MCP server restart, the latest Turn re-initialized.
+    for (const turn of [...turns].reverse()) {
+      const { items: events } = await api.listTurnEvents(sessionId, turn.id, { limit: EVENTS_SCANNED });
+      const match = events.some(
+        (e) => e.type === "mcp.initialize" && e.mcpServers.some((s) => s.sessionId === mcpSessionId),
+      );
+      if (match) return true;
+    }
+    return false;
   }
 
   // `override` is the tool's explicit `caller_session_id`; it only counts when the
@@ -56,7 +68,12 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
     const [session, turns] = await Promise.all([api.getSession(sessionId), api.listTurns(sessionId)]);
     // An override only counts for a Session that is mid-Turn, as the caller's is.
     if (!cached && !running(turns)) return undefined;
-    return { sessionId, runningTurnId: running(turns), depth: depthOf(session.metadata) };
+    return {
+      sessionId,
+      runningTurnId: running(turns),
+      depth: depthOf(session.metadata),
+      verified: cached !== undefined,
+    };
   };
 }
 

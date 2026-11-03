@@ -175,6 +175,48 @@ describe("fork_turn refuses", () => {
     );
   });
 
+  test("an in-place write on a running Session when the caller is unverified", async () => {
+    const fake = new FakeSessionsApi();
+    const { client } = await connect(testDeps(source, { api: fake }), "sessions");
+    // No `mcp.initialize` names this connection: `caller` is only a claim, and
+    // `busy`'s running Turn could be the real caller.
+    fake.addSession("busy", { metadata: { experiment: "x", depth: "0" }, inline: true });
+    fake.addTurn("busy", "b1");
+    fake.addTurn("busy", "b2", { status: "running" });
+    fake.addSession("caller");
+    fake.addTurn("caller", "k1", { status: "running" });
+    const w = { fake, client };
+    await expectRefused(
+      w,
+      "fork_turn",
+      { session_id: "busy", from_turn_id: "b1", message: "x", caller_session_id: "caller" },
+      /could be mine/,
+    );
+    await expectRefused(w, "cancel_session", { session_id: "busy", caller_session_id: "caller" }, /could be mine/);
+  });
+
+  test("a replay when the caller is unverified (it counts as depth 1)", async () => {
+    const fake = new FakeSessionsApi();
+    const { client } = await connect(testDeps(source, { api: fake }), "sessions");
+    fake.addSession("chat");
+    fake.addTurn("chat", "c1");
+    fake.addSession("caller");
+    fake.addTurn("caller", "k1", { status: "running" });
+    await expectRefused(
+      { fake, client },
+      "fork_turn",
+      {
+        session_id: "chat",
+        from_turn_id: "c1",
+        message: "x",
+        experiment: "unverified",
+        estimated_cost_usd: 1,
+        caller_session_id: "caller",
+      },
+      /depth 1 \(assumed/,
+    );
+  });
+
   test("a config_patch key outside the allowlist", async () => {
     const w = await world();
     const r = await call(w.client, "fork_turn", {

@@ -64,6 +64,20 @@ export const Metrics = z.object({
   cost_usd: z.number().optional(),
 });
 
+// A finished Turn's metrics in the tools' snake_case, or undefined while it
+// runs (and for a Turn cancelled for the next one, #24).
+export function metricsOf(t: Turn): z.infer<typeof Metrics> | undefined {
+  const m = "metrics" in t.state ? t.state.metrics : undefined;
+  if (!m) return undefined;
+  return {
+    input_tokens: m.totalInputTokens,
+    output_tokens: m.totalOutputTokens,
+    reasoning_tokens: m.totalReasoningTokens,
+    cache_read_tokens: m.totalCacheReadTokens,
+    cost_usd: m.totalCostInUsd,
+  };
+}
+
 export const TurnSummary = z.object({
   citation: SessionCitation,
   previous_turn_id: z.string().nullable(),
@@ -85,8 +99,7 @@ export function requiredActions(turn: Turn): number {
 
 export function turnSummary(t: Turn, inputChars: number): TurnSummary {
   const s = t.state;
-  // `in` narrows a union by asking whether a property exists on this member.
-  const metrics = "metrics" in s && s.metrics ? s.metrics : undefined;
+  const metrics = metricsOf(t);
   const detail = s.status === "cancelled" ? s.reason : s.status === "error" ? s.message : undefined;
   return {
     citation: { session_id: t.sessionId, turn_id: t.id },
@@ -95,19 +108,10 @@ export function turnSummary(t: Turn, inputChars: number): TurnSummary {
     ...(detail ? { detail } : {}),
     required_actions: requiredActions(t),
     created_at: t.createdAt,
+    // `in` narrows a union by asking whether a property exists on this member.
     ...("completedAt" in s ? { completed_at: s.completedAt } : {}),
     input: excerpt(inputText(t), inputChars),
-    ...(metrics
-      ? {
-          metrics: {
-            input_tokens: metrics.totalInputTokens,
-            output_tokens: metrics.totalOutputTokens,
-            reasoning_tokens: metrics.totalReasoningTokens,
-            cache_read_tokens: metrics.totalCacheReadTokens,
-            cost_usd: metrics.totalCostInUsd,
-          },
-        }
-      : {}),
+    ...(metrics ? { metrics } : {}),
   };
 }
 
@@ -124,6 +128,9 @@ export const EventView = z.object({
   text: z.string().optional(),
   tool_calls: z.array(z.object({ id: z.string(), name: z.string(), args_chars: z.number().int() })).optional(),
   tool_call_id: z.string().optional(),
+  // An Approval request names only the waiting calls' ids; get the names from
+  // the `model.message` that made them.
+  pending_tool_call_ids: z.array(z.string()).optional(),
   content_chars: z.number().int().optional(),
   usage: z.object({ input_tokens: z.number(), output_tokens: z.number() }).optional(),
   servers: z.array(z.string()).optional(),
@@ -167,7 +174,7 @@ export function eventView(sessionId: string, turnId: string, e: SessionEvent, te
     case "mcp.initialize":
       return { ...base, servers: e.mcpServers.map((s) => s.name) };
     case "tool.approval_required":
-      return { ...base, tool_calls: e.toolCalls.map((c) => ({ id: c.id, name: "", args_chars: 0 })) };
+      return { ...base, pending_tool_call_ids: e.toolCalls.map((c) => c.id) };
     default:
       return base;
   }
