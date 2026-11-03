@@ -15,6 +15,9 @@ export type AgentSpec = TrueForgeApi.AgentSpec;
 export type TurnInputItem = TrueForgeApi.TurnInputItem;
 export type Metadata = Record<string, string>;
 
+// What creating a Turn sends: its input, chained on an explicit Turn (or "none").
+export type CreateTurnBody = { input: TurnInputItem[]; previousTurnId: string };
+
 // One page of a list, with the token for the next one (absent on the last page).
 export type Page<T> = { items: T[]; next?: string };
 
@@ -38,7 +41,7 @@ export interface SessionsApi {
   // writes: the only four calls that change anything
   createSession(body: { spec: AgentSpec; metadata: Metadata }): Promise<Session>;
   updateSession(sessionId: string, body: { spec?: AgentSpec; metadata?: Metadata }): Promise<Session>;
-  createTurn(sessionId: string, body: { input: TurnInputItem[]; previousTurnId: string }): Promise<Turn>;
+  createTurn(sessionId: string, body: CreateTurnBody): Promise<Turn>;
   cancel(sessionId: string): Promise<void>;
 }
 

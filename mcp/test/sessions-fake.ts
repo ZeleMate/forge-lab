@@ -4,6 +4,7 @@
 
 import type {
   AgentSpec,
+  CreateTurnBody,
   Metadata,
   Page,
   Session,
@@ -235,7 +236,7 @@ export class FakeSessionsApi implements SessionsApi {
     return structuredClone(s);
   }
 
-  async createTurn(sessionId: string, body: { input: TurnInputItem[]; previousTurnId: string }): Promise<Turn> {
+  async createTurn(sessionId: string, body: CreateTurnBody): Promise<Turn> {
     this.log("createTurn", sessionId, body);
     const id = `${sessionId}-t${this.turnsOf(sessionId).length + 1}`;
     const previous = body.previousTurnId === "none" ? null : body.previousTurnId;

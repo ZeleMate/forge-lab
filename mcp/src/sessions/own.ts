@@ -5,9 +5,9 @@
 
 import type { SessionsApi, Turn } from "./api";
 
-// `verified`: found by the scan. An unverified one came only from the tool's
+// `detected`: found by the scan. Otherwise it came only from the tool's
 // `caller_session_id`, which nothing confirms, so the write checks distrust it.
-export type OwnSession = { sessionId: string; runningTurnId: string | undefined; depth: number; verified: boolean };
+export type OwnSession = { sessionId: string; runningTurnId: string | undefined; depth: number; detected: boolean };
 
 // `mcp.initialize` comes right after `turn.created` on the Turn that connected,
 // so the first few events of a Turn are enough to look at.
@@ -29,7 +29,11 @@ const running = (turns: Turn[]) => turns.find((t) => t.state.status === "running
 
 export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefined) {
   // The mapping never changes for a connection (one connection per Session),
-  // so the scan runs once; the running Turn is looked up again on every call.
+  // so the scan runs once, and so does a miss: TrueForge persists
+  // `mcp.initialize` when it connects, before its first tool call, so a
+  // connection that isn't found then never will be. The running Turn is looked
+  // up again on every call.
+  let scanned = false;
   let cached: string | undefined;
 
   async function scan(): Promise<string | undefined> {
@@ -37,7 +41,11 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
     let cursor: string | undefined;
     for (let page = 0; page < SESSION_PAGES; page++) {
       const res = await api.listSessions({ limit: 25, ...(cursor ? { cursor } : {}) });
-      for (const session of res.items) if (await initializedHere(session.id)) return session.id;
+      // A page's Sessions are checked in parallel; `findIndex` then takes the
+      // first match in the page's own (most recently updated) order.
+      const hits = await Promise.all(res.items.map((s) => initializedHere(s.id)));
+      const hit = res.items[hits.findIndex(Boolean)];
+      if (hit) return hit.id;
       cursor = res.next;
       if (!cursor) break;
     }
@@ -62,7 +70,10 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
   // `override` is the tool's explicit `caller_session_id`; it only counts when the
   // scan finds nothing, so a model can't name another Session to dodge the refusals.
   return async function findOwn(override?: string): Promise<OwnSession | undefined> {
-    if (!cached) cached = await scan();
+    if (!scanned) {
+      cached = await scan();
+      scanned = true;
+    }
     const sessionId = cached ?? override;
     if (!sessionId) return undefined;
     const [session, turns] = await Promise.all([api.getSession(sessionId), api.listTurns(sessionId)]);
@@ -72,7 +83,7 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
       sessionId,
       runningTurnId: running(turns),
       depth: depthOf(session.metadata),
-      verified: cached !== undefined,
+      detected: cached !== undefined,
     };
   };
 }

@@ -5,7 +5,7 @@
 import type { CallToolResult, McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { guarded, ok, refuse } from "../result";
-import type { Session, Turn, TurnInputItem } from "./api";
+import type { CreateTurnBody, Session, Turn, TurnInputItem } from "./api";
 import { checkDepth, checkInPlaceTarget, checkSourceTurn, checkTurnId, isRefusal, ownOrRefuse } from "./checks";
 import type { FindOwn } from "./own";
 import { SessionCitation } from "./project";
@@ -79,15 +79,9 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       annotations: WRITE_ANNOTATIONS,
     },
     guarded(async (args) => {
-      const own = await ownOrRefuse(findOwn, args.caller_session_id);
-      if (isRefusal(own)) return own;
-      const bad = checkTurnId(args.from_turn_id);
-      if (bad) return bad;
-      const [session, turns] = await Promise.all([api.getSession(args.session_id), api.listTurns(args.session_id)]);
-      const source = turns.find((t) => t.id === args.from_turn_id);
-      if (!source) return refuse(`no Turn ${args.from_turn_id} in Session ${args.session_id}`, "get_turn for the ids");
-      const unfinished = checkSourceTurn(source);
-      if (unfinished) return unfinished;
+      const loaded = await loadSource(args.session_id, args.from_turn_id, args.caller_session_id);
+      if (isRefusal(loaded)) return loaded;
+      const { own, session, turns, source } = loaded;
       const message: TurnInputItem = { type: "user.message", content: args.message };
 
       if (isExperiment(session)) {
@@ -104,13 +98,13 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       // The user's chat: replay into a new inline Experiment Session.
       const deep = checkDepth(session);
       if (deep) return deep;
-      // An unverified caller might be deeper than the Session it names, so it
+      // An undetected caller might be deeper than the Session it names, so it
       // counts as depth 1, and its replays stop here.
-      const callerDepth = own.verified ? own.depth : Math.max(own.depth, 1);
+      const callerDepth = own.detected ? own.depth : Math.max(own.depth, 1);
       const depth = callerDepth + 1;
       if (depth >= 2)
         return refuse(
-          `I'm running at depth ${callerDepth}${own.verified ? "" : " (assumed, since I couldn't confirm my Session)"}, so a new Experiment Session would be depth ${depth}; writes stop at depth 2`,
+          `I'm running at depth ${callerDepth}${own.detected ? "" : " (assumed, since I couldn't confirm my Session)"}, so a new Experiment Session would be depth ${depth}; writes stop at depth 2`,
           "fork from inside the user's chat or a depth-0 Session",
         );
       if (!args.experiment)
@@ -171,15 +165,9 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       annotations: WRITE_ANNOTATIONS,
     },
     guarded(async (args) => {
-      const own = await ownOrRefuse(findOwn, args.caller_session_id);
-      if (isRefusal(own)) return own;
-      const bad = checkTurnId(args.turn_id);
-      if (bad) return bad;
-      const [session, turns] = await Promise.all([api.getSession(args.session_id), api.listTurns(args.session_id)]);
-      const source = turns.find((t) => t.id === args.turn_id);
-      if (!source) return refuse(`no Turn ${args.turn_id} in Session ${args.session_id}`, "get_turn for the ids");
-      const unfinished = checkSourceTurn(source);
-      if (unfinished) return unfinished;
+      const loaded = await loadSource(args.session_id, args.turn_id, args.caller_session_id);
+      if (isRefusal(loaded)) return loaded;
+      const { own, session, turns, source } = loaded;
       const target = checkInPlaceTarget(session, own, "re-run", turns.some(isUnfinished));
       if (target) return target;
       const input = source.input ?? [];
@@ -234,6 +222,21 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
     }),
   );
 
+  // Checks 1 to 3 of tools.ts, which every write that starts from a Turn opens
+  // with: the caller's own Session, an explicit Turn id, and a finished source
+  // Turn. Returns a refusal, or what the rest of the write needs.
+  async function loadSource(sessionId: string, turnId: string, override?: string) {
+    const own = await ownOrRefuse(findOwn, override);
+    if (isRefusal(own)) return own;
+    const bad = checkTurnId(turnId);
+    if (bad) return bad;
+    const [session, turns] = await Promise.all([api.getSession(sessionId), api.listTurns(sessionId)]);
+    const source = turns.find((t) => t.id === turnId);
+    if (!source) return refuse(`no Turn ${turnId} in Session ${sessionId}`, "get_turn for the ids");
+    // `??` returns the refusal if there is one, otherwise the loaded parts.
+    return checkSourceTurn(source) ?? { own, session, turns, source };
+  }
+
   // Patches an inline Experiment Session's spec before an in-place write.
   async function patchInPlace(session: Session, patch?: ConfigPatch): Promise<CallToolResult | undefined> {
     if (!patch) return undefined;
@@ -252,7 +255,7 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
   // and say where it is.
   async function startInPlace(
     session: Session,
-    body: { input: TurnInputItem[]; previousTurnId: string },
+    body: CreateTurnBody,
     patch: ConfigPatch | undefined,
     note: string,
   ): Promise<CallToolResult> {
@@ -271,11 +274,7 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
 
   // Creates the Turn after a patch. The patch can't be undone atomically, so if
   // the create fails the error says the spec already changed.
-  async function createAfterPatch(
-    id: string,
-    body: { input: TurnInputItem[]; previousTurnId: string },
-    patch?: ConfigPatch,
-  ): Promise<Turn> {
+  async function createAfterPatch(id: string, body: CreateTurnBody, patch?: ConfigPatch): Promise<Turn> {
     try {
       return await api.createTurn(id, body);
     } catch (error) {

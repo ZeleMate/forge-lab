@@ -208,20 +208,22 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps): void {
         const usage = messages.flatMap((m) => (m.usage ? [m.usage] : []));
         const last = usage.at(-1);
         if (!breakdown && last) breakdown = { ...last.inputTokensBreakdown };
-        const s = turn.state;
-        const m = metricsOf(turn);
+        const state = turn.state;
+        const recorded = metricsOf(turn);
         rows.push({
           citation: { session_id: args.session_id, turn_id: turn.id },
-          status: s.status,
-          ...("completedAt" in s ? { duration_ms: Date.parse(s.completedAt) - Date.parse(turn.createdAt) } : {}),
-          metrics: m
-            ? m
+          status: state.status,
+          ...("completedAt" in state
+            ? { duration_ms: Date.parse(state.completedAt) - Date.parse(turn.createdAt) }
+            : {}),
+          metrics: recorded
+            ? recorded
             : {
                 input_tokens: sum(usage.map((u) => u.inputTokens)),
                 output_tokens: sum(usage.map((u) => u.outputTokens)),
                 cache_read_tokens: sum(usage.map((u) => u.cacheReadTokens ?? 0)),
               },
-          metrics_from: m ? "turn" : "events",
+          metrics_from: recorded ? "turn" : "events",
           model_calls: messages.length,
           tool_calls: sum(messages.map((e) => e.toolCalls?.length ?? 0)),
           threads: events.filter((e) => e.type === "thread.created").length,

@@ -89,7 +89,7 @@ export function checkInPlaceTarget(
     );
   const deep = checkDepth(session);
   if (deep) return deep;
-  if (!own.verified && targetRunning)
+  if (!own.detected && targetRunning)
     return refuse(
       `I couldn't confirm which Session I'm in, and Session ${session.id} has a running Turn that could be mine`,
       "wait until it finishes, or ask the user to do this in the UI",

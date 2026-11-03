@@ -217,6 +217,15 @@ describe("writes", () => {
     expect(r.data).toMatchObject({ mode: "in-place" });
   });
 
+  test("a failed own-Session scan runs once per connection", async () => {
+    const fake = new FakeSessionsApi();
+    const { client } = await connect(testDeps(source, { api: fake }), "sessions");
+    fake.addSession("exp", { metadata: { experiment: "x", depth: "0" }, inline: true });
+    fake.addTurn("exp", "e1");
+    for (let i = 0; i < 3; i++) await call(client, "cancel_session", { session_id: "exp" });
+    expect(fake.calls.filter((c) => c.method === "listSessions")).toHaveLength(1);
+  });
+
   test("a failed create after config_patch says the spec already changed", async () => {
     const { fake, client } = await setup();
     fake.createTurn = async () => {

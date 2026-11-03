@@ -9,13 +9,14 @@ import type { AgentSpec } from "./api";
 // The allowlist, in the wire's snake_case, since that's what the docs and the
 // model see. `.strict()` makes zod reject any other key, so nothing outside it
 // can be patched. The values' own shapes are checked by the SDK's schema below.
-const loose = z.record(z.string(), z.unknown());
+// Any JSON object; the SDK's schema checks what's inside (below).
+const anyObject = z.record(z.string(), z.unknown());
 export const ConfigPatch = z
   .object({
-    context_management: loose.optional(),
+    context_management: anyObject.optional(),
     iteration_limit: z.number().int().min(1).max(200).optional(),
-    model: z.object({ params: loose }).strict().optional(),
-    dynamic_sub_agents: loose.optional(),
+    model: z.object({ params: anyObject }).strict().optional(),
+    dynamic_sub_agents: anyObject.optional(),
     sandbox: z.object({ enabled: z.boolean() }).strict().optional(),
   })
   .strict()
