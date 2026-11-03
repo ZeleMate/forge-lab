@@ -60,12 +60,9 @@ export function checkDepth(session: Session): CallToolResult | undefined {
 }
 
 // 4. The target of an in-place write, in this order: only an Experiment
-// Session, never the caller's own, never depth 2 or more, and never a running
-// one for an unverified caller. Keeping the order in one place is the point:
-// it's what makes the writes safe.
-//
-// An unverified caller (only a `caller_session_id`, no detected Session) might
-// really be any running Session, so it may not touch one that is running.
+// Session, never the caller's own, never depth 2 or more, and never one with a
+// running Turn. Keeping the order in one place is the point: it's what makes
+// the writes safe.
 export function checkInPlaceTarget(
   session: Session,
   own: OwnSession,
@@ -89,17 +86,21 @@ export function checkInPlaceTarget(
     );
   const deep = checkDepth(session);
   if (deep) return deep;
-  // A fork or re-run chains a new Turn on the tip, which cancels a running one
-  // without the cancel_session Approval, so it's refused for any caller.
-  if (targetRunning && !cancel && own.detected)
-    return refuse(
-      `Session ${session.id} has a running Turn, and a ${action} would cancel it`,
-      "wait until it finishes, or cancel it with cancel_session first",
-    );
-  if (!own.detected && targetRunning)
+  if (!targetRunning) return undefined;
+  // A caller named only by `caller_session_id` might really be any running
+  // Session, so it may not touch one, not even to cancel it.
+  if (!own.detected)
     return refuse(
       `I couldn't confirm which Session I'm in, and Session ${session.id} has a running Turn that could be mine`,
-      "wait until it finishes, or ask the user to do this in the UI",
+      cancel ? "the user can stop it in the UI" : "wait until it finishes, or ask the user to do this in the UI",
+    );
+  // A fork or re-run chains on a finished Turn, so the running one isn't
+  // cancelled (#21 6.2), but the new Turn becomes the tip, and the running one
+  // is left where cancel_session can't reach it.
+  if (!cancel)
+    return refuse(
+      `Session ${session.id} has a running Turn; a ${action} would run alongside it and leave it where cancel_session can't reach`,
+      "wait_turn until it finishes, or cancel_session it first",
     );
   return undefined;
 }

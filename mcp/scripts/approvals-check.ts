@@ -187,6 +187,9 @@ const STEPS: Step[] = [
 const approvals: Record<string, unknown> = {};
 let previous = "none";
 for (const step of STEPS) {
+  // A write into a Session with a running Turn is refused, so the last step's
+  // Turn in the target finishes first.
+  for (const t of await sessions.listTurns(target)) if (t.state.status === "running") await waitTurn(target, t.id);
   const ask = `Call the sessions tool ${step.tool} exactly once with exactly these arguments, then stop: ${JSON.stringify(step.args)}`;
   const paused = await waitTurn(caller, (await createTurn(caller, ask, previous)).id);
   const state = paused.state as {

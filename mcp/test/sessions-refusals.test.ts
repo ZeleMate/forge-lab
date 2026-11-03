@@ -231,12 +231,15 @@ describe("fork_turn refuses", () => {
 
   test("a config_patch value the spec schema rejects", async () => {
     const w = await world();
+    // An Experiment Session with nothing running, so only the patch is wrong.
+    w.fake.addSession("idle-exp", { metadata: { experiment: "idle", depth: "0" }, inline: true });
+    w.fake.addTurn("idle-exp", "i1");
     await expectRefused(
       w,
       "fork_turn",
       {
-        session_id: "exp",
-        from_turn_id: "e1",
+        session_id: "idle-exp",
+        from_turn_id: "i1",
         message: "again",
         config_patch: { context_management: { compaction: { trigger: { type: "never-heard-of-it" } } } },
       },
@@ -252,6 +255,24 @@ describe("fork_turn refuses", () => {
       { session_id: "named-exp", from_turn_id: "n1", message: "again", config_patch: { iteration_limit: 5 } },
       /named Agent/,
     );
+  });
+});
+
+describe("in-place writes refuse a Session with a running Turn", () => {
+  test("fork_turn in place", async () => {
+    const w = await world();
+    // `exp` has e3 running; forking from the finished e1 would leave e3 off the tip.
+    await expectRefused(
+      w,
+      "fork_turn",
+      { session_id: "exp", from_turn_id: "e1", message: "again" },
+      /running Turn; a fork in place/,
+    );
+  });
+
+  test("rerun_turn", async () => {
+    const w = await world();
+    await expectRefused(w, "rerun_turn", { session_id: "exp", turn_id: "e1" }, /running Turn; a re-run/);
   });
 });
 

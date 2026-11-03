@@ -1,0 +1,110 @@
+{
+  "model": "openrouter/glm-5-3-flash",
+  "version": "0.180.0",
+  "refusals": {
+    "no own Session": "refused: can't tell which Session I'm running in, so I can't rule out acting on it. Try: pass caller_session_id (your Session's id)",
+    "pending Approval": "refused: Turn 01m6hemt8jc4skb7812f5pgrp6 is waiting on an Approval or answer (1 pending). Try: pick an earlier Turn, or resolve it in the UI first",
+    "running": "refused: Turn 01m6hgzxyz6msfjtegwfq6cdz1 is still running. Try: wait_turn until it finishes, or pick a finished Turn",
+    "auto": "refused: `auto` isn't allowed: every write names an explicit Turn id. Try: get_turn to find the Turn's id",
+    "depth 2": "refused: Session 01m6hgzvzcr8f7dp9f7pk0f8qd is at depth 2; writes stop at depth 2. Try: work in a shallower Experiment Session",
+    "replay from depth 1": "refused: I'm running at depth 1 (assumed, since I couldn't confirm my Session), so a new Experiment Session would be depth 2; writes stop at depth 2. Try: fork from inside the user's chat or a depth-0 Session",
+    "own Session, in place": "refused: a fork in place in my own Session would move its tip off this Turn. Try: use another Experiment Session",
+    "rerun own Session": "refused: a re-run in my own Session would move its tip off this Turn. Try: use another Experiment Session",
+    "rerun the chat": "refused: Session 01m6hgzt0502ep352jg75rgfsp is not an Experiment Session, so it's read-only. Try: fork_turn from it instead, which replays into a new Experiment Session",
+    "rerun depth 2": "refused: Session 01m6hgzvzcr8f7dp9f7pk0f8qd is at depth 2; writes stop at depth 2. Try: work in a shallower Experiment Session",
+    "cancel own Session": "refused: cancelling my own Session would end this Turn. Try: the user can stop it in the UI",
+    "cancel the chat": "refused: Session 01m6hgzt0502ep352jg75rgfsp is not an Experiment Session, so it's read-only. Try: the user can stop it in the UI",
+    "cancel depth 2": "refused: Session 01m6hgzvzcr8f7dp9f7pk0f8qd is at depth 2; writes stop at depth 2. Try: work in a shallower Experiment Session"
+  },
+  "approvals": {
+    "fork_turn": {
+      "pausedTurn": "01m6hgzy395v8rrk8ky3ks3h2m",
+      "status": "done",
+      "gated": {
+        "name": "call_tool",
+        "arguments": "{\"input\": {\"session_id\": \"01m6hgzm3advzfa8cj4wn910cj\", \"from_turn_id\": \"01m6hgzm3d92009ckkr0b52d3a\", \"message\": \"Say bye in one word.\"}, \"mcp_server\": \"sessions\", \"tool_name\": \"fork_turn\"}"
+      },
+      "toolResponse": "{\"error\":[{\"type\":\"text\",\"text\":\"refused: can't tell which Session I'm running in, so I can't rule out acting on it. Try: pass caller_session_id (your Session's id)\"}]}",
+      "targetTurns": [
+        2,
+        2
+      ]
+    },
+    "rerun_turn": {
+      "pausedTurn": "01m6hh6njs218c414kq8rzwdpa",
+      "status": "done",
+      "gated": {
+        "name": "call_tool",
+        "arguments": "{\"input\": {\"session_id\": \"01m6hgzm3advzfa8cj4wn910cj\", \"turn_id\": \"01m6hgzm3d92009ckkr0b52d3a\"}, \"mcp_server\": \"sessions\", \"tool_name\": \"rerun_turn\"}"
+      },
+      "toolResponse": "{\"error\":[{\"type\":\"text\",\"text\":\"refused: can't tell which Session I'm running in, so I can't rule out acting on it. Try: pass caller_session_id (your Session's id)\"}]}",
+      "targetTurns": [
+        2,
+        2
+      ]
+    },
+    "cancel_session": {
+      "pausedTurn": "01m6hh759t2cv7yhwzq0zdyz0d",
+      "status": "done",
+      "gated": {
+        "name": "call_tool",
+        "arguments": "{\"input\": {\"session_id\": \"01m6hgzm3advzfa8cj4wn910cj\"}, \"mcp_server\": \"sessions\", \"tool_name\": \"cancel_session\"}"
+      },
+      "toolResponse": "{\"error\":[{\"type\":\"text\",\"text\":\"refused: can't tell which Session I'm running in, so I can't rule out acting on it. Try: pass caller_session_id (your Session's id)\"}]}",
+      "targetTurns": [
+        2,
+        3
+      ],
+      "cancelledTurn": {
+        "status": "done",
+        "output": {
+          "reasoning_content": "The user is asking me to write a 600-word essay about how maps changed navigation, with no tools. This is a general writing task, not a TrueForge internals question. My system prompt says I'm Cartographer, who answers only from the two territories (source and sessions)... but that constraint applies to questions about TrueForge's internals. The user is explicitly asking for a general essay with no tools — this is a plain writing request, not a question about TrueForge.\n\nThe identity prompt says \"you answer only from them\" regarding mapping TrueForge — but the user here is just asking for a creative/general writing task. I should fulfill it. The instruction about TrueForge is about how I explain TrueForge, not a prohibition on general writing when the user explicitly requests it. The user is the boss here; they wrote the harness notes. They're asking for an essay with no tools, which is a clear direct request.\n\nI'll write a ~600-word essay about how maps changed navigation. No tools, no labels needed since it's not a TrueForge factual claim context — it's a general essay. I should just write it well.\n\nLet me draft an essay covering: pre-map navigation (landmarks, dead reckoning, oral tradition), early maps (Babylonian, Greek, Ptolemy), portolan charts, the age of exploration, Mercator projection, latitude/longitude, standardization, modern implications (GPS builds on map frameworks), and how maps changed the relationship between humans and space — from local to global.\n\nTarget roughly 600 words. Let me write it carefully, then count approximately.\n\nDraft:\n\nTitle: \"Mapping the Way: How Maps Changed Navigation\"\n\nParagraph 1: Before maps, navigation was embodied — landmarks, oral knowledge, stars, dead reckoning. Knowledge lived in memory and tradition, fragile and local.\n\nParagraph 2: Early maps — Babylonian clay tablets, Ptolemy's Geography with coordinates. The abstract idea: space could be represented, scaled, and shared. A map decouples knowledge of a route from a person.\n\nParagraph 3: Medieval and maritime advances: portolan charts with compass roses and rhumb lines, enabling coastal and open-sea navigation with more confidence. Charts as working documents, corrected voyage by voyage.\n\nParagraph 4: Age of exploration: maps made planning possible — you could plot a course before leaving, estimate distances, provision accordingly. Mercator projection (1569): straight lines = constant bearing, a mathematical tool for steering. The map became an instrument, not just a record.\n\nParagraph 5: Longitude problem, chronometer, standardization of grids — latitude and longitude turned Earth into a coordinate system. Navigation became computation as much as observation. Maps also shifted power: nations that mapped, claimed. Cartography as statecraft.\n\nParagraph 6: Modern era: aerial photography, satellite imagery, GPS. The map is now live, layered, personalized. But the core transformation stands: maps turned navigation from memory into information, from following someone into following a representation.\n\nConclusion: The deeper change is conceptual — maps made space thinkable at scale, made it possible to imagine journeys before taking them, and turned geography into a shared, correctable object.\n\nLet me write it out to about 600 words. I'll aim for 590-620.",
+          "content": "# Mapping the Way: How Maps Changed Navigation\n\nBefore maps, navigation was an act of memory. Travellers followed coastlines, counted river bends, remembered which stars rose over which headlands. Sailors practiced dead reckoning, estimating position from speed, direction, and time, and their knowledge lived in songs, stories, and the hard-won experience of individuals. A route was only as durable as the person who carried it. When a pilot died, a lifetime of geography could vanish with him.\n\nThe map changed that. Its essential innovation was not accuracy but abstraction: the idea that space could be represented as a relationship between symbols, that a journey could exist as marks on clay, parchment, or paper, separate from any single knower. Babylonian tablets from more than two millennia before the common era already scratched the world into schematics. Ptolemy's *Geography*, rediscovered in Europe in the fifteenth century, made the decisive leap of principle — places fixed by coordinates on a grid, so that location became a number, and a number could be transmitted, checked, and corrected anywhere on Earth. A map decoupled geographical knowledge from geographical experience. For the first time, someone who had never seen a coastline could navigate one.\n\nMaritime charting turned that principle into a working tool. Medieval portolan charts, dense with compass roses and rhumb lines radiating from harbour to harbour, gave sailors the Mediterranean in ink. These were not monuments but instruments: copied, annotated, corrected voyage by voyage, accumulating the experience of many crews into a single shareable object. A chart recorded not just where land was, but how to approach it — anchorages, hazards, bearings. Navigation stopped being purely improvisational and became partly anticipatory. A captain could study a route before sailing it, estimate distances, provision accordingly, and brief his officers with a shared picture of the voyage ahead.\n\nThe age of exploration made the map the central instrument of navigation rather than its by-product. Expeditions were planned on paper first: courses plotted, distances summed, returns projected. Gerhardus Mercator's 1569 projection solved a specific, practical problem — on his grid, a straight line corresponds to a constant compass bearing, so a navigator could draw his course and simply steer it. The map had become mathematics, a machine for turning intention into heading. Meanwhile, the longitude problem — determining east-west position at sea — drove centuries of instrument-making until John Harrison's chronometers let navigators marry the map's abstract grid to the sky's real clockwork. Latitude and longitude together turned the planet into a single coordinate system, and navigation into computation as much as observation.\n\nThis transformation carried consequences far beyond steering. Cartography became statecraft: empires that mapped coastlines claimed them, and the blank spaces on a map were invitations to power. Standardized charts enabled trade routes to be planned, insured, and repeated, knitting the world into an economy. A ship's position, once a matter of individual judgment, became a matter of public, verifiable record.\n\nToday navigation is again changing shape. Satellite positioning places each of us on that same grid automatically, and digital maps are live, layered, and personalized — rerouting around traffic, overlaying transit times, speaking directions aloud. Yet the transformation that began on clay tablets is intact: we navigate representations, not memories. The deeper legacy of the map is conceptual. It made space thinkable at scales no eye or lifespan could span, allowed journeys to be imagined before they were undertaken, and turned geography from private experience into shared, correctable knowledge. Every time we follow a blue dot, we are using the oldest navigational instrument of all: the ability to hold the world in a picture, and to trust the picture over the horizon.",
+          "type": "model.message",
+          "id": "01m6hh7b7nhte9kajhbjgk1syq",
+          "created_at": "2026-11-03T20:22:28.095Z",
+          "thread_id": "main",
+          "finish_reason": "stop",
+          "usage": {
+            "input_tokens": 5131,
+            "output_tokens": 1442,
+            "cache_read_tokens": 5056,
+            "input_tokens_breakdown": {
+              "harness": 3361,
+              "skills": 0,
+              "instructions": 1381,
+              "tool_definitions": 507,
+              "messages": 0
+            }
+          },
+          "model": {
+            "name": "openrouter/glm-5-3-flash",
+            "params": {
+              "max_tokens": 16384,
+              "parallel_tool_calls": true
+            }
+          }
+        },
+        "required_actions": [],
+        "completed_at": "2026-11-03T20:22:28.097Z",
+        "metrics": {
+          "total_input_tokens": 5131,
+          "total_output_tokens": 1442,
+          "total_tokens": 6573,
+          "total_cache_read_tokens": 5056,
+          "total_reasoning_tokens": 677
+        }
+      }
+    }
+  },
+  "sessions": {
+    "target": "01m6hgzm3advzfa8cj4wn910cj",
+    "caller": "01m6hgzt00c3mym8t3k0rjavr6",
+    "chat": "01m6hgzt0502ep352jg75rgfsp",
+    "deep": "01m6hgzvzcr8f7dp9f7pk0f8qd",
+    "untouchedOthers": 44
+  },
+  "failures": [
+    "cancel_session: the tip wasn't client-cancelled"
+  ]
+}

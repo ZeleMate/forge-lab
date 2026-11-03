@@ -178,7 +178,7 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps): void {
     {
       title: "Session stats",
       description:
-        "Token, cost and timing figures for a Session's newest Turns, with model calls, tool calls and Subagent threads per Turn, and the latest context breakdown (harness, instructions, tools, messages).",
+        "Token, cost and timing figures for a Session's newest Turns, with model calls, tool calls and Subagent threads per Turn, and the latest context breakdown (harness, instructions, tools, messages). A Turn without recorded metrics (running, or cancelled for the next Turn) has tokens summed from its events and no cost: TrueForge prices a Turn only when it ends.",
       inputSchema: z.object({
         session_id: sessionId,
         last_turns: z.number().int().min(1).max(25).default(10),

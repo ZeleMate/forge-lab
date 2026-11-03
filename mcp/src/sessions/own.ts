@@ -29,11 +29,9 @@ const running = (turns: Turn[]) => turns.find((t) => t.state.status === "running
 
 export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefined) {
   // The mapping never changes for a connection (one connection per Session),
-  // so the scan runs once, and so does a miss: TrueForge persists
-  // `mcp.initialize` when it connects, before its first tool call, so a
-  // connection that isn't found then never will be. The running Turn is looked
-  // up again on every call.
-  let scanned = false;
+  // so a found Session is kept. A miss is not: the live approvals check showed
+  // the `mcp.initialize` event isn't always readable by the first tool call.
+  // The running Turn is looked up again on every call.
   let cached: string | undefined;
 
   async function scan(): Promise<string | undefined> {
@@ -41,11 +39,7 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
     let cursor: string | undefined;
     for (let page = 0; page < SESSION_PAGES; page++) {
       const res = await api.listSessions({ limit: 25, ...(cursor ? { cursor } : {}) });
-      // A page's Sessions are checked in parallel; `findIndex` then takes the
-      // first match in the page's own (most recently updated) order.
-      const hits = await Promise.all(res.items.map((s) => initializedHere(s.id)));
-      const hit = res.items[hits.findIndex(Boolean)];
-      if (hit) return hit.id;
+      for (const session of res.items) if (await initializedHere(session.id)) return session.id;
       cursor = res.next;
       if (!cursor) break;
     }
@@ -70,10 +64,7 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
   // `override` is the tool's explicit `caller_session_id`; it only counts when the
   // scan finds nothing, so a model can't name another Session to dodge the refusals.
   return async function findOwn(override?: string): Promise<OwnSession | undefined> {
-    if (!scanned) {
-      cached = await scan();
-      scanned = true;
-    }
+    if (!cached) cached = await scan();
     const sessionId = cached ?? override;
     if (!sessionId) return undefined;
     const [session, turns] = await Promise.all([api.getSession(sessionId), api.listTurns(sessionId)]);
