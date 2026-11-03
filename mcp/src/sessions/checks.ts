@@ -61,8 +61,8 @@ export function checkDepth(session: Session): CallToolResult | undefined {
 
 // 4. The target of an in-place write, in this order: only an Experiment
 // Session, never the caller's own, never depth 2 or more, and never a running
-// one for an unverified caller. Keeping the order in
-// one place is the point: it's what makes the writes safe.
+// one for an unverified caller. Keeping the order in one place is the point:
+// it's what makes the writes safe.
 //
 // An unverified caller (only a `caller_session_id`, no detected Session) might
 // really be any running Session, so it may not touch one that is running.

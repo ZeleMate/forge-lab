@@ -28,6 +28,8 @@ export function replayRunner(api: SessionsApi, clock: Clock) {
               ? `turn ${index + 1} wants an Approval`
               : undefined;
         if (failed) {
+          // A Turn that timed out is still running; stop it so it isn't left unattended.
+          if (isUnfinished(turn)) await api.cancel(newSessionId).catch(() => undefined);
           await markFailed(failed);
           return;
         }
