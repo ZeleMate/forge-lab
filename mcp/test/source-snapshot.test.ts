@@ -6,7 +6,7 @@ import { beforeAll, describe, expect, test } from "bun:test";
 import { readPin } from "@forge-lab/lib/snapshot";
 import type { Client } from "@modelcontextprotocol/client";
 import { openSourceSnapshot } from "../src/source/snapshot";
-import { call, connect } from "./helpers";
+import { call, connect, testDeps } from "./helpers";
 
 const pin = readPin();
 const SHA7 = pin.sha.slice(0, 7);
@@ -18,7 +18,7 @@ let client: Client;
 
 // Building the index takes about 0.3 s warm, a few seconds on a cold disk.
 beforeAll(async () => {
-  ({ client } = await connect({ source: openSourceSnapshot() }, "source"));
+  ({ client } = await connect(testDeps(openSourceSnapshot()), "source"));
 }, 30_000);
 
 describe("the pinned snapshot", () => {

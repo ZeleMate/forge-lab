@@ -26,12 +26,17 @@ import type { Endpoint } from "../src/app";
 const MODEL = "openrouter/glm-5-3-flash";
 
 type Question = { question: string; provenance: "source" | "observed" };
-// `Partial<Record<...>>`: not every server has a question yet (#56 and #57 add theirs).
+// `Partial<Record<...>>`: not every server has a question yet (#57 adds triage's).
 const QUESTIONS: Partial<Record<Endpoint, Question>> = {
   source: {
     question:
       "Where is the AgentThread class declared in TrueForge, and which method runs the agent loop? Cite the lines.",
     provenance: "source",
+  },
+  sessions: {
+    question:
+      "Which Experiment Sessions ran most recently? List up to three, then give the status and token totals of the newest Turn in the first one. Cite the ids.",
+    provenance: "observed",
   },
 };
 

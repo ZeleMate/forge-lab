@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, test } from "bun:test";
 import { HOST, PORTS } from "@forge-lab/lib/ports";
 import { createApp } from "../src/app";
 import type { Snapshot } from "../src/source/snapshot";
-import { connect, fixtureCopy, fixtureSnapshot } from "./helpers";
+import { connect, fixtureCopy, fixtureSnapshot, testDeps } from "./helpers";
 
 const URL_SOURCE = `http://${HOST}:${PORTS.mcp}/mcp/source`;
 const initialize = {
@@ -27,19 +27,19 @@ beforeAll(() => {
 
 describe("guards", () => {
   test("refuses a Host that isn't loopback (DNS rebinding)", async () => {
-    const res = await createApp({ source }).fetch(post({ host: "evil.example:8791" }));
+    const res = await createApp(testDeps(source)).fetch(post({ host: "evil.example:8791" }));
     expect(res.status).toBe(403);
   });
 
   test("refuses a browser Origin that isn't loopback", async () => {
-    const res = await createApp({ source }).fetch(
+    const res = await createApp(testDeps(source)).fetch(
       post({ host: `${HOST}:${PORTS.mcp}`, origin: "https://evil.example" }),
     );
     expect(res.status).toBe(403);
   });
 
   test("an unknown endpoint is a 404", async () => {
-    const res = await createApp({ source }).fetch(
+    const res = await createApp(testDeps(source)).fetch(
       new Request(`http://${HOST}:${PORTS.mcp}/mcp/nope`, { headers: { host: `${HOST}:${PORTS.mcp}` } }),
     );
     expect(res.status).toBe(404);
@@ -48,7 +48,7 @@ describe("guards", () => {
 
 describe("connections", () => {
   test("initialize issues an Mcp-Session-Id and keeps the connection", async () => {
-    const app = createApp({ source });
+    const app = createApp(testDeps(source));
     const res = await app.fetch(post({ host: `${HOST}:${PORTS.mcp}` }));
     expect(res.status).toBe(200);
     expect(res.headers.get("mcp-session-id")).toBeString();
@@ -56,21 +56,21 @@ describe("connections", () => {
   });
 
   test("an unknown Mcp-Session-Id is a 404, so the client re-initializes", async () => {
-    const res = await createApp({ source }).fetch(
+    const res = await createApp(testDeps(source)).fetch(
       post({ host: `${HOST}:${PORTS.mcp}`, "mcp-session-id": "nope" }, { jsonrpc: "2.0", id: 2, method: "tools/list" }),
     );
     expect(res.status).toBe(404);
   });
 
   test("a request without an Mcp-Session-Id that isn't initialize is a 400", async () => {
-    const res = await createApp({ source }).fetch(
+    const res = await createApp(testDeps(source)).fetch(
       post({ host: `${HOST}:${PORTS.mcp}` }, { jsonrpc: "2.0", id: 2, method: "tools/list" }),
     );
     expect(res.status).toBe(400);
   });
 
   test("GET for a server-to-client stream is a 405, so the client doesn't hold one open", async () => {
-    const app = createApp({ source });
+    const app = createApp(testDeps(source));
     const init = await app.fetch(post({ host: `${HOST}:${PORTS.mcp}` }));
     const sid = init.headers.get("mcp-session-id") ?? "";
     const res = await app.fetch(
@@ -82,8 +82,8 @@ describe("connections", () => {
   });
 
   test("two clients get two connections", async () => {
-    const a = await connect({ source }, "source");
-    const b = await connect({ source }, "source");
+    const a = await connect(testDeps(source), "source");
+    const b = await connect(testDeps(source), "source");
     expect(a.client.transport?.sessionId).not.toBe(b.client.transport?.sessionId);
   });
 });

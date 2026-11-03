@@ -1,0 +1,43 @@
+{
+  "version": "0.180.0",
+  "model": "openrouter/glm-5-3-flash",
+  "sessions": {
+    "session": "01m6hepk08b3ys8esn340sve6q",
+    "question": "Which Experiment Sessions ran most recently? List up to three, then give the status and token totals of the newest Turn in the first one. Cite the ids.",
+    "checks": {
+      "turnDone": true,
+      "toolResultLabelled": true,
+      "toolResultCited": true,
+      "answerCites": true
+    },
+    "answer": "**Answer:** The three most recently updated Experiment Sessions are (observed, `list_sessions`): **01m6hepk08b3ys8esn340sve6q** (\"Which Experiment Sessions ran most recently?…\", experiment tag `smoke-mcp-sessions`), **01m6henjst4ccxbphc4q7tksjm** (`fixtures-record`, depth 1), and **01m6hemt8dkseems6s7t5jrnfj** (`fixtures-record`, depth 0). The first one is this very Session — its newest Turn **01m6hepk0ak8namvygbadbwqdr** is still `status: running`, so it has **no token totals yet** (no metrics object; only `input`, `created_at 2026-11-03T19:38:11.852Z`, `required_actions: 0`).\n\n**Evidence** (all `observed`):\n- `01m6hepk08b3ys8esn340sve6q` — experiment: true, agent `inline`, 1 turn, updated 2026-11-03T19:38:11.851Z (session/turn `01m6hepk0ak8namvygbadbwqdr`).\n- `01m6henjst4ccxbphc4q7tksjm` — experiment: true, updated 2026-11-03T19:37:38.881Z, 1 turn.\n- `01m6hemt8dkseems6s7t5jrnfj` — experiment: true, updated 2026-11-03T19:37:37.843Z, 4 turns.\n- Newest Turn of the first Session: status `running`, input is this question, and the response's `metrics` field is absent — so input/output/reasoning tokens are **not found** while it runs.\n\n**Gaps:** Token totals can only be reported after the Turn completes — I could re-run `get_turn` on `01m6hepk0ak8namvygbadbwqdr` next Turn (or wait via `wait_turn`) to fetch them.",
+    "summary": {
+      "status": "done",
+      "wallMs": 12023,
+      "metrics": {
+        "total_input_tokens": 33419,
+        "total_output_tokens": 784,
+        "total_tokens": 34203,
+        "total_cache_read_tokens": 24896,
+        "total_reasoning_tokens": 171
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "mcp.initialize": 2,
+        "model.message": 5,
+        "tool.response": 5,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "list_tools",
+        "get_tool_info",
+        "get_tool_info",
+        "call_tool",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 24896
+    }
+  }
+}

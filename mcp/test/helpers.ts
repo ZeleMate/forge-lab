@@ -6,7 +6,10 @@ import { join } from "node:path";
 import { HOST, PORTS } from "@forge-lab/lib/ports";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { type AppDeps, createApp, type Endpoint } from "../src/app";
+import type { Clock } from "../src/clock";
+import type { SessionsDeps } from "../src/sessions/tools";
 import { buildProject, type Snapshot } from "../src/source/snapshot";
+import { FakeSessionsApi } from "./sessions-fake";
 
 export const FIXTURE_TREE = join(import.meta.dir, "fixture-tree");
 export const FIXTURE_SHA = "f1x7ure0000000000000000000000000000000000";
@@ -37,6 +40,27 @@ export function fixtureSnapshot(root: string): Snapshot {
   };
 }
 
+// A clock whose `sleep` returns at once and moves `now` forward, so a test
+// of a 60-second wait takes no time.
+export function fakeClock(start = Date.parse("2026-11-01T12:00:00.000Z")): Clock & { slept: number[] } {
+  let now = start;
+  const slept: number[] = [];
+  return {
+    slept,
+    now: () => now,
+    sleep: async (ms) => {
+      slept.push(ms);
+      now += ms;
+    },
+  };
+}
+
+// The app's dependencies for a test: a fixture snapshot, plus a fake TrueForge
+// and clock unless the test brings its own.
+export function testDeps(source: Snapshot, sessions: Partial<SessionsDeps> = {}): AppDeps {
+  return { source, sessions: { api: new FakeSessionsApi(), clock: fakeClock(), ...sessions } };
+}
+
 // An MCP client connected to the app in-process: the client's HTTP requests go
 // straight to `app.fetch`, no port involved. The URL still says 127.0.0.1:8791,
 // because the app's Host guard checks it.
@@ -53,7 +77,9 @@ export async function connect(deps: AppDeps, endpoint: Endpoint) {
     },
   });
   await client.connect(transport);
-  return { app, client };
+  // The id the server issued for this connection, which TrueForge would persist
+  // in its `mcp.initialize` event (#24).
+  return { app, client, mcpSessionId: transport.sessionId };
 }
 
 // The parsed JSON of a successful tool call, or the text of an isError one.
