@@ -88,13 +88,44 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
   // The write tools' own-Session check: the first thing every write does.
   async function ownOrRefuse(override?: string): Promise<OwnSession | CallToolResult> {
     const own = await findOwn(override);
-    return (
-      own ??
-      refuse(
+    if (!own)
+      return refuse(
         "can't tell which Session I'm running in, so I can't rule out acting on it",
         "pass caller_session_id (your Session's id)",
-      )
-    );
+      );
+    // The detected Session wins over the override (findOwn), so a different id
+    // can only be a mistake or an attempt to dodge the own-Session refusals.
+    if (override && override !== own.sessionId)
+      return refuse(
+        `caller_session_id ${override} isn't the Session I'm running in (${own.sessionId})`,
+        "leave caller_session_id out; it's only for when I can't tell",
+      );
+    return own;
+  }
+
+  // The checks every in-place write runs on its target, in this order: only an
+  // Experiment Session, never the caller's own, never depth 2 or more. Keeping
+  // the order in one place is the point: it's what makes the writes safe.
+  function checkInPlaceTarget(
+    session: Session,
+    own: OwnSession,
+    action: "fork in place" | "re-run" | "cancel",
+  ): CallToolResult | undefined {
+    if (!isExperiment(session))
+      return refuse(
+        `Session ${session.id} is not an Experiment Session, so it's read-only`,
+        action === "cancel"
+          ? "the user can stop it in the UI"
+          : "fork_turn from it instead, which replays into a new Experiment Session",
+      );
+    if (session.id === own.sessionId)
+      return refuse(
+        action === "cancel"
+          ? "cancelling my own Session would end this Turn"
+          : `a ${action} in my own Session would move its tip off this Turn`,
+        action === "cancel" ? "the user can stop it in the UI" : "use another Experiment Session",
+      );
+    return checkDepth(session);
   }
 
   // `v is CallToolResult` is a type predicate: where isRefusal returns true,
@@ -303,8 +334,12 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       const [session, turns] = await Promise.all([api.getSession(args.session_id), api.listTurns(args.session_id)]);
       let breakdown: Record<string, number> | undefined;
       const rows: z.infer<typeof TurnStats>[] = [];
-      for (const turn of turns.slice(-args.last_turns).reverse()) {
-        const events = await allEvents(api, args.session_id, turn.id);
+      const newest = turns.slice(-args.last_turns).reverse();
+      // The reads run in parallel; `Promise.all` keeps the results in the
+      // input's order, so the loop below still walks newest first.
+      const eventsOf = await Promise.all(newest.map((t) => allEvents(api, args.session_id, t.id)));
+      for (const [i, turn] of newest.entries()) {
+        const events = eventsOf[i] ?? [];
         const messages = events.filter((e) => e.type === "model.message");
         // `flatMap` maps and flattens one level, so per-message lists become one list.
         const usage = messages.flatMap((m) => (m.usage ? [m.usage] : []));
@@ -429,21 +464,20 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       const [session, turns] = await Promise.all([api.getSession(args.session_id), api.listTurns(args.session_id)]);
       const source = turns.find((t) => t.id === args.from_turn_id);
       if (!source) return refuse(`no Turn ${args.from_turn_id} in Session ${args.session_id}`, "get_turn for the ids");
-      const deep = checkDepth(session);
-      if (deep) return deep;
       const unfinished = checkSourceTurn(source);
       if (unfinished) return unfinished;
       const message: TurnInputItem = { type: "user.message", content: args.message };
 
       if (isExperiment(session)) {
-        if (session.id === own.sessionId)
-          return refuse(
-            "an in-place fork of my own Session would move its tip off this Turn",
-            "fork another Experiment Session",
-          );
+        const target = checkInPlaceTarget(session, own, "fork in place");
+        if (target) return target;
         const patched = await patchInPlace(session, args.config_patch);
         if (isRefusal(patched)) return patched;
-        const turn = await api.createTurn(session.id, { input: [message], previousTurnId: source.id });
+        const turn = await createAfterPatch(
+          session.id,
+          { input: [message], previousTurnId: source.id },
+          args.config_patch,
+        );
         return ok({
           provenance: "observed" as const,
           citation: { session_id: session.id, turn_id: turn.id },
@@ -455,6 +489,8 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       }
 
       // The user's chat: replay into a new inline Experiment Session.
+      const deep = checkDepth(session);
+      if (deep) return deep;
       const depth = own.depth + 1;
       if (depth >= 2)
         return refuse(
@@ -524,18 +560,8 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       const bad = checkTurnId(args.turn_id);
       if (bad) return bad;
       const session = await api.getSession(args.session_id);
-      if (!isExperiment(session))
-        return refuse(
-          `Session ${session.id} is not an Experiment Session, so it's read-only`,
-          "fork_turn from it instead, which replays into a new Experiment Session",
-        );
-      if (session.id === own.sessionId)
-        return refuse(
-          "re-running a Turn in my own Session would move its tip off this Turn",
-          "use another Experiment Session",
-        );
-      const deep = checkDepth(session);
-      if (deep) return deep;
+      const target = checkInPlaceTarget(session, own, "re-run");
+      if (target) return target;
       const source = await api.getTurn(session.id, args.turn_id);
       const unfinished = checkSourceTurn(source);
       if (unfinished) return unfinished;
@@ -547,7 +573,11 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
         );
       const patched = await patchInPlace(session, args.config_patch);
       if (isRefusal(patched)) return patched;
-      const turn = await api.createTurn(session.id, { input, previousTurnId: source.previousTurnId ?? "none" });
+      const turn = await createAfterPatch(
+        session.id,
+        { input, previousTurnId: source.previousTurnId ?? "none" },
+        args.config_patch,
+      );
       return ok({
         provenance: "observed" as const,
         citation: { session_id: session.id, turn_id: turn.id },
@@ -573,15 +603,8 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       const own = await ownOrRefuse(args.caller_session_id);
       if (isRefusal(own)) return own;
       const session = await api.getSession(args.session_id);
-      if (!isExperiment(session))
-        return refuse(
-          `Session ${session.id} is not an Experiment Session, so it's read-only`,
-          "the user can stop it in the UI",
-        );
-      if (session.id === own.sessionId)
-        return refuse("cancelling my own Session would end this Turn", "the user can stop it in the UI");
-      const deep = checkDepth(session);
-      if (deep) return deep;
+      const target = checkInPlaceTarget(session, own, "cancel");
+      if (target) return target;
       const tip = await api.tipTurnId(session.id);
       const tipTurn = tip ? await api.getTurn(session.id, tip) : undefined;
       if (tipTurn?.state.status !== "running")
@@ -616,6 +639,22 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
     if (!patched.ok) return refuse(`config_patch doesn't fit the spec: ${patched.reason}`, "fix the patch's values");
     await api.updateSession(session.id, { spec: patched.spec });
     return undefined;
+  }
+
+  // Creates the Turn after a patch. The patch can't be undone atomically, so if
+  // the create fails the error says the spec already changed.
+  async function createAfterPatch(
+    id: string,
+    body: { input: TurnInputItem[]; previousTurnId: string },
+    patch?: ConfigPatch,
+  ): Promise<Turn> {
+    try {
+      return await api.createTurn(id, body);
+    } catch (error) {
+      if (!patch) throw error;
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`${message} (Session ${id}'s spec was already patched with config_patch; no Turn was created)`);
+    }
   }
 
   // Runs the replayed Turns one after another: each must finish before the next

@@ -200,17 +200,34 @@ describe("writes", () => {
     expect(fake.mutations()).toEqual([{ method: "cancel", args: ["exp"] }]);
   });
 
-  test("caller_session_id overrides the auto-detected Session", async () => {
-    const { fake, client } = await setup();
-    // Claiming to be `exp` makes `exp` the caller's own Session, so it's refused.
+  test("caller_session_id counts only when the Session can't be detected", async () => {
+    const fake = new FakeSessionsApi();
+    const { client } = await connect(testDeps(source, { api: fake }), "sessions");
+    // No `mcp.initialize` names this connection, so the override is used.
+    fake.addSession("exp", { metadata: { experiment: "x", depth: "0" }, inline: true });
+    fake.addTurn("exp", "e1");
+    fake.addSession("caller");
     const r = await call(client, "fork_turn", {
       session_id: "exp",
       from_turn_id: "e1",
       message: "x",
-      caller_session_id: "exp",
+      caller_session_id: "caller",
     });
-    expect(r.text).toMatch(/own Session/);
-    expect(fake.mutations()).toEqual([]);
+    expect(r.data).toMatchObject({ mode: "in-place" });
+  });
+
+  test("a failed create after config_patch says the spec already changed", async () => {
+    const { fake, client } = await setup();
+    fake.createTurn = async () => {
+      throw new Error("HTTP 412");
+    };
+    const r = await call(client, "rerun_turn", {
+      session_id: "exp",
+      turn_id: "e2",
+      config_patch: { iteration_limit: 5 },
+    });
+    expect(r.isError).toBe(true);
+    expect(r.text).toMatch(/HTTP 412.*already patched/);
   });
 });
 

@@ -149,6 +149,17 @@ describe("fork_turn refuses", () => {
     );
   });
 
+  test("a caller_session_id that contradicts the detected Session", async () => {
+    const w = await world();
+    // Claiming to be `exp` would let an in-place fork of `own` through.
+    await expectRefused(
+      w,
+      "fork_turn",
+      { session_id: "own", from_turn_id: "o1", message: "again", caller_session_id: "exp" },
+      /isn't the Session I'm running in/,
+    );
+  });
+
   test("a config_patch key outside the allowlist", async () => {
     const w = await world();
     const r = await call(w.client, "fork_turn", {
