@@ -207,6 +207,7 @@ describe("writes", () => {
     fake.addSession("exp", { metadata: { experiment: "x", depth: "0" }, inline: true });
     fake.addTurn("exp", "e1");
     fake.addSession("caller");
+    fake.addTurn("caller", "k1", { status: "running" }); // the caller is mid-Turn
     const r = await call(client, "fork_turn", {
       session_id: "exp",
       from_turn_id: "e1",

@@ -3,13 +3,14 @@
 // act only on Experiment Sessions. Every result is labelled `observed` and
 // cites `{session_id, turn_id, event_id}`.
 //
-// Write safety, in the order the checks run:
+// Write safety, in the order every write tool runs the checks:
 // 1. the tool must know its own Session (auto-detected, or `caller_session_id`);
-// 2. only Experiment Sessions are changed in place; the user's chat is only
-//    ever read, and a fork from it replays into a new Experiment Session;
-// 3. depth 2 or more is refused, and so is the caller's own Session in place;
-// 4. a source Turn must be finished and not waiting on an Approval (#24: the
-//    server would accept it), and every create names an explicit Turn id.
+// 2. every Turn is named by an explicit id, never `auto` or `none`;
+// 3. a source Turn must be finished and not waiting on an Approval (#24: the
+//    server would accept it);
+// 4. the target (`checkInPlaceTarget`): only Experiment Sessions are changed in
+//    place, never the caller's own, never at depth 2 or more. The user's chat is
+//    only ever read; a fork from it replays into a new Experiment Session.
 // Only after all of that does a mutating call go out.
 
 import type { CallToolResult, McpServer, ToolAnnotations } from "@modelcontextprotocol/server";
@@ -133,7 +134,7 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
   const isRefusal = (v: unknown): v is CallToolResult => typeof v === "object" && v !== null && "isError" in v;
 
   function checkSourceTurn(turn: Turn): CallToolResult | undefined {
-    if (turn.state.status === "running" || turn.state.status === "paused")
+    if (isUnfinished(turn))
       return refuse(`Turn ${turn.id} is still running`, "wait_turn until it finishes, or pick a finished Turn");
     if (requiredActions(turn) > 0)
       return refuse(
@@ -408,14 +409,13 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       const started = clock.now();
       const deadline = started + args.timeout_s * 1000;
       let turn = await api.getTurn(args.session_id, args.turn_id);
-      const unfinished = (t: Turn) => t.state.status === "running" || t.state.status === "paused";
-      while (unfinished(turn) && clock.now() < deadline) {
+      while (isUnfinished(turn) && clock.now() < deadline) {
         await clock.sleep(Math.min(POLL_MS, deadline - clock.now()));
         turn = await api.getTurn(args.session_id, args.turn_id);
       }
       return ok({
         provenance: "observed" as const,
-        still_running: unfinished(turn),
+        still_running: isUnfinished(turn),
         waited_ms: clock.now() - started,
         turn: turnSummary(turn, 500),
       });
@@ -471,21 +471,12 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       if (isExperiment(session)) {
         const target = checkInPlaceTarget(session, own, "fork in place");
         if (target) return target;
-        const patched = await patchInPlace(session, args.config_patch);
-        if (isRefusal(patched)) return patched;
-        const turn = await createAfterPatch(
-          session.id,
+        return startInPlace(
+          session,
           { input: [message], previousTurnId: source.id },
           args.config_patch,
+          "wait_turn to follow it",
         );
-        return ok({
-          provenance: "observed" as const,
-          citation: { session_id: session.id, turn_id: turn.id },
-          mode: "in-place" as const,
-          context: "kept" as const,
-          status: turn.state.status,
-          note: "wait_turn to follow it",
-        });
       }
 
       // The user's chat: replay into a new inline Experiment Session.
@@ -534,7 +525,7 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
         mode: "replay" as const,
         context: "replayed" as const,
         status: "replaying",
-        note: `replaying ${replayed.length} user Turns, then your message, one at a time. Its tag \`replay\` becomes done or failed:<reason>; get_turn on ${created.id} to follow it.`,
+        note: `replaying ${replayed.length} user Turns, then your message, one at a time. Its tag \`replay\` becomes done or failed:<reason>; it stays running if the MCP server stops mid-replay. get_turn on ${created.id} to follow it.`,
       });
     }),
   );
@@ -559,33 +550,26 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
       if (isRefusal(own)) return own;
       const bad = checkTurnId(args.turn_id);
       if (bad) return bad;
-      const session = await api.getSession(args.session_id);
-      const target = checkInPlaceTarget(session, own, "re-run");
-      if (target) return target;
-      const source = await api.getTurn(session.id, args.turn_id);
+      const [session, source] = await Promise.all([
+        api.getSession(args.session_id),
+        api.getTurn(args.session_id, args.turn_id),
+      ]);
       const unfinished = checkSourceTurn(source);
       if (unfinished) return unfinished;
+      const target = checkInPlaceTarget(session, own, "re-run");
+      if (target) return target;
       const input = source.input ?? [];
       if (!input.length || input.some((i) => i.type !== "user.message"))
         return refuse(
           `Turn ${source.id} wasn't started by a user message (it answered an Approval)`,
           "re-run the Turn before it",
         );
-      const patched = await patchInPlace(session, args.config_patch);
-      if (isRefusal(patched)) return patched;
-      const turn = await createAfterPatch(
-        session.id,
+      return startInPlace(
+        session,
         { input, previousTurnId: source.previousTurnId ?? "none" },
         args.config_patch,
+        `re-runs ${source.id}'s input from ${source.previousTurnId ?? "the root"}; wait_turn to follow it`,
       );
-      return ok({
-        provenance: "observed" as const,
-        citation: { session_id: session.id, turn_id: turn.id },
-        mode: "in-place" as const,
-        context: "kept" as const,
-        status: turn.state.status,
-        note: `re-runs ${source.id}'s input from ${source.previousTurnId ?? "the root"}; wait_turn to follow it`,
-      });
     }),
   );
 
@@ -641,6 +625,27 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
     return undefined;
   }
 
+  // The end of every in-place write: patch the spec if asked, create the Turn,
+  // and say where it is.
+  async function startInPlace(
+    session: Session,
+    body: { input: TurnInputItem[]; previousTurnId: string },
+    patch: ConfigPatch | undefined,
+    note: string,
+  ): Promise<CallToolResult> {
+    const patched = await patchInPlace(session, patch);
+    if (isRefusal(patched)) return patched;
+    const turn = await createAfterPatch(session.id, body, patch);
+    return ok({
+      provenance: "observed" as const,
+      citation: { session_id: session.id, turn_id: turn.id },
+      mode: "in-place" as const,
+      context: "kept" as const,
+      status: turn.state.status,
+      note,
+    });
+  }
+
   // Creates the Turn after a patch. The patch can't be undone atomically, so if
   // the create fails the error says the spec already changed.
   async function createAfterPatch(
@@ -691,8 +696,7 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
     const deadline = clock.now() + REPLAY_TURN_TIMEOUT_MS;
     for (;;) {
       const turn = await api.getTurn(id, turnId);
-      const unfinished = turn.state.status === "running" || turn.state.status === "paused";
-      if (!unfinished || clock.now() >= deadline) return turn;
+      if (!isUnfinished(turn) || clock.now() >= deadline) return turn;
       await clock.sleep(POLL_MS);
     }
   }
@@ -701,6 +705,10 @@ export function registerSessionsTools(server: McpServer, deps: SessionsDeps, mcp
 // ---------- pure helpers ----------
 
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
+
+// Still going: running, or `paused` (which #24 never saw on the wire, since an
+// Approval wait shows as `done` with required actions, but the type allows it).
+const isUnfinished = (t: Turn) => t.state.status === "running" || t.state.status === "paused";
 
 function costOf(t: Turn): number {
   return ("metrics" in t.state && t.state.metrics?.totalCostInUsd) || 0;

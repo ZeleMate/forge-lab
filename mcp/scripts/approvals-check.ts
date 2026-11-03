@@ -86,10 +86,18 @@ const d1 = await waitTurn(deep.id, (await createTurn(deep.id, "Say hi in one wor
 const fixturesDir = join(import.meta.dir, "..", "fixtures-results");
 const recording = readdirSync(fixturesDir).sort().at(-1) ?? "";
 const fixtures = (await Bun.file(join(fixturesDir, recording)).json()) as {
-  sessions: { main: { id: string }; fork: { id: string } };
+  sessions: { main: { id: string } };
   turns: { pending: { id: string } };
 };
 const running = await createTurn(target, SLOW, t1.id);
+// A `caller_session_id` only counts for a Session that's mid-Turn, as a real
+// caller is, so the two Sessions phase 1 calls "from" each get a running Turn.
+const callerBusy = await createTurn(caller, SLOW, "none");
+const { data: nested } = await api<{ id: string }>("POST", "/sessions", {
+  agent: { spec },
+  metadata: { experiment: EXPERIMENT, depth: "1" },
+});
+const nestedBusy = await createTurn(nested.id, SLOW, "none");
 
 // ---------- phase 1: refusals ----------
 
@@ -118,7 +126,7 @@ const REFUSALS: [string, string, Record<string, unknown>, RegExp][] = [
       message: "x",
       experiment: "nested",
       estimated_cost_usd: 1,
-      caller_session_id: fixtures.sessions.fork.id,
+      caller_session_id: nested.id,
     },
     /depth/,
   ],
@@ -150,6 +158,13 @@ results.refusals = refusals;
 await mcp.close();
 await api("POST", `/sessions/${target}/cancel`, {});
 await waitTurn(target, running.id);
+for (const [id, turn] of [
+  [caller, callerBusy],
+  [nested.id, nestedBusy],
+] as const) {
+  await api("POST", `/sessions/${id}/cancel`, {});
+  await waitTurn(id, turn.id);
+}
 
 // ---------- phase 2: Approvals ----------
 
@@ -224,7 +239,7 @@ if (slowForCancel) {
 results.approvals = approvals;
 
 // Nothing outside this script's Sessions moved, across both phases.
-const ours = [target, caller, chat.id, deep.id];
+const ours = [target, caller, chat.id, deep.id, nested.id];
 const outside = changed(before, await fingerprint(), ours);
 if (outside.length) failures.push(`Sessions outside the check changed: ${outside.join(", ")}`);
 results.sessions = {

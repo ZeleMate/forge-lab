@@ -160,6 +160,21 @@ describe("fork_turn refuses", () => {
     );
   });
 
+  test("a caller_session_id naming a Session that isn't mid-Turn", async () => {
+    const fake = new FakeSessionsApi();
+    const { client } = await connect(testDeps(source, { api: fake }), "sessions");
+    fake.addSession("exp", { metadata: { experiment: "x", depth: "0" }, inline: true });
+    fake.addTurn("exp", "e1");
+    fake.addSession("idle");
+    fake.addTurn("idle", "i1");
+    await expectRefused(
+      { fake, client },
+      "fork_turn",
+      { session_id: "exp", from_turn_id: "e1", message: "again", caller_session_id: "idle" },
+      /can't tell which Session/,
+    );
+  });
+
   test("a config_patch key outside the allowlist", async () => {
     const w = await world();
     const r = await call(w.client, "fork_turn", {

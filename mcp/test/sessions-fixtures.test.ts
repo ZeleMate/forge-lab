@@ -71,7 +71,8 @@ describe(`recorded fixtures (${newest}, TrueForge ${rec.version})`, () => {
     const turns = Object.values(rec.turns).filter((t) => t.sessionId === main.id);
     const events = Object.fromEntries(Object.entries(rec.turns).map(([k, t]) => [t.id, rec.events[k] ?? []]));
     fake.loadRecorded(main, turns, events);
-    fake.addSession("caller"); // the Session the tool claims to run in
+    fake.addSession("caller"); // the Session the tool claims to run in, mid-Turn
+    fake.addTurn("caller", "k1", { status: "running" });
     const pending = rec.turns.pending as Turn;
     const r = await call(client, "fork_turn", {
       session_id: main.id,
