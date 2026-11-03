@@ -11,6 +11,15 @@ import { isUnfinished, POLL_MS } from "./shared";
 const REPLAY_TURN_TIMEOUT_MS = 660_000;
 
 export function replayRunner(api: SessionsApi, clock: Clock) {
+  async function waitUntilDone(id: string, turnId: string): Promise<Turn> {
+    const deadline = clock.now() + REPLAY_TURN_TIMEOUT_MS;
+    for (;;) {
+      const turn = await api.getTurn(id, turnId);
+      if (!isUnfinished(turn) || clock.now() >= deadline) return turn;
+      await clock.sleep(POLL_MS);
+    }
+  }
+
   // Runs the replayed Turns one after another: each must finish before the next
   // chains on it, or creating the next would cancel it (#21 6.2).
   return async function replay(newSessionId: string, tags: Record<string, string>, inputs: TurnInputItem[][]) {
@@ -42,15 +51,6 @@ export function replayRunner(api: SessionsApi, clock: Clock) {
       throw error;
     }
   };
-
-  async function waitUntilDone(id: string, turnId: string): Promise<Turn> {
-    const deadline = clock.now() + REPLAY_TURN_TIMEOUT_MS;
-    for (;;) {
-      const turn = await api.getTurn(id, turnId);
-      if (!isUnfinished(turn) || clock.now() >= deadline) return turn;
-      await clock.sleep(POLL_MS);
-    }
-  }
 }
 
 // The Turns from the root down to `turnId`, following `previousTurnId`.

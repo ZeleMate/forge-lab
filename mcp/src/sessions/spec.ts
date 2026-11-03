@@ -9,7 +9,8 @@ import type { AgentSpec } from "./api";
 // The allowlist, in the wire's snake_case, since that's what the docs and the
 // model see. `.strict()` makes zod reject any other key, so nothing outside it
 // can be patched. The values' own shapes are checked by the SDK's schema below.
-// Any JSON object; the SDK's schema checks what's inside (below).
+//
+// Any JSON object; the SDK's schema checks what's inside.
 const anyObject = z.record(z.string(), z.unknown());
 export const ConfigPatch = z
   .object({

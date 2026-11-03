@@ -89,6 +89,13 @@ export function checkInPlaceTarget(
     );
   const deep = checkDepth(session);
   if (deep) return deep;
+  // A fork or re-run chains a new Turn on the tip, which cancels a running one
+  // without the cancel_session Approval, so it's refused for any caller.
+  if (targetRunning && !cancel && own.detected)
+    return refuse(
+      `Session ${session.id} has a running Turn, and a ${action} would cancel it`,
+      "wait until it finishes, or cancel it with cancel_session first",
+    );
   if (!own.detected && targetRunning)
     return refuse(
       `I couldn't confirm which Session I'm in, and Session ${session.id} has a running Turn that could be mine`,

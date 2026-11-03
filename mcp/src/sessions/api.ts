@@ -7,7 +7,8 @@
 import { TrueForge, type TrueForgeApi } from "@truefoundry/trueforge-sdk";
 
 // The SDK's types, re-exported under short names. `TrueForgeApi` is a namespace
-// of types only; `import type` above means none of it reaches the runtime.
+// of types only; `TrueForge` above is a runtime import, and its inline `type`
+// modifier erases just `TrueForgeApi`.
 export type Session = TrueForgeApi.Session;
 export type Turn = TrueForgeApi.Turn;
 export type SessionEvent = TrueForgeApi.SessionEvent;
