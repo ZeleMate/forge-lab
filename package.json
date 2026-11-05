@@ -4,6 +4,7 @@
   "description": "Cartographer on a local TrueForge. Bun workspaces: one lockfile (bun.lock) and one bunfig.toml at this root.",
   "workspaces": [
     "agents",
+    "app",
     "harness",
     "lib",
     "mcp"
@@ -32,6 +33,8 @@
     "typescript": "7.0.2"
   },
   "overrides": {
-    "undici": "7.30.1"
+    "undici": "7.30.1",
+    "@assistant-ui/store": "0.2.21",
+    "@assistant-ui/tap": "0.9.5"
   }
 }
