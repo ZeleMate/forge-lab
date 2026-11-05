@@ -281,12 +281,18 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps): void {
   );
 }
 
-// Every event of a Turn, at most 5 pages of 100.
+const EVENT_PAGES = 5;
+const EVENTS_PAGE_SIZE = 100;
+
+// Every event of a Turn, at most EVENT_PAGES pages of EVENTS_PAGE_SIZE.
 async function allEvents(api: SessionsApi, sessionId: string, turnId: string): Promise<SessionEvent[]> {
   const out: SessionEvent[] = [];
   let cursor: string | undefined;
-  for (let page = 0; page < 5; page++) {
-    const res = await api.listTurnEvents(sessionId, turnId, { limit: 100, ...(cursor ? { cursor } : {}) });
+  for (let page = 0; page < EVENT_PAGES; page++) {
+    const res = await api.listTurnEvents(sessionId, turnId, {
+      limit: EVENTS_PAGE_SIZE,
+      ...(cursor ? { cursor } : {}),
+    });
     out.push(...res.items);
     cursor = res.next;
     if (!cursor) break;
