@@ -156,6 +156,7 @@ results.refusals = refusals;
 await mcp.close();
 await api("POST", `/sessions/${target}/cancel`, {});
 await waitTurn(target, running.id);
+// `as const` makes these fixed-length tuples with a type per position, not string[] arrays.
 for (const [id, turn] of [
   [caller, callerBusy],
   [nested.id, nestedBusy],

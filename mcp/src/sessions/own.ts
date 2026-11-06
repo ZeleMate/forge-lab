@@ -50,6 +50,7 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
   async function initializedHere(sessionId: string): Promise<boolean> {
     // One oversized Session mustn't fail every write: it's skipped here, and a
     // caller that really is that Session goes undetected, so it's treated strictly.
+    // `.catch` on a promise maps a rejection to a value or rethrows it, like try/catch.
     const turns = await api.listTurns(sessionId).catch((error) => {
       if (error instanceof TooManyTurnsError) return [];
       throw error;
