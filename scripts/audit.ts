@@ -5,6 +5,11 @@
 // Fails on any high or critical advisory that isn't accepted below, or whose
 // acceptance has passed its review date. Moderate and low ones are counted but
 // don't fail: Dependabot alerts cover them. Needs the npm registry (network).
+//
+// Some advisories are fixed by the root `overrides` in package.json instead of
+// being accepted (JSON has no comments, so the note lives here): undici, node-forge
+// and follow-redirects. Drop each override at the next TrueForge bump that ships
+// the overridden version or later.
 
 type Severity = "low" | "moderate" | "high" | "critical";
 type Advisory = { url: string; title: string; severity: Severity; vulnerable_versions: string };
@@ -13,39 +18,11 @@ type AuditReport = Record<string, Advisory[]>;
 
 type Accepted = { ghsa: string; pkg: string; reviewBy: string; reason: string };
 
-// All of them come in through TrueForge itself (@truefoundry/trueforge's own
+// body-parser and zod come in through TrueForge itself (@truefoundry/trueforge's own
 // dependencies), so only a TrueForge bump or a root `overrides` pin can fix them.
-// (undici is forced to 7.30.1 by `overrides`, which fixed its entry; drop that
-// override at the next TrueForge bump if it ships undici 7.30.1 or later.)
 // Re-check this list on every bump, and by `reviewBy` at the latest; after
 // that date the entry stops applying and the job fails until someone looks again.
-
-// The 2026-10-30 node-forge and follow-redirects advisories are fixed in versions
-// still inside the 7-day release age (node-forge 1.4.1 clears it on 2026-11-03,
-// follow-redirects 1.16.2 on 2026-11-01). Accepted only until then: on 2026-11-04
-// replace these six entries with exact `overrides`, as undici was handled.
-const UNTIL_OVERRIDE = "2026-11-04";
-const SANDBOX_PROXY =
-  "sandbox-runtime only uses forge.pki, to make and sign its own proxy CA and leaf certs and re-read its own CA PEM; no forge.tls, no PKCS#12, no third-party input";
-
 const ACCEPTED: Accepted[] = [
-  { ghsa: "GHSA-8hrf-8g6f-7xwp", pkg: "node-forge", reviewBy: UNTIL_OVERRIDE, reason: SANDBOX_PROXY },
-  { ghsa: "GHSA-hqq3-7jhf-c5jx", pkg: "node-forge", reviewBy: UNTIL_OVERRIDE, reason: SANDBOX_PROXY },
-  { ghsa: "GHSA-5x38-2vff-x55p", pkg: "node-forge", reviewBy: UNTIL_OVERRIDE, reason: SANDBOX_PROXY },
-  { ghsa: "GHSA-7wch-p9px-956x", pkg: "node-forge", reviewBy: UNTIL_OVERRIDE, reason: SANDBOX_PROXY },
-  { ghsa: "GHSA-jc66-7q78-782g", pkg: "node-forge", reviewBy: UNTIL_OVERRIDE, reason: SANDBOX_PROXY },
-  {
-    ghsa: "GHSA-mrwp-f3q8-3g9p",
-    pkg: "follow-redirects",
-    reviewBy: UNTIL_OVERRIDE,
-    reason: "only via axios in the Daytona SDK; #11 chose the local sandbox, so Daytona isn't used",
-  },
-  {
-    ghsa: "GHSA-86w9-cpqp-85rv",
-    pkg: "node-forge",
-    reviewBy: "2027-01-24",
-    reason: "sandbox-runtime uses it for its local proxy certificates, not to verify third-party signatures",
-  },
   {
     ghsa: "GHSA-27r3-jxmh-p828",
     pkg: "body-parser",
