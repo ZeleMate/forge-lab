@@ -24,7 +24,10 @@ import {
   createTurn,
   findAgent,
   ORIGIN,
+  onSmokeModel,
   openInlineExperimentSession,
+  SLOW_PROMPT,
+  SMOKE_MODEL,
   saveResults,
   serverVersion,
   type Turn,
@@ -33,21 +36,16 @@ import {
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { sdkSessionsApi } from "../src/sessions/api";
 
-const MODEL = "openrouter/glm-5-3-flash";
 const EXPERIMENT = "approvals-check";
-const SLOW = "Write a 600-word essay about how maps changed navigation. No tools.";
 const failures: string[] = [];
-const results: Record<string, unknown> = { model: MODEL, version: await serverVersion() };
+const results: Record<string, unknown> = { model: SMOKE_MODEL, version: await serverVersion() };
 
 const agent = await findAgent("cartographer");
 if (!agent) {
   console.error("approvals: no cartographer Agent; `bun run dev` applies it");
   process.exit(1);
 }
-type Spec = { model: { name: string; params?: Record<string, unknown> } };
-const spec = structuredClone(agent.manifest) as Spec;
-const { reasoning_effort: _dropped, ...params } = spec.model.params ?? {};
-spec.model = { ...spec.model, name: MODEL, params };
+const spec = onSmokeModel(agent.manifest);
 
 const sessions = sdkSessionsApi(ORIGIN);
 
@@ -89,15 +87,15 @@ const fixtures = (await Bun.file(join(fixturesDir, recording)).json()) as {
   sessions: { main: { id: string } };
   turns: { pending: { id: string } };
 };
-const running = await createTurn(target, SLOW, t1.id);
+const running = await createTurn(target, SLOW_PROMPT, t1.id);
 // A `caller_session_id` only counts for a Session that's mid-Turn, as a real
 // caller is, so the two Sessions phase 1 calls "from" each get a running Turn.
-const callerBusy = await createTurn(caller, SLOW, "none");
+const callerBusy = await createTurn(caller, SLOW_PROMPT, "none");
 const { data: nested } = await api<{ id: string }>("POST", "/sessions", {
   agent: { spec },
   metadata: { experiment: EXPERIMENT, depth: "1" },
 });
-const nestedBusy = await createTurn(nested.id, SLOW, "none");
+const nestedBusy = await createTurn(nested.id, SLOW_PROMPT, "none");
 
 // ---------- phase 1: refusals ----------
 
@@ -179,7 +177,7 @@ const STEPS: Step[] = [
     // The tip must be running when the approved call runs, so it starts now.
     beforeApproval: async () => {
       const tip = await sessions.tipTurnId(target);
-      slowForCancel = await createTurn(target, SLOW, tip ?? "none");
+      slowForCancel = await createTurn(target, SLOW_PROMPT, tip ?? "none");
     },
   },
 ];

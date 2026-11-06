@@ -20,17 +20,18 @@ import {
   createTurn,
   findAgent,
   ORIGIN,
+  onSmokeModel,
   openInlineExperimentSession,
+  SLOW_PROMPT,
+  SMOKE_MODEL,
   saveResults,
   serverVersion,
+  type WireSpec,
   waitTurn,
 } from "@forge-lab/lib/trueforge";
 import { type SessionEvent, sdkSessionsApi, type Turn } from "../src/sessions/api";
 
-const MODEL = "openrouter/glm-5-3-flash";
 const EXPERIMENT = "fixtures-record";
-// Long enough that the Turn is still running when the script acts on it.
-const SLOW = "Write a 600-word essay about how maps changed navigation. No tools.";
 
 const pin = readPin();
 const version = await serverVersion();
@@ -47,15 +48,8 @@ if (!agent) {
 // Copies of the registered spec (snake_case, as GET /agents returns it) on GLM,
 // which rejects reasoning_effort. `pending` needs an Approval on a harmless
 // read, so the copy gates every source tool.
-type Spec = {
-  model: { name: string; params?: Record<string, unknown> };
-  mcp_servers?: { name: string; require_approval_for_tools?: string[] }[];
-  config?: Record<string, unknown>;
-};
-const base = structuredClone(agent.manifest) as Spec;
-const { reasoning_effort: _dropped, ...params } = base.model.params ?? {};
-base.model = { ...base.model, name: MODEL, params };
-const gated: Spec = {
+const base = onSmokeModel(agent.manifest);
+const gated: WireSpec = {
   ...base,
   mcp_servers: base.mcp_servers?.map((s) => (s.name === "source" ? { ...s, require_approval_for_tools: ["@all"] } : s)),
 };
@@ -77,13 +71,13 @@ const pending = await createTurn(a, "Call the source_status tool once and tell m
 turns.pending = await settle(a, pending.id);
 
 // A new root, read at once while it runs; then a Turn chained on it freezes it.
-const slow = await createTurn(a, SLOW, "none");
+const slow = await createTurn(a, SLOW_PROMPT, "none");
 turns.running = await sessions.getTurn(a, slow.id);
 const next = await createTurn(a, "Say hello in one word.", slow.id);
 turns["after-next"] = await settle(a, next.id);
 turns["next-turn"] = await sessions.getTurn(a, slow.id);
 
-const toCancel = await createTurn(a, SLOW, next.id);
+const toCancel = await createTurn(a, SLOW_PROMPT, next.id);
 await Bun.sleep(1_000);
 await api("POST", `/sessions/${a}/cancel`, {});
 turns["client-cancel"] = await settle(a, toCancel.id);
@@ -114,7 +108,7 @@ const mismatches = Object.keys(expected).filter((k) => expected[k] !== observed[
 
 const file = await saveResults(`${import.meta.dir}/../fixtures-results`, {
   version,
-  model: MODEL,
+  model: SMOKE_MODEL,
   sessions: { main: await sessions.getSession(a), fork: await sessions.getSession(b.id) },
   listed: (await sessions.listSessions({ limit: 5, metadata: { experiment: EXPERIMENT } })).items,
   expected,

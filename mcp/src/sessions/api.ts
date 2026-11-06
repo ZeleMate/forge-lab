@@ -27,6 +27,7 @@ export interface SessionsApi {
   listSessions(q: { agentId?: string; metadata?: Metadata; limit: number; cursor?: string }): Promise<Page<Session>>;
   getSession(sessionId: string): Promise<Session>;
   // Every Turn of a Session, oldest first (the server's only order, #21 section 9).
+  // Throws TooManyTurnsError past MAX_TURNS.
   listTurns(sessionId: string): Promise<Turn[]>;
   getTurn(sessionId: string, turnId: string): Promise<Turn>;
   listTurnEvents(
@@ -46,9 +47,30 @@ export interface SessionsApi {
   cancel(sessionId: string): Promise<void>;
 }
 
-// The SDK caps a Session's Turns at 25 per page; this stops a runaway Session
+// The server caps a Session's Turns at 25 per page; this stops a runaway Session
 // from turning one tool call into hundreds of requests.
-const MAX_TURNS = 200;
+export const MAX_TURNS = 200;
+
+// A class that extends Error lets a caller tell this failure from others with `instanceof`.
+export class TooManyTurnsError extends Error {
+  constructor(sessionId: string) {
+    super(`Session ${sessionId} has more than ${MAX_TURNS} Turns, too many to read`);
+    this.name = "TooManyTurnsError";
+  }
+}
+
+// Every Turn from the SDK's pages, oldest first. Past the cap it throws rather
+// than returning a cut list: the newest Turns are the ones a cut would lose, so
+// "the newest Turn" and a fork's source lookup would quietly be wrong.
+export async function collectTurns(sessionId: string, pages: AsyncIterable<Turn>): Promise<Turn[]> {
+  const turns: Turn[] = [];
+  // `for await` walks the SDK's Page across every page it fetches.
+  for await (const turn of pages) {
+    if (turns.length >= MAX_TURNS) throw new TooManyTurnsError(sessionId);
+    turns.push(turn);
+  }
+  return turns;
+}
 
 export function sdkSessionsApi(baseUrl: string): SessionsApi {
   // Reads may retry (they change nothing); writes never do, because a retried
@@ -71,13 +93,7 @@ export function sdkSessionsApi(baseUrl: string): SessionsApi {
       return (await read.sessions.get(sessionId)).data;
     },
     async listTurns(sessionId) {
-      const turns: Turn[] = [];
-      // `for await` walks the SDK's Page across every page it fetches.
-      for await (const turn of await read.sessions.listTurns(sessionId, { limit: 25 })) {
-        turns.push(turn);
-        if (turns.length >= MAX_TURNS) break;
-      }
-      return turns;
+      return collectTurns(sessionId, await read.sessions.listTurns(sessionId, { limit: 25 }));
     },
     async getTurn(sessionId, turnId) {
       return (await read.sessions.getTurn(sessionId, turnId)).data;

@@ -15,15 +15,15 @@ import {
   allEvents,
   type Event,
   findAgent,
+  onSmokeModel,
   openInlineExperimentSession,
   runTurn,
+  SMOKE_MODEL,
   saveResults,
   serverVersion,
   summarise,
 } from "@forge-lab/lib/trueforge";
 import type { Endpoint } from "../src/app";
-
-const MODEL = "openrouter/glm-5-3-flash";
 
 type Question = { question: string; provenance: "source" | "observed" };
 // `Partial<Record<...>>`: not every server has a question yet (#57 adds triage's).
@@ -52,11 +52,7 @@ if (!agent) {
   process.exit(1);
 }
 
-// A copy of the registered spec on the smoke model. GLM rejects reasoning_effort
-// (its provider manifest declares no reasoning_efforts), so that param is dropped.
-const manifest = structuredClone(agent.manifest) as { model: { name: string; params?: Record<string, unknown> } };
-const { reasoning_effort: _dropped, ...params } = manifest.model.params ?? {};
-manifest.model = { ...manifest.model, name: MODEL, params };
+const manifest = onSmokeModel(agent.manifest);
 
 const wanted = Bun.argv.slice(2) as Endpoint[];
 // `Object.entries` types keys as plain strings, so the cast restores Endpoint.
@@ -64,7 +60,7 @@ const selected = (Object.entries(QUESTIONS) as [Endpoint, Question][]).filter(
   ([s]) => !wanted.length || wanted.includes(s),
 );
 const sha7 = pin.sha.slice(0, 7);
-const results: Record<string, unknown> = { version, model: MODEL };
+const results: Record<string, unknown> = { version, model: SMOKE_MODEL };
 let failed = false;
 
 for (const [server, { question, provenance }] of selected) {

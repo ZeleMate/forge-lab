@@ -2,6 +2,7 @@
 // reads' projections, wait_turn on the fake clock, and what each write sends.
 import { beforeAll, describe, expect, test } from "bun:test";
 import { serialization } from "@truefoundry/trueforge-sdk";
+import { collectTurns, MAX_TURNS, TooManyTurnsError, type Turn } from "../src/sessions/api";
 import { branchTo } from "../src/sessions/replay";
 import { applyConfigPatch, deepMerge } from "../src/sessions/spec";
 import type { Snapshot } from "../src/source/snapshot";
@@ -250,6 +251,44 @@ describe("config_patch merge", () => {
   test("an unknown key inside an allowed object is refused, not dropped", () => {
     const patched = applyConfigPatch(SPEC, { dynamic_sub_agents: { enabeld: true } });
     expect(patched.ok).toBe(false);
+  });
+});
+
+describe("the Turn cap", () => {
+  // An `async function*` is an async generator, like the SDK's auto-paging Page.
+  async function* pages(n: number) {
+    for (let i = 0; i < n; i++) yield { id: `t${i}` } as Turn;
+  }
+
+  test("every Turn comes back at the cap", async () => {
+    expect(await collectTurns("s", pages(MAX_TURNS))).toHaveLength(MAX_TURNS);
+  });
+
+  test("past the cap it throws instead of losing the newest Turns", async () => {
+    await expect(collectTurns("s", pages(MAX_TURNS + 1))).rejects.toBeInstanceOf(TooManyTurnsError);
+  });
+
+  test("get_turn reports it as an error, not an older Turn as the newest", async () => {
+    const { fake, client } = await setup();
+    fake.listTurns = async () => {
+      throw new TooManyTurnsError("chat");
+    };
+    const r = await call(client, "get_turn", { session_id: "chat" });
+    expect(r.isError).toBe(true);
+    expect(r.text).toMatch(/more than 200 Turns/);
+  });
+
+  test("an oversized Session doesn't stop the own-Session scan", async () => {
+    const { fake, client } = await setup();
+    fake.addSession("huge"); // the most recently updated, so it's scanned first
+    const listTurns = fake.listTurns.bind(fake);
+    fake.listTurns = async (id) => {
+      if (id === "huge") throw new TooManyTurnsError(id);
+      return listTurns(id);
+    };
+    // The scan still detects `own`, so the fork goes ahead instead of "can't tell".
+    const r = await call(client, "fork_turn", { session_id: "exp", from_turn_id: "e1", message: "x" });
+    expect(r.data).toMatchObject({ mode: "in-place" });
   });
 });
 

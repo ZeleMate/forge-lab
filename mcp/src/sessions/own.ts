@@ -3,7 +3,7 @@
 // `Mcp-Session-Id` in an `mcp.initialize` event. So the caller's Session is the
 // one with a running Turn whose `mcp.initialize` names this connection's id.
 
-import type { SessionsApi, Turn } from "./api";
+import { type SessionsApi, TooManyTurnsError, type Turn } from "./api";
 
 // `detected`: found by the scan. Otherwise it came only from the tool's
 // `caller_session_id`, which nothing confirms, so the write checks distrust it.
@@ -48,7 +48,12 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
 
   // Whether this Session is running a Turn and was connected to us.
   async function initializedHere(sessionId: string): Promise<boolean> {
-    const turns = await api.listTurns(sessionId);
+    // One oversized Session mustn't fail every write: it's skipped here, and a
+    // caller that really is that Session goes undetected, so it's treated strictly.
+    const turns = await api.listTurns(sessionId).catch((error) => {
+      if (error instanceof TooManyTurnsError) return [];
+      throw error;
+    });
     if (!running(turns)) return false;
     // Newest first: after an MCP server restart, the latest Turn re-initialized.
     for (const turn of [...turns].reverse()) {

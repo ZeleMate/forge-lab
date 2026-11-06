@@ -137,6 +137,26 @@ export async function openInlineExperimentSession(spec: Record<string, unknown>,
   return data.id;
 }
 
+// The model smoke runs and mechanics Experiments use, and a prompt slow enough
+// that a script can act on the Turn while it's still running.
+export const SMOKE_MODEL = "openrouter/glm-5-3-flash";
+export const SLOW_PROMPT = "Write a 600-word essay about how maps changed navigation. No tools.";
+
+// The parts of a snake_case spec the scripts change.
+export type WireSpec = {
+  model: { name: string; params?: Record<string, unknown> };
+  mcp_servers?: { name: string; require_approval_for_tools?: string[] }[];
+  config?: Record<string, unknown>;
+};
+
+// A copy of a registered spec on the smoke model. GLM rejects reasoning_effort
+// (its provider manifest declares no reasoning_efforts), so that param is dropped.
+export function onSmokeModel(manifest: Record<string, unknown>): WireSpec {
+  const spec = structuredClone(manifest) as WireSpec;
+  const { reasoning_effort: _dropped, ...params } = spec.model.params ?? {};
+  return { ...spec, model: { ...spec.model, name: SMOKE_MODEL, params } };
+}
+
 // ---------- running turns ----------
 
 // Starts a Turn and returns at once (`stream: false`), still `running`.
