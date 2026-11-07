@@ -90,9 +90,14 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
   }
 
   // One judged call, its cost added to the budget, or the reason it failed.
-  async function judge(estimateUsd: number, run: (d: Decide) => Promise<Judged>): Promise<Judged | string> {
-    const why = blocked(estimateUsd);
-    if (why || !decide) return why ?? "no triage backend";
+  async function judge(
+    inputChars: number,
+    questionCount: number,
+    run: (d: Decide) => Promise<Judged>,
+  ): Promise<Judged | string> {
+    if (!decide) return blocked(0) ?? "no triage backend";
+    const why = blocked(decide.estimateUsd(inputChars, questionCount));
+    if (why) return why;
     let judged: Judged;
     try {
       judged = await run(decide);
@@ -108,6 +113,18 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       );
     }
     return judged;
+  }
+
+  // The fields of a result where nothing was judged, plus whatever `extra` adds.
+  function unscoredResult<P extends "source" | "observed", E extends object>(provenance: P, reason: string, extra?: E) {
+    return {
+      provenance,
+      status: "unscored" as const,
+      reason,
+      cost_usd: 0,
+      budget: budgetView(),
+      ...(extra as E),
+    };
   }
 
   server.registerTool(
@@ -155,21 +172,14 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
         return refuse("none of the paths is a file in the snapshot", "pass paths that search_text returned");
 
       const { input, questions, id } = buildScoreRequest(candidates, args.question);
-      const result = await judge(decide?.estimateUsd(input.length, questions.length) ?? 0, (d) =>
-        d.score(input, questions, LEVELS),
-      );
+      const result = await judge(input.length, questions.length, (d) => d.score(input, questions, LEVELS));
 
-      const base = { provenance: "source" as const, budget: budgetView() };
       if (typeof result === "string")
         return ok(
           fitList(
-            {
-              ...base,
-              status: "unscored" as const,
-              reason: result,
+            unscoredResult("source", result, {
               unscored: [...unscored, ...candidates.map((c) => ({ path: c.path, reason: "not judged" }))],
-              cost_usd: 0,
-            },
+            }),
             "ranked",
             [] as Ranked[],
             args.max_chars,
@@ -192,7 +202,14 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       ranked.sort((a, b) => b.score - a.score);
       return ok(
         fitList(
-          { ...base, status: "judged" as const, judged_by: decide?.backend, unscored, cost_usd: result.costUsd },
+          {
+            provenance: "source" as const,
+            budget: budgetView(),
+            status: "judged" as const,
+            judged_by: decide?.backend,
+            unscored,
+            cost_usd: result.costUsd,
+          },
           "ranked",
           ranked,
           args.max_chars,
@@ -254,17 +271,25 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
           `Session ${session.id} is not an Experiment Session, and the user's chat isn't sent to the triage judge`,
           "use list_events and read the events yourself",
         );
-      const page = await deps.sessions.listTurnEvents(args.session_id, args.turn_id, { limit: 100 });
-      const events = page.items.filter((e) => !args.types.length || args.types.includes(e.type)).slice(0, args.limit);
+      // Page through the whole Turn, so the type filter sees every event.
+      const all: SessionEvent[] = [];
+      let cursor: string | undefined;
+      do {
+        const page = await deps.sessions.listTurnEvents(args.session_id, args.turn_id, {
+          limit: 100,
+          ...(cursor ? { cursor } : {}),
+        });
+        all.push(...page.items);
+        cursor = page.next;
+      } while (cursor);
+      const events = all.filter((e) => !args.types.length || args.types.includes(e.type)).slice(0, args.limit);
 
       // Every call is checked against the budget on its own, so the events
       // judged before the cap is reached keep their answers.
       let costUsd = 0;
       const results = await mapLimit(events, CONCURRENCY, async (e) => {
         const input = eventInput(e);
-        const judged = await judge(decide?.estimateUsd(input.length, names.length) ?? 0, (d) =>
-          d.predicate(input, args.predicates),
-        );
+        const judged = await judge(input.length, names.length, (d) => d.predicate(input, args.predicates));
         if (typeof judged !== "string") costUsd += judged.costUsd;
         return judged;
       });
@@ -283,15 +308,23 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       });
       const firstFailure = results.find((r) => typeof r === "string");
       const allFailed = results.length > 0 && results.every((r) => typeof r === "string");
-      const noEvents = !events.length;
+      if (!events.length)
+        return ok(
+          fitList(
+            unscoredResult("observed", "no events of those types in this Turn"),
+            "events",
+            rows,
+            args.max_chars,
+          ),
+        );
+      if (allFailed && typeof firstFailure === "string")
+        return ok(fitList(unscoredResult("observed", firstFailure), "events", rows, args.max_chars));
       return ok(
         fitList(
           {
             provenance: "observed" as const,
-            status: allFailed || noEvents ? ("unscored" as const) : ("judged" as const),
-            ...(allFailed && typeof firstFailure === "string" ? { reason: firstFailure } : {}),
-            ...(noEvents ? { reason: "no events of those types in this Turn" } : {}),
-            ...(decide && !allFailed && !noEvents ? { judged_by: decide.backend } : {}),
+            status: "judged" as const,
+            ...(decide ? { judged_by: decide.backend } : {}),
             cost_usd: costUsd,
             budget: budgetView(),
           },

@@ -91,9 +91,11 @@ const selected = (Object.entries(QUESTIONS) as [Endpoint, Question][]).filter(
 const sha7 = pin.sha.slice(0, 7);
 const results: Record<string, unknown> = { version, model: SMOKE_MODEL };
 let failed = false;
+// Loaded before any server runs, so a missing recording stops the run before it spends anything.
+const fixture = selected.some(([s]) => s === "triage") ? await loadFixture() : undefined;
 
 for (const [server, { question: asked, provenance, expect = [] }] of selected) {
-  const question = typeof asked === "function" ? asked(await loadFixture()) : asked;
+  const question = typeof asked === "function" && fixture ? asked(fixture) : (asked as string);
   const session = await openInlineExperimentSession(manifest, `smoke-mcp-${server}`);
   const turn = await runTurn(session, question);
   const events = await allEvents(session, turn.id);

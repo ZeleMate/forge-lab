@@ -29,19 +29,24 @@ export class Budget {
     return new Date(this.clock.now()).toISOString().slice(0, 10);
   }
 
-  // Today's spend. A file from another day counts as 0; a file that can't be
-  // read counts as the whole cap, so a broken counter can't lift the limit.
-  private spentToday(): number {
+  // Today's spend, or undefined when the counter can't be read. A file from
+  // another day counts as 0.
+  private readSpent(): number | undefined {
     let saved: Saved;
     try {
       saved = JSON.parse(readFileSync(this.file, "utf8")) as Saved;
     } catch (error) {
       // No file yet is a normal first run; anything else is a broken counter.
       if ((error as NodeJS.ErrnoException).code === "ENOENT") return 0;
-      return this.capUsd;
+      return undefined;
     }
-    if (typeof saved?.spent_usd !== "number" || typeof saved.day !== "string") return this.capUsd;
+    if (typeof saved?.spent_usd !== "number" || typeof saved.day !== "string") return undefined;
     return saved.day === this.today() ? saved.spent_usd : 0;
+  }
+
+  // An unreadable counter counts as the whole cap, so a broken counter can't lift the limit.
+  private spentToday(): number {
+    return this.readSpent() ?? this.capUsd;
   }
 
   status(): BudgetStatus {
@@ -59,7 +64,10 @@ export class Budget {
   }
 
   spend(usd: number): void {
-    const saved: Saved = { day: this.today(), spent_usd: this.spentToday() + usd };
+    const spent = this.readSpent();
+    // Don't write over a counter that couldn't be read: that would lock the day at cap + usd.
+    if (spent === undefined) return;
+    const saved: Saved = { day: this.today(), spent_usd: spent + usd };
     mkdirSync(dirname(this.file), { recursive: true });
     writeFileSync(this.file, JSON.stringify(saved));
   }
