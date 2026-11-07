@@ -5,9 +5,9 @@
 // (#23: about 0.3 s warm, a few seconds on a cold disk), so no tool call ever
 // waits on a half-built index. A missing snapshot or ripgrep stops the server.
 
-import { homedir } from "node:os";
 import { join } from "node:path";
 import { HOST, PORTS, TRUEFORGE_ORIGIN } from "@forge-lab/lib/ports";
+import { CACHE_DIR } from "@forge-lab/lib/snapshot";
 import { createApp, ENDPOINTS } from "./src/app";
 import { systemClock } from "./src/clock";
 import { sdkSessionsApi } from "./src/sessions/api";
@@ -25,7 +25,7 @@ console.log(`source: ${source.version} @ ${source.sha.slice(0, 7)}, ${files} fil
 // #8's cap. The counter sits next to the Source Snapshot cache, outside the repo.
 const TRIAGE_BUDGET_USD = 0.5;
 const budget = new Budget({
-  file: join(homedir(), "Library/Caches/forge-lab/triage-budget.json"),
+  file: join(CACHE_DIR, "triage-budget.json"),
   capUsd: TRIAGE_BUDGET_USD,
   clock: systemClock,
 });
