@@ -1,5 +1,5 @@
-# Git hooks (#30). They're the only gate on this repo: GitHub Free can't protect
-# `main` on a private repo, so CI (#31) reports but can't block. See SECURITY.md.
+# Git hooks (#30). The first gate on this repo; CI (#31) and the ruleset on
+# `main` come after. See SECURITY.md.
 #
 # One-time setup: `brew install lefthook gitleaks actionlint zizmor`, then
 # `lefthook install` at the repo root. Never skip them with `--no-verify`.
