@@ -50,7 +50,9 @@ export class Budget {
   }
 
   // Whether a call estimated at `estimateUsd` still fits under the cap. Once the
-  // cap is reached, nothing fits, not even a call estimated at $0.
+  // cap is reached, nothing fits, not even a call estimated at $0. The cap is
+  // soft under concurrency: calls running at once all check before any spends,
+  // so together they can overshoot by a few calls' cost.
   allows(estimateUsd: number): boolean {
     const spent = this.spentToday();
     return spent < this.capUsd && spent + estimateUsd <= this.capUsd + 1e-12;

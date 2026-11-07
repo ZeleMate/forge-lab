@@ -28,7 +28,13 @@ import {
 import type { Endpoint } from "../src/app";
 
 // `expect`: text some tool result must contain, beyond the provenance label.
-type Question = { question: string; provenance: "source" | "observed"; expect?: string[] };
+// `question` may be a function of the fixture, so the recording is read only when it runs.
+type Fixture = { sessions: { main: { id: string } }; turns: { pending: { id: string } } };
+type Question = {
+  question: string | ((fixture: Fixture) => string);
+  provenance: "source" | "observed";
+  expect?: string[];
+};
 
 // The triage question checks events of a real Experiment Session: the latest
 // `fixtures:record` Turn that called source_status and waits on an Approval.
@@ -40,13 +46,8 @@ async function loadFixture() {
     console.error("smoke: no recording in fixtures-results; run `bun run fixtures:record`");
     process.exit(1);
   }
-  return (await Bun.file(join(fixturesDir, recording)).json()) as {
-    sessions: { main: { id: string } };
-    turns: { pending: { id: string } };
-  };
+  return (await Bun.file(join(fixturesDir, recording)).json()) as Fixture;
 }
-const triageWanted = !Bun.argv.slice(2).length || Bun.argv.slice(2).includes("triage");
-const fixture = triageWanted ? await loadFixture() : undefined;
 
 const QUESTIONS: Record<Endpoint, Question> = {
   source: {
@@ -60,7 +61,8 @@ const QUESTIONS: Record<Endpoint, Question> = {
     provenance: "observed",
   },
   triage: {
-    question: `Two triage steps, then answer. First, search_text for "compaction" and pass up to 15 of the files it found to rank_relevance with the question "Where does TrueForge decide when to compact the context?"; name the top 3 with their scores. Second, use check_events on Session ${fixture?.sessions.main.id}, Turn ${fixture?.turns.pending.id} (an Experiment Session) with one predicate named calls_source_status: "This event calls the tool source_status." Say which events it flags. Give the cost of each triage call. Cite the files.`,
+    question: (fixture) =>
+      `Two triage steps, then answer. First, search_text for "compaction" and pass up to 15 of the files it found to rank_relevance with the question "Where does TrueForge decide when to compact the context?"; name the top 3 with their scores. Second, use check_events on Session ${fixture.sessions.main.id}, Turn ${fixture.turns.pending.id} (an Experiment Session) with one predicate named calls_source_status: "This event calls the tool source_status." Say which events it flags. Give the cost of each triage call. Cite the files.`,
     provenance: "source",
     // A judged result, check_events' `observed` label, and the cost on show.
     expect: ['"status":"judged"', '"provenance":"observed"', '"cost_usd"'],
@@ -90,7 +92,8 @@ const sha7 = pin.sha.slice(0, 7);
 const results: Record<string, unknown> = { version, model: SMOKE_MODEL };
 let failed = false;
 
-for (const [server, { question, provenance, expect = [] }] of selected) {
+for (const [server, { question: asked, provenance, expect = [] }] of selected) {
+  const question = typeof asked === "function" ? asked(await loadFixture()) : asked;
   const session = await openInlineExperimentSession(manifest, `smoke-mcp-${server}`);
   const turn = await runTurn(session, question);
   const events = await allEvents(session, turn.id);
