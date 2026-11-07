@@ -103,7 +103,9 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     try {
       budget.spend(judged.costUsd);
     } catch (error) {
-      console.error(`triage: couldn't record $${judged.costUsd} of spend: ${error instanceof Error ? error.message : String(error)}`);
+      console.error(
+        `triage: couldn't record $${judged.costUsd} of spend: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
     return judged;
   }

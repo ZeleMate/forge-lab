@@ -119,6 +119,18 @@ describe("rank_relevance", () => {
     expect(r.data.reason).toMatch(/decisions call failed: HTTP 500/);
     expect(budget.status().spentUsd).toBe(0);
   });
+
+  test("keeps a paid answer when recording its spend fails", async () => {
+    const { decide } = fakeDecide({ scores: { [LOOP]: 2.5 } });
+    const budget = tmpBudget();
+    budget.spend = () => {
+      throw new Error("disk full");
+    };
+    const { client } = await connect(testDeps(source, {}, { decide, budget }), "triage");
+    const r = await call(client, "rank_relevance", { question: "Where does the agent loop run?", paths: [LOOP] });
+    expect(r.data.status).toBe("judged");
+    expect(r.data.ranked[0]).toMatchObject({ score: 2.5 });
+  });
 });
 
 describe("check_events", () => {
