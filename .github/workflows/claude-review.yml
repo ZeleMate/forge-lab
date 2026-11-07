@@ -110,11 +110,13 @@ jobs:
             issue=$(gh api "repos/$REPO/issues/$n" 2>/dev/null) || continue
             # `index` gives null when the association isn't listed, which `jq -e` treats as false.
             jq -e --argjson t "$trusted" '.author_association as $a | $t | index($a)' <<<"$issue" >/dev/null || continue
+            # A failed comments fetch (say, a transient API error) skips this issue, like a failed
+            # issue fetch above, rather than failing the review.
+            comments=$(gh api --paginate "repos/$REPO/issues/$n/comments" 2>/dev/null) || continue
             {
               jq -r '"# #\(.number): \(.title)\n\n\(.body // "")"' <<<"$issue"
-              gh api --paginate "repos/$REPO/issues/$n/comments" \
-                | jq -r --argjson t "$trusted" '.[] | select(.author_association as $a | $t | index($a))
-                  | "\n## Comment by \(.user.login)\n\n\(.body // "")"'
+              jq -r --argjson t "$trusted" '.[] | select(.author_association as $a | $t | index($a))
+                | "\n## Comment by \(.user.login)\n\n\(.body // "")"' <<<"$comments"
             } > ".review/issues/$n.md"
           done
           ls .review/issues
