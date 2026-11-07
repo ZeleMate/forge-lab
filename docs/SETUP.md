@@ -17,7 +17,6 @@ From the repo template (v0.3.0), for a **public** repo on GitHub **Free**. forge
 
 1. **Account security (once per account):** passkey or security key on GitHub.
 1. **Hooks:** `brew install lefthook gitleaks actionlint zizmor`, then `lefthook install` (see the README).
-1. **Actions allowlist:** add `SonarSource/sonarqube-scan-action@*` next to `anthropics/claude-code-action@*` and `oven-sh/setup-bun@*` (Settings → Actions → General).
 1. **Dependabot malware alerts:** Settings → Advanced Security → enable "Malware alerts" (UI only).
 1. **Claude review:** run `claude setup-token` and copy the token. No Claude GitHub App is needed: the workflow posts with its own `GITHUB_TOKEN`. The token often wraps onto two lines, and a copied line break breaks it, so check the length (about 108) and store it without whitespace:
    `pbpaste | tr -d '[:space:]' | wc -c`, then `pbpaste | tr -d '[:space:]' | gh secret set CLAUDE_CODE_OAUTH_TOKEN`. Copy something else afterwards to clear the clipboard. Optionally add `CLAUDE_FIX_TOKEN` (see `docs/secrets.md`) so the fix commit starts CI right away.

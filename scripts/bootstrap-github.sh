@@ -12,7 +12,7 @@ REPO="forge-lab"
 VISIBILITY="public"
 PLAN="free"
 PUBLISHES="no"
-DESCRIPTION="Learning repo: a paper-scout agent on the TrueForge harness (TS + Bun)"
+DESCRIPTION="Learning repo: Cartographer, an agent on the TrueForge harness (TS + Bun)"
 FULL="$OWNER/$REPO"
 
 DRY_RUN=0
