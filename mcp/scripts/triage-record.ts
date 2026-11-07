@@ -66,7 +66,9 @@ if (scoreResponse.usage.output_tokens !== 0) failures.push(`score: ${scoreRespon
 // ---------- predicate: one recorded event ----------
 
 const fixturesDir = join(import.meta.dir, "..", "fixtures-results");
-const fixture = (await Bun.file(join(fixturesDir, readdirSync(fixturesDir).sort().at(-1) ?? "")).json()) as {
+const recording = readdirSync(fixturesDir).sort().at(-1);
+if (!recording) throw new Error("no recording in fixtures-results; run `bun run fixtures:record`");
+const fixture = (await Bun.file(join(fixturesDir, recording)).json()) as {
   events: { pending: SessionEvent[] };
 };
 const event = fixture.events.pending.find((e) => e.type === "model.message");
