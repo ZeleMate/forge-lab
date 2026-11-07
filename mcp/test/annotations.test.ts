@@ -22,6 +22,8 @@ const WRITE: ToolAnnotations = {
   openWorldHint: false,
 };
 const DESTRUCTIVE: ToolAnnotations = { ...WRITE, destructiveHint: true };
+// Read-only, so ungated, but it calls an outside API and its answers vary.
+const TRIAGE: ToolAnnotations = { ...READ, idempotentHint: false, openWorldHint: true };
 
 const EXPECTED: Record<Endpoint, Record<string, ToolAnnotations>> = {
   source: {
@@ -42,7 +44,10 @@ const EXPECTED: Record<Endpoint, Record<string, ToolAnnotations>> = {
     rerun_turn: WRITE,
     cancel_session: DESTRUCTIVE,
   },
-  triage: {}, // #57
+  triage: {
+    rank_relevance: TRIAGE,
+    check_events: TRIAGE,
+  },
 };
 
 let source: Snapshot;

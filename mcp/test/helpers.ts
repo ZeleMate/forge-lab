@@ -9,6 +9,7 @@ import { type AppDeps, createApp, type Endpoint } from "../src/app";
 import type { Clock } from "../src/clock";
 import type { SessionsDeps } from "../src/sessions/tools";
 import { buildProject, type Snapshot } from "../src/source/snapshot";
+import { Budget } from "../src/triage/budget";
 import { FakeSessionsApi } from "./sessions-fake";
 
 export const FIXTURE_TREE = join(import.meta.dir, "fixture-tree");
@@ -56,9 +57,25 @@ export function fakeClock(start = Date.parse("2026-11-01T12:00:00.000Z")): Clock
 }
 
 // The app's dependencies for a test: a fixture snapshot, plus a fake TrueForge
-// and clock unless the test brings its own.
-export function testDeps(source: Snapshot, sessions: Partial<SessionsDeps> = {}): AppDeps {
-  return { source, sessions: { api: new FakeSessionsApi(), clock: fakeClock(), ...sessions } };
+// and clock unless the test brings its own. Triage has no backend by default,
+// so its tools answer `unscored`.
+export function testDeps(
+  source: Snapshot,
+  sessions: Partial<SessionsDeps> = {},
+  triage: Partial<AppDeps["triage"]> = {},
+): AppDeps {
+  const clock = fakeClock();
+  return {
+    source,
+    sessions: { api: new FakeSessionsApi(), clock, ...sessions },
+    triage: { decide: undefined, budget: tmpBudget(clock), ...triage },
+  };
+}
+
+// A budget in a fresh temporary file, $0.50 unless the test says otherwise.
+export function tmpBudget(clock: Clock = fakeClock(), capUsd = 0.5): Budget {
+  const file = join(mkdtempSync(join(tmpdir(), "forge-lab-budget-")), "triage-budget.json");
+  return new Budget({ file, capUsd, clock });
 }
 
 // An MCP client connected to the app in-process: the client's HTTP requests go

@@ -17,7 +17,11 @@ export const PIN_FILE = join(REPO_ROOT, "snapshot.json");
 export const MANIFEST_NAME = ".source-snapshot.json";
 
 export const PACKAGE = "@truefoundry/trueforge";
-export const DEFAULT_CACHE_ROOT = join(homedir(), "Library/Caches/forge-lab/trueforge-src");
+// forge-lab's own cache folder, outside the repo: the Source Snapshot and the
+// triage budget counter live here. forge-lab runs on macOS (see AGENTS.md); CI
+// points the snapshot elsewhere with SOURCE_SNAPSHOT_DIR and never starts the server.
+export const CACHE_DIR = join(homedir(), "Library/Caches/forge-lab");
+export const DEFAULT_CACHE_ROOT = join(CACHE_DIR, "trueforge-src");
 
 export type SnapshotPin = {
   version: string; // the npm version, as /healthz reports it
