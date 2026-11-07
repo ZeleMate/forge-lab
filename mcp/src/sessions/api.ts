@@ -75,7 +75,10 @@ export async function collectTurns(sessionId: string, pages: AsyncIterable<Turn>
 export function sdkSessionsApi(baseUrl: string): SessionsApi {
   // Reads may retry (they change nothing); writes never do, because a retried
   // create could make a second Turn (#21 section 8).
-  const read = new TrueForge({ baseUrl, maxRetries: 2 });
+  // Each read also gets a short timeout: TrueForge is local and answers in
+  // milliseconds, and with the SDK's 60 s default, 2 retries could carry one
+  // slow read past the 2-minute MCP timeout (wait_turn polls for up to 85 s).
+  const read = new TrueForge({ baseUrl, maxRetries: 2, timeoutInSeconds: 5 });
   const write = new TrueForge({ baseUrl, maxRetries: 0 });
 
   return {

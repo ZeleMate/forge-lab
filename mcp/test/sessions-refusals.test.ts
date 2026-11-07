@@ -308,6 +308,24 @@ describe("rerun_turn refuses", () => {
   });
 });
 
+describe("source Turn refusals", () => {
+  test("fork_turn from a Turn that doesn't exist", async () => {
+    const w = await world();
+    await expectRefused(w, "fork_turn", { session_id: "exp", from_turn_id: "nope", message: "x" }, /no Turn nope/);
+  });
+
+  test("rerun_turn of a Turn that answered an Approval instead of a user message", async () => {
+    const w = await world();
+    // An idle Experiment Session, so the input is the only thing wrong.
+    w.fake.addSession("idle-exp", { metadata: { experiment: "idle", depth: "0" }, inline: true });
+    w.fake.addTurn("idle-exp", "i1");
+    w.fake.addTurn("idle-exp", "i2", {
+      input: [{ type: "user.tool_approval", threadId: "main", toolCallId: "call-0", approval: { status: "allow" } }],
+    });
+    await expectRefused(w, "rerun_turn", { session_id: "idle-exp", turn_id: "i2" }, /wasn't started by a user message/);
+  });
+});
+
 describe("cancel_session refuses", () => {
   test("the user's chat (not an Experiment Session)", async () => {
     const w = await world();
