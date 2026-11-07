@@ -2,7 +2,7 @@
 // what a symlink out of the root can and can't reach.
 import { beforeAll, describe, expect, test } from "bun:test";
 import type { Client } from "@modelcontextprotocol/client";
-import { call, connect, FIXTURE_SHA, fixtureCopy, fixtureSnapshot } from "./helpers";
+import { call, connect, FIXTURE_SHA, fixtureCopy, fixtureSnapshot, testDeps } from "./helpers";
 
 const SHA7 = FIXTURE_SHA.slice(0, 7);
 let client: Client;
@@ -10,7 +10,7 @@ let outside: string;
 beforeAll(async () => {
   const copy = fixtureCopy();
   outside = copy.outside;
-  ({ client } = await connect({ source: fixtureSnapshot(copy.root) }, "source"));
+  ({ client } = await connect(testDeps(fixtureSnapshot(copy.root)), "source"));
 });
 
 describe("refusals", () => {

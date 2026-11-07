@@ -2,7 +2,7 @@
 // call, so no TrueForge server is needed.
 import { afterAll, afterEach, expect, spyOn, test } from "bun:test";
 import { TRUEFORGE_ORIGIN } from "./ports";
-import { openInlineExperimentSession } from "./trueforge";
+import { onSmokeModel, openInlineExperimentSession, SMOKE_MODEL } from "./trueforge";
 
 // `spyOn` swaps in a fake that records every call. `mockReset` clears it between
 // tests; `mockRestore` puts the real fetch back, since every test file shares one process.
@@ -29,4 +29,14 @@ test("openInlineExperimentSession posts the spec inline, tagged as an Experiment
 test("an HTTP error throws instead of returning an id", async () => {
   fetchSpy.mockResolvedValue(new Response("bad spec", { status: 400 }));
   await expect(openInlineExperimentSession({}, "x")).rejects.toThrow("HTTP 400");
+});
+
+test("onSmokeModel swaps the model and drops reasoning_effort on a copy", () => {
+  const manifest = {
+    model: { name: "opus", params: { reasoning_effort: "medium", max_tokens: 10 } },
+    instructions: "x",
+  };
+  expect(onSmokeModel(manifest).model).toEqual({ name: SMOKE_MODEL, params: { max_tokens: 10 } });
+  expect(onSmokeModel(manifest)).toHaveProperty("instructions", "x");
+  expect(manifest.model.name).toBe("opus");
 });

@@ -5,7 +5,7 @@ import { beforeAll, describe, expect, test } from "bun:test";
 import type { ToolAnnotations } from "@modelcontextprotocol/server";
 import { ENDPOINTS, type Endpoint } from "../src/app";
 import type { Snapshot } from "../src/source/snapshot";
-import { connect, fixtureCopy, fixtureSnapshot } from "./helpers";
+import { connect, fixtureCopy, fixtureSnapshot, testDeps } from "./helpers";
 
 const READ: ToolAnnotations = {
   readOnlyHint: true,
@@ -13,6 +13,15 @@ const READ: ToolAnnotations = {
   idempotentHint: true,
   openWorldHint: false,
 };
+
+// `@write` and `@destructive` match these (#8).
+const WRITE: ToolAnnotations = {
+  readOnlyHint: false,
+  destructiveHint: false,
+  idempotentHint: false,
+  openWorldHint: false,
+};
+const DESTRUCTIVE: ToolAnnotations = { ...WRITE, destructiveHint: true };
 
 const EXPECTED: Record<Endpoint, Record<string, ToolAnnotations>> = {
   source: {
@@ -23,7 +32,16 @@ const EXPECTED: Record<Endpoint, Record<string, ToolAnnotations>> = {
     find_references: READ,
     type_of: READ,
   },
-  sessions: {}, // #56
+  sessions: {
+    list_sessions: READ,
+    get_turn: READ,
+    list_events: READ,
+    session_stats: READ,
+    wait_turn: READ,
+    fork_turn: WRITE,
+    rerun_turn: WRITE,
+    cancel_session: DESTRUCTIVE,
+  },
   triage: {}, // #57
 };
 
@@ -34,7 +52,7 @@ beforeAll(() => {
 
 describe.each([...ENDPOINTS])("/mcp/%s", (endpoint) => {
   test("lists exactly the expected tools, with their annotations and an outputSchema", async () => {
-    const { client } = await connect({ source }, endpoint);
+    const { client } = await connect(testDeps(source), endpoint);
     const { tools } = await client.listTools();
     const actual = Object.fromEntries(tools.map((t) => [t.name, t.annotations]));
     expect(actual).toEqual(EXPECTED[endpoint]);
