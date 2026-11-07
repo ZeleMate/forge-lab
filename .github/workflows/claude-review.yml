@@ -19,8 +19,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Claude's fix commit starts this workflow again. On that commit only the security review runs:
-  # no code review and no new fix, so Claude doesn't keep fixing its own fixes.
+  # Claude's fix commit starts this workflow again, once someone approves the run (claude-push
+  # explains why). On that commit only the security review runs: no code review and no new fix,
+  # so Claude doesn't keep fixing its own fixes.
   gate:
     name: skip fix commits
     # Same-repo PRs only: the action isn't hardened against prompt injection from untrusted diffs.
@@ -153,7 +154,8 @@ jobs:
             --disallowedTools "Read(//proc/**),Read(//sys/**),Read(~/.claude/**),Read(~/.config/**),Edit(./.git/**)"
             --json-schema '{"type":"object","required":["findings"],"properties":{"findings":{"type":"array","items":{"type":"object","required":["file","severity","description"],"properties":{"file":{"type":"string"},"line":{"type":"integer"},"severity":{"type":"string","enum":["high","medium","low"]},"category":{"type":"string"},"description":{"type":"string"},"fix":{"type":"string"}}}}}}'
 
-  # Also runs on Claude's fix commit, so the one commit written by a model is security-reviewed too.
+  # Also runs on Claude's fix commit when someone approves that run, so the one commit written by a
+  # model can be security-reviewed too.
   claude-security:
     name: security review (Claude)
     needs: gate
@@ -361,6 +363,12 @@ jobs:
   # Applies claude-fix's patch and pushes one commit with a Claude-Fix trailer, which gate
   # looks for. Claude never runs here, and each token is in the environment of one step only.
   # Never onto the default branch, even for a PR from it.
+  #
+  # The push uses the job's own token, so it's authored by github-actions[bot]. GitHub holds the
+  # pull_request runs that push starts (CI and this workflow) at "action_required" until someone
+  # with write access approves them on the PR. A workflow_dispatch from that token isn't held, so
+  # the job then dispatches CI on the branch. This workflow has no workflow_dispatch trigger, so
+  # nothing here starts another review or fix: a fix of a fix needs a person to approve it.
   claude-push:
     name: push review fixes
     needs: claude-fix
@@ -370,7 +378,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
-      contents: write # pushes the fix commit (when CLAUDE_FIX_TOKEN isn't set)
+      actions: write # dispatches CI on the fix commit
+      contents: write # pushes the fix commit
       pull-requests: write # comments what was fixed
     outputs:
       left: ${{ steps.commit.outputs.left }}
@@ -433,7 +442,6 @@ jobs:
             commit -q --no-verify -m "fix: address Claude review findings" -m "$trailers"
           printf '\n\nPushing as %s.\n' "$(git rev-parse HEAD)" >> "$RUNNER_TEMP/comment.md"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      # Before the push: with CLAUDE_FIX_TOKEN set, the push starts a new run, which cancels this one.
       - name: Comment what was fixed
         env:
           GH_TOKEN: ${{ github.token }}
@@ -441,17 +449,27 @@ jobs:
           PR: ${{ github.event.pull_request.number }}
         run: gh pr comment "$PR" -R "$REPO" --body-file "$RUNNER_TEMP/comment.md"
       - name: Push
+        id: push
         if: steps.commit.outputs.sha != ''
         env:
-          # A push with the job's own token starts workflows only once someone approves them on
-          # the PR. A fine-grained token (contents: write on this repo, without the Workflows
-          # permission, so GitHub refuses workflow changes) starts them right away.
-          PUSH_TOKEN: ${{ secrets.CLAUDE_FIX_TOKEN || github.token }}
+          PUSH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: git push "https://x-access-token:${PUSH_TOKEN}@github.com/${REPO}.git" "HEAD:refs/heads/${HEAD_REF}"
+      # CI on the fix commit, which the push alone leaves waiting for approval. Its checks land on
+      # the commit, so they show on the PR. It runs the branch's tip: if someone pushed in the
+      # meantime, that push started its own CI anyway. A failed dispatch doesn't fail this job,
+      # since claude-leftovers reads that as a failed fix; the commit just shows no CI run.
+      - name: Run CI on the fix commit
+        if: steps.commit.outputs.sha != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: gh workflow run ci.yml -R "$REPO" --ref "$HEAD_REF"
       - name: Say the push failed
-        if: failure() && steps.commit.outputs.sha != ''
+        if: failure() && steps.push.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
