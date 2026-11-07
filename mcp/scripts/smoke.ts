@@ -33,11 +33,20 @@ type Question = { question: string; provenance: "source" | "observed"; expect?: 
 // The triage question checks events of a real Experiment Session: the latest
 // `fixtures:record` Turn that called source_status and waits on an Approval.
 const fixturesDir = join(import.meta.dir, "..", "fixtures-results");
-const recording = readdirSync(fixturesDir).sort().at(-1) ?? "";
-const fixture = (await Bun.file(join(fixturesDir, recording)).json()) as {
-  sessions: { main: { id: string } };
-  turns: { pending: { id: string } };
-};
+// Read only when the triage question runs, so source and sessions runs need no recording.
+async function loadFixture() {
+  const recording = readdirSync(fixturesDir).sort().at(-1);
+  if (!recording) {
+    console.error("smoke: no recording in fixtures-results; run `bun run fixtures:record`");
+    process.exit(1);
+  }
+  return (await Bun.file(join(fixturesDir, recording)).json()) as {
+    sessions: { main: { id: string } };
+    turns: { pending: { id: string } };
+  };
+}
+const triageWanted = !Bun.argv.slice(2).length || Bun.argv.slice(2).includes("triage");
+const fixture = triageWanted ? await loadFixture() : undefined;
 
 const QUESTIONS: Record<Endpoint, Question> = {
   source: {
@@ -51,7 +60,7 @@ const QUESTIONS: Record<Endpoint, Question> = {
     provenance: "observed",
   },
   triage: {
-    question: `Two triage steps, then answer. First, search_text for "compaction" and pass up to 15 of the files it found to rank_relevance with the question "Where does TrueForge decide when to compact the context?"; name the top 3 with their scores. Second, use check_events on Session ${fixture.sessions.main.id}, Turn ${fixture.turns.pending.id} (an Experiment Session) with one predicate named calls_source_status: "This event calls the tool source_status." Say which events it flags. Give the cost of each triage call. Cite the files.`,
+    question: `Two triage steps, then answer. First, search_text for "compaction" and pass up to 15 of the files it found to rank_relevance with the question "Where does TrueForge decide when to compact the context?"; name the top 3 with their scores. Second, use check_events on Session ${fixture?.sessions.main.id}, Turn ${fixture?.turns.pending.id} (an Experiment Session) with one predicate named calls_source_status: "This event calls the tool source_status." Say which events it flags. Give the cost of each triage call. Cite the files.`,
     provenance: "source",
     // A judged result, check_events' `observed` label, and the cost on show.
     expect: ['"status":"judged"', '"provenance":"observed"', '"cost_usd"'],

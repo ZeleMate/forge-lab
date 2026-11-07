@@ -28,7 +28,7 @@ import { openSourceSnapshot } from "../src/source/snapshot";
 import { Budget } from "../src/triage/budget";
 import { candidateFor } from "../src/triage/candidates";
 import { DECISIONS_MODEL, decisionsDecide, parseDecision } from "../src/triage/decide";
-import { eventInput, LEVELS } from "../src/triage/tools";
+import { buildScoreRequest, eventInput, LEVELS } from "../src/triage/tools";
 
 if (!process.env.OPENAI_API_KEY) {
   console.error("triage: OPENAI_API_KEY isn't set in mcp/.env");
@@ -49,16 +49,11 @@ const PATHS = [
 ];
 const candidates = PATHS.map((p) => candidateFor(source, p)).flatMap((c) => (c.ok ? [c.candidate] : []));
 if (candidates.length !== PATHS.length) failures.push("score: a candidate path isn't in the snapshot");
-const id = (i: number) => `C${String(i + 1).padStart(2, "0")}`;
+const { input, questions, id } = buildScoreRequest(candidates, "Which method runs the agent loop?");
 const scoreBody = {
   model: DECISIONS_MODEL,
-  input: `Question about the TrueForge agent harness: Which method runs the agent loop?\n\nCandidate files:\n\n${candidates.map((c, i) => `### ${id(i)}\n${c.text}`).join("\n\n")}`,
-  questions: candidates.map((c, i) => ({
-    type: "score" as const,
-    name: id(i),
-    instructions: `How much does candidate ${id(i)} (${c.path}) help answer the question? Judge ${id(i)} only.`,
-    levels: [...LEVELS],
-  })),
+  input,
+  questions: questions.map((q) => ({ type: "score" as const, ...q, levels: [...LEVELS] })),
 };
 const scoreResponse = await client.decisions.create(scoreBody);
 const scored = parseDecision(scoreResponse);

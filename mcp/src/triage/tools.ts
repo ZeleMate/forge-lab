@@ -47,6 +47,21 @@ export const LEVELS: readonly Level[] = [
   },
 ];
 
+type Ranked = { citation: SourceCitation; score: number; level: string };
+
+// The `score` request for a pool of candidates. Candidates get short ids, so
+// each question names exactly one. triage-record.ts builds its request with this too.
+export function buildScoreRequest(candidates: Candidate[], question: string) {
+  const id = (i: number) => `C${String(i + 1).padStart(2, "0")}`;
+  const listing = candidates.map((c, i) => `### ${id(i)}\n${c.text}`).join("\n\n");
+  const input = `Question about the TrueForge agent harness: ${question}\n\nCandidate files:\n\n${listing}`;
+  const questions: Question[] = candidates.map((c, i) => ({
+    name: id(i),
+    instructions: `How much does candidate ${id(i)} (${c.path}) help answer the question? Judge ${id(i)} only.`,
+  }));
+  return { input, questions, id };
+}
+
 const Status = z.enum(["judged", "unscored"]);
 const BudgetView = z.object({
   day: z.string(),
@@ -78,13 +93,19 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
   async function judge(estimateUsd: number, run: (d: Decide) => Promise<Judged>): Promise<Judged | string> {
     const why = blocked(estimateUsd);
     if (why || !decide) return why ?? "no triage backend";
+    let judged: Judged;
     try {
-      const judged = await run(decide);
-      budget.spend(judged.costUsd);
-      return judged;
+      judged = await run(decide);
     } catch (error) {
       return `the ${decide.backend} call failed: ${error instanceof Error ? error.message : String(error)}`;
     }
+    // Outside the try: a failed counter write must not discard a paid answer.
+    try {
+      budget.spend(judged.costUsd);
+    } catch (error) {
+      console.error(`triage: couldn't record $${judged.costUsd} of spend: ${error instanceof Error ? error.message : String(error)}`);
+    }
+    return judged;
   }
 
   server.registerTool(
@@ -131,14 +152,7 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       if (!candidates.length)
         return refuse("none of the paths is a file in the snapshot", "pass paths that search_text returned");
 
-      // Candidates get short ids, so each `score` question names exactly one.
-      const id = (i: number) => `C${String(i + 1).padStart(2, "0")}`;
-      const listing = candidates.map((c, i) => `### ${id(i)}\n${c.text}`).join("\n\n");
-      const input = `Question about the TrueForge agent harness: ${args.question}\n\nCandidate files:\n\n${listing}`;
-      const questions: Question[] = candidates.map((c, i) => ({
-        name: id(i),
-        instructions: `How much does candidate ${id(i)} (${c.path}) help answer the question? Judge ${id(i)} only.`,
-      }));
+      const { input, questions, id } = buildScoreRequest(candidates, args.question);
       const result = await judge(decide?.estimateUsd(input.length, questions.length) ?? 0, (d) =>
         d.score(input, questions, LEVELS),
       );
@@ -155,12 +169,12 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
               cost_usd: 0,
             },
             "ranked",
-            [] as { citation: SourceCitation; score: number; level: string }[],
+            [] as Ranked[],
             args.max_chars,
           ),
         );
 
-      const ranked: { citation: SourceCitation; score: number; level: string }[] = [];
+      const ranked: Ranked[] = [];
       candidates.forEach((c, i) => {
         const score = result.answers[id(i)];
         if (score === null || score === undefined) unscored.push({ path: c.path, reason: "the judge didn't answer" });
