@@ -22,11 +22,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       # uv from its verified release archive, like every tool in this repo's CI.
-      - uses: ./.github/actions/fetch-binary
-        with:
-          name: uv
-          url: https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-unknown-linux-gnu.tar.gz
-          sha256: f29c3e94ffabd7e6f3ba521dba169a9b7ec12100bf3257087f0f24f6123f3645
+      - uses: ./.github/actions/uv
       - name: Check for template update
         env:
           GH_TOKEN: ${{ github.token }}

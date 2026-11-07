@@ -84,7 +84,7 @@ for (const [server, { question, provenance }] of selected) {
   failed ||= !ok; // `||=` assigns only when the left side is false
   results[server] = { session, question, checks, answer, summary: summarise(turn, events) };
   // A literal format string, so nothing in the data can act as a `%` specifier.
-  console.log("== %s: %s %o", server, ok ? "ok" : "FAILED", checks);
+  console.log("== %s: %s %O", server, ok ? "ok" : "FAILED", checks);
 }
 
 console.log(`Saved to ${await saveResults(`${import.meta.dir}/../smoke-results`, results)}`);
