@@ -55,3 +55,11 @@ lefthook install
 **CI** ([`ci.yml`](.github/workflows/ci.yml)) runs on every PR, on pushes to `main`, and weekly: `lint`, `typecheck`, `test`, `deps` (frozen install, exact pins, Source Snapshot pin, `bun run audit`), `secrets` (Gitleaks over the full history) and `workflows` (`actionlint`, `zizmor`). Until the ruleset on `main` requires it, it can't block a merge, so don't merge a PR with a red run.
 
 Never skip the hooks with `--no-verify`. If a hook is wrong, fix the hook in its own PR. The one exception is a documented reason in the commit or PR description.
+
+## Repo baseline
+
+The CI, security and agent setup comes from [`ZeleMate/repo-template`](https://github.com/ZeleMate/repo-template), adopted at v0.3.0 and adapted to Bun, Biome and Lefthook ([`.copier-answers.yml`](.copier-answers.yml); `uvx copier update --trust` pulls later versions). See the [setup checklist](docs/SETUP.md), [architecture decisions](docs/decisions/), [threat model](docs/THREAT_MODEL.md), [agent policy](docs/agent-policy.md) and [contributing guide](CONTRIBUTING.md).
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).

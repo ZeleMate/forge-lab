@@ -1,0 +1,67 @@
+name: Security
+
+# Called from ci.yml on every PR/push (so it feeds the ci-ok check), and run weekly
+# so new advisories against unchanged code are caught.
+# From the repo template; Gitleaks stays in ci.yml's `secrets` job, and uv comes from
+# its verified release archive (.github/actions/fetch-binary) instead of setup-uv.
+on:
+  workflow_call:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 5 * * 1"
+
+permissions: {}
+
+env:
+  UV_LOCKED: "1"
+
+jobs:
+  sast:
+    name: sast (semgrep)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/fetch-binary
+        with:
+          name: uv
+          url: https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-unknown-linux-gnu.tar.gz
+          sha256: f29c3e94ffabd7e6f3ba521dba169a9b7ec12100bf3257087f0f24f6123f3645
+      # Semgrep Community Edition runs entirely in CI; no code leaves the runner except rule downloads.
+      # Add project rules under .semgrep/ and they are picked up automatically.
+      - env:
+          # semgrep-core can segfault in its io_uring backend on ubuntu-24.04
+          # runners; Eio's portable backend avoids it.
+          EIO_BACKEND: posix
+        run: |
+          configs=(--config p/default)
+          [ -d .semgrep ] && configs+=(--config .semgrep)
+          uv run --project .github/tools semgrep scan "${configs[@]}" --error --metrics off --disable-version-check
+    # CodeQL runs via GitHub "default setup" (enabled by scripts/bootstrap-github.sh), not in this file.
+
+  dependencies:
+    name: dependencies (osv-scanner)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    env:
+      OSV_VERSION: "2.7.0"
+      OSV_SHA256: "160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # A bare binary, not an archive, so fetch-binary can't take it.
+      - name: Install osv-scanner (checksum-verified)
+        run: |
+          curl -fsSL --proto '=https' --tlsv1.2 -o osv-scanner "https://github.com/google/osv-scanner/releases/download/v${OSV_VERSION}/osv-scanner_linux_amd64"
+          echo "${OSV_SHA256}  osv-scanner" | sha256sum -c -
+          chmod +x osv-scanner
+      # Accepted advisories, each with a reason and a review date, are in osv-scanner.toml. Named
+      # explicitly, because by default each lockfile only sees a config in its own folder.
+      - run: ./osv-scanner scan source --config osv-scanner.toml --recursive .

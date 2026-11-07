@@ -1,10 +1,11 @@
-# CI (#31): the backstop behind the git hooks (#30). It blocks a merge only once
-# the owner's ruleset on `main` requires it; until then, treat a red run as
-# "don't merge yet". See SECURITY.md.
+# CI (#31): the backstop behind the git hooks (#30). `ci-ok` sums up every job and
+# is the check the `main` ruleset requires (.github/rulesets/main.json); until the
+# owner applies it, treat a red run as "don't merge yet". See SECURITY.md.
 #
-# Hardening: no secrets, no token permissions beyond reading the repo, every
-# action pinned to a full commit SHA, and tools fetched from their releases with
-# pinned SHA-256 digests (.github/actions/) instead of third-party actions.
+# Hardening: no token permissions beyond reading the repo, every action pinned to
+# a full commit SHA, and tools fetched from their releases with pinned SHA-256
+# digests (.github/actions/) instead of third-party actions. The exceptions, from
+# the repo template: the sonarqube job reads SONAR_TOKEN and uses SonarSource's action.
 name: CI
 
 on:
@@ -72,10 +73,16 @@ jobs:
       - run: bun run snapshot
         env:
           SOURCE_SNAPSHOT_DIR: ${{ runner.temp }}/trueforge-src
-      # No --pass-with-no-tests: a run that finds no tests is a failure.
-      - run: bun test
+      # No --pass-with-no-tests: a run that finds no tests is a failure. The lcov report
+      # feeds the sonarqube job.
+      - run: bun test --coverage --coverage-reporter=lcov --coverage-dir=coverage
         env:
           SOURCE_SNAPSHOT_DIR: ${{ runner.temp }}/trueforge-src
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage
+          path: ./coverage/lcov.info
+          retention-days: 1
 
   deps:
     runs-on: ubuntu-24.04
@@ -136,3 +143,56 @@ jobs:
       - run: actionlint
       # Workflows, the composite actions and dependabot.yml; config in .github/zizmor.yml.
       - run: zizmor --offline --no-progress .
+
+  # From the repo template: Semgrep and OSV-Scanner (Gitleaks is the `secrets` job above).
+  security:
+    uses: ./.github/workflows/security.yml
+    permissions:
+      contents: read
+
+  # From the repo template: SonarQube Cloud maintainability metrics, with the coverage from `test`.
+  sonarqube:
+    # Fork PRs get no secrets, so they cannot be analysed.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    needs: [test]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      # Secrets can't be read in `if:`, so expose only whether this one is set.
+      HAS_SONAR_TOKEN: ${{ secrets.SONAR_TOKEN != '' }}
+    steps:
+      - name: Skip without a SonarQube token
+        if: env.HAS_SONAR_TOKEN != 'true'
+        run: echo "::warning::SONAR_TOKEN is not set, so the analysis was skipped. See docs/SETUP.md."
+      - if: env.HAS_SONAR_TOKEN == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - if: env.HAS_SONAR_TOKEN == 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: coverage
+          path: ./coverage
+      # The one third-party action besides the Claude review's; it needs an Actions allowlist entry.
+      - if: env.HAS_SONAR_TOKEN == 'true'
+        uses: SonarSource/sonarqube-scan-action@4d1dc0c91ee400dcf8a6dddf2f705ac36542e304 # v8.4.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # The single required status check for the `main` ruleset (.github/rulesets/main.json).
+  # Fails if any job failed or was cancelled; a skipped job (sonarqube on a fork PR) passes.
+  ci-ok:
+    if: always()
+    needs: [lint, typecheck, test, deps, secrets, workflows, security, sonarqube]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "results: $RESULTS"
+          case "$RESULTS" in *failure*|*cancelled*) exit 1 ;; esac
