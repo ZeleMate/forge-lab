@@ -39,7 +39,7 @@ Done so far:
 
 ## Git hooks
 
-The hooks in [`lefthook.yml`](lefthook.yml) are the only gate on this repo: it's private on GitHub Free, so nothing on GitHub can block a merge (see [`SECURITY.md`](SECURITY.md)). Set them up once per clone:
+The hooks in [`lefthook.yml`](lefthook.yml) are the first gate on this repo; CI and the ruleset on `main` come after (see [`SECURITY.md`](SECURITY.md)). Set them up once per clone:
 
 ```bash
 brew install lefthook gitleaks actionlint zizmor
@@ -52,6 +52,6 @@ lefthook install
 - **pre-commit** (staged files only): Gitleaks, no `.env` files except `.env.example`, Biome with fixes re-staged, exact pins and install rules (`bun run check:pins`), the Source Snapshot pin, and `actionlint` plus `zizmor` on `.github/` files.
 - **pre-push:** no pushes to `main` (push a branch and open a PR), Gitleaks on the pushed commits, the pin, Source Snapshot and workflow checks again over the whole tree (so a `--no-verify` commit can't skip them), `bun install --frozen-lockfile`, `bun run check` and `bun test`.
 
-**CI** ([`ci.yml`](.github/workflows/ci.yml)) runs on every PR, on pushes to `main`, and weekly: `lint`, `typecheck`, `test`, `deps` (frozen install, exact pins, Source Snapshot pin, `bun run audit`), `secrets` (Gitleaks over the full history) and `workflows` (`actionlint`, `zizmor`). It can't block a merge on GitHub Free, so don't merge a PR with a red run.
+**CI** ([`ci.yml`](.github/workflows/ci.yml)) runs on every PR, on pushes to `main`, and weekly: `lint`, `typecheck`, `test`, `deps` (frozen install, exact pins, Source Snapshot pin, `bun run audit`), `secrets` (Gitleaks over the full history) and `workflows` (`actionlint`, `zizmor`). Until the ruleset on `main` requires it, it can't block a merge, so don't merge a PR with a red run.
 
 Never skip the hooks with `--no-verify`. If a hook is wrong, fix the hook in its own PR. The one exception is a documented reason in the commit or PR description.

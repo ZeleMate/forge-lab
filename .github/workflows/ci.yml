@@ -1,6 +1,6 @@
-# CI (#31): the backstop behind the git hooks (#30). The repo is private on
-# GitHub Free, so nothing here can block a merge. Treat a red run as "don't
-# merge yet". See SECURITY.md.
+# CI (#31): the backstop behind the git hooks (#30). It blocks a merge only once
+# the owner's ruleset on `main` requires it; until then, treat a red run as
+# "don't merge yet". See SECURITY.md.
 #
 # Hardening: no secrets, no token permissions beyond reading the repo, every
 # action pinned to a full commit SHA, and tools fetched from their releases with
