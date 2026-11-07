@@ -95,7 +95,8 @@ let failed = false;
 const fixture = selected.some(([s]) => s === "triage") ? await loadFixture() : undefined;
 
 for (const [server, { question: asked, provenance, expect = [] }] of selected) {
-  const question = typeof asked === "function" && fixture ? asked(fixture) : (asked as string);
+  if (typeof asked === "function" && !fixture) throw new Error(`${server} needs a fixtures recording`);
+  const question = typeof asked === "function" ? asked(fixture as Fixture) : asked;
   const session = await openInlineExperimentSession(manifest, `smoke-mcp-${server}`);
   const turn = await runTurn(session, question);
   const events = await allEvents(session, turn.id);
