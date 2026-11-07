@@ -3,6 +3,7 @@
 // no backend, the budget is spent or a call fails, and check_events reading
 // only Experiment Sessions with each event's type in the input.
 import { beforeAll, describe, expect, test } from "bun:test";
+import type { SessionEvent } from "../src/sessions/api";
 import type { Snapshot } from "../src/source/snapshot";
 import type { Decide, Judged, Question } from "../src/triage/decide";
 import { CONCURRENCY, mapLimit } from "../src/triage/tools";
@@ -161,6 +162,30 @@ describe("check_events", () => {
       "Event type: mcp.initialize",
     ]);
     expect(r.data.cost_usd).toBeCloseTo(0.002);
+  });
+
+  test("the type filter sees past the first page of 100 events", async () => {
+    const { decide, calls } = fakeDecide();
+    const fake = new FakeSessionsApi();
+    fake.addSession("exp", { metadata: { experiment: "x", depth: "0" }, inline: true });
+    fake.addTurn("exp", "e1");
+    // 120 other events first, so the one that matches is on the second page.
+    for (let i = 0; i < 120; i++)
+      fake.addEvent("e1", {
+        type: "thread.done",
+        id: `done-${i}`,
+        createdAt: "2026-11-07T00:00:00.000Z",
+      } as SessionEvent);
+    fake.addMcpInitialize("e1", "conn");
+    const { client } = await connect(testDeps(source, { api: fake }, { decide }), "triage");
+    const r = await call(client, "check_events", {
+      session_id: "exp",
+      turn_id: "e1",
+      predicates,
+      types: ["mcp.initialize"],
+    });
+    expect(r.data.events.map((e: { type: string }) => e.type)).toEqual(["mcp.initialize"]);
+    expect(calls).toHaveLength(1);
   });
 
   test("refuses the user's chat: its events never reach the judge", async () => {

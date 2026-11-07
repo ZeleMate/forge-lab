@@ -29,6 +29,9 @@ export const TRIAGE_ANNOTATIONS: ToolAnnotations = {
 
 export const MAX_CANDIDATES = 50;
 export const MAX_EVENTS = 50;
+// check_events reads at most this many pages of 100 events while it looks for
+// matching ones, so a runaway Turn can't turn one call into endless reads.
+export const MAX_EVENT_PAGES = 20;
 // check_events runs one call per event; this many run at once.
 export const CONCURRENCY = 4;
 const EVENT_CHARS = 2_000;
@@ -271,18 +274,21 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
           `Session ${session.id} is not an Experiment Session, and the user's chat isn't sent to the triage judge`,
           "use list_events and read the events yourself",
         );
-      // Page through the whole Turn, so the type filter sees every event.
-      const all: SessionEvent[] = [];
+      // Page through the Turn until `limit` events match, so the type filter
+      // sees past the first 100, up to MAX_EVENT_PAGES pages.
+      const matches = (e: SessionEvent) => !args.types.length || args.types.includes(e.type);
+      const events: SessionEvent[] = [];
       let cursor: string | undefined;
-      do {
-        const page = await deps.sessions.listTurnEvents(args.session_id, args.turn_id, {
+      for (let page = 0; page < MAX_EVENT_PAGES && events.length < args.limit; page++) {
+        const res = await deps.sessions.listTurnEvents(args.session_id, args.turn_id, {
           limit: 100,
           ...(cursor ? { cursor } : {}),
         });
-        all.push(...page.items);
-        cursor = page.next;
-      } while (cursor);
-      const events = all.filter((e) => !args.types.length || args.types.includes(e.type)).slice(0, args.limit);
+        events.push(...res.items.filter(matches));
+        cursor = res.next;
+        if (!cursor) break;
+      }
+      events.splice(args.limit); // `splice(n)` cuts the array down to its first n items, in place
 
       // Every call is checked against the budget on its own, so the events
       // judged before the cap is reached keep their answers.
@@ -310,12 +316,7 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       const allFailed = results.length > 0 && results.every((r) => typeof r === "string");
       if (!events.length)
         return ok(
-          fitList(
-            unscoredResult("observed", "no events of those types in this Turn"),
-            "events",
-            rows,
-            args.max_chars,
-          ),
+          fitList(unscoredResult("observed", "no events of those types in this Turn"), "events", rows, args.max_chars),
         );
       if (allFailed && typeof firstFailure === "string")
         return ok(fitList(unscoredResult("observed", firstFailure), "events", rows, args.max_chars));

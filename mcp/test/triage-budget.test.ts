@@ -68,4 +68,11 @@ describe("Budget", () => {
     const b = new Budget({ file, capUsd: CAP, clock: fakeClock(NOON) });
     expect(b.allows(0)).toBe(false);
   });
+
+  test("spending doesn't write over an unreadable file, so a passing glitch can't lock the day", () => {
+    const file = budgetFile();
+    writeFileSync(file, "not json");
+    new Budget({ file, capUsd: CAP, clock: fakeClock(NOON) }).spend(0.01);
+    expect(readFileSync(file, "utf8")).toBe("not json");
+  });
 });
