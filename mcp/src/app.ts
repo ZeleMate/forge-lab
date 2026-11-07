@@ -19,11 +19,17 @@ import {
 import { registerSessionsTools, type SessionsDeps } from "./sessions/tools";
 import type { Snapshot } from "./source/snapshot";
 import { registerSourceTools } from "./source/tools";
+import { registerTriageTools, type TriageDeps } from "./triage/tools";
 
 export const ENDPOINTS = ["source", "sessions", "triage"] as const;
 export type Endpoint = (typeof ENDPOINTS)[number];
 
-export type AppDeps = { source: Snapshot; sessions: SessionsDeps };
+// The triage tools also read the snapshot and Sessions, which they get from here.
+export type AppDeps = {
+  source: Snapshot;
+  sessions: SessionsDeps;
+  triage: Pick<TriageDeps, "decide" | "budget">;
+};
 
 // DNS-rebinding guard: a web page can make the browser send requests to
 // 127.0.0.1, but not with our Host, and with its own Origin. Only loopback names pass.
@@ -44,8 +50,11 @@ export function createApp(deps: AppDeps) {
       registerSessionsTools(server, deps.sessions, mcpSessionId);
       return server;
     },
-    // The triage tools come in #57.
-    triage: () => emptyServer("cartographer-triage"),
+    triage: () => {
+      const server = new McpServer({ name: "cartographer-triage", version: deps.source.version });
+      registerTriageTools(server, { ...deps.triage, source: deps.source, sessions: deps.sessions.api });
+      return server;
+    },
   };
 
   // Open connections, keyed by endpoint and Mcp-Session-Id (MCP calls them
@@ -99,15 +108,6 @@ export function createApp(deps: AppDeps) {
     },
     openConnections: () => connections.size,
   };
-}
-
-// An endpoint with no tools yet. TrueForge calls `tools/list` on every attached
-// server, and an McpServer without tools answers "Method not found", which would
-// fail the Turn; this one advertises tools and lists none.
-function emptyServer(name: string): McpServer {
-  const server = new McpServer({ name, version: "0.0.0" }, { capabilities: { tools: {} } });
-  server.server.setRequestHandler("tools/list", () => ({ tools: [] }));
-  return server;
 }
 
 function jsonRpcError(status: number, message: string): Response {

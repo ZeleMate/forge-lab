@@ -10,6 +10,8 @@
 // provenance label and a citation, and the answer cites `file:line` with the sha.
 // Writes mcp/smoke-results/<timestamp>.json and exits 1 if a check failed.
 
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
 import { readPin } from "@forge-lab/lib/snapshot";
 import {
   allEvents,
@@ -25,9 +27,19 @@ import {
 } from "@forge-lab/lib/trueforge";
 import type { Endpoint } from "../src/app";
 
-type Question = { question: string; provenance: "source" | "observed" };
-// `Partial<Record<...>>`: not every server has a question yet (#57 adds triage's).
-const QUESTIONS: Partial<Record<Endpoint, Question>> = {
+// `expect`: text some tool result must contain, beyond the provenance label.
+type Question = { question: string; provenance: "source" | "observed"; expect?: string[] };
+
+// The triage question checks events of a real Experiment Session: the latest
+// `fixtures:record` Turn that called source_status and waits on an Approval.
+const fixturesDir = join(import.meta.dir, "..", "fixtures-results");
+const recording = readdirSync(fixturesDir).sort().at(-1) ?? "";
+const fixture = (await Bun.file(join(fixturesDir, recording)).json()) as {
+  sessions: { main: { id: string } };
+  turns: { pending: { id: string } };
+};
+
+const QUESTIONS: Record<Endpoint, Question> = {
   source: {
     question:
       "Where is the AgentThread class declared in TrueForge, and which method runs the agent loop? Cite the lines.",
@@ -37,6 +49,12 @@ const QUESTIONS: Partial<Record<Endpoint, Question>> = {
     question:
       "Which Experiment Sessions ran most recently? List up to three, then give the status and token totals of the newest Turn in the first one. Cite the ids.",
     provenance: "observed",
+  },
+  triage: {
+    question: `Two triage steps, then answer. First, search_text for "compaction" and pass up to 15 of the files it found to rank_relevance with the question "Where does TrueForge decide when to compact the context?"; name the top 3 with their scores. Second, use check_events on Session ${fixture.sessions.main.id}, Turn ${fixture.turns.pending.id} (an Experiment Session) with one predicate named calls_source_status: "This event calls the tool source_status." Say which events it flags. Give the cost of each triage call. Cite the files.`,
+    provenance: "source",
+    // A judged result, check_events' `observed` label, and the cost on show.
+    expect: ['"status":"judged"', '"provenance":"observed"', '"cost_usd"'],
   },
 };
 
@@ -63,7 +81,7 @@ const sha7 = pin.sha.slice(0, 7);
 const results: Record<string, unknown> = { version, model: SMOKE_MODEL };
 let failed = false;
 
-for (const [server, { question, provenance }] of selected) {
+for (const [server, { question, provenance, expect = [] }] of selected) {
   const session = await openInlineExperimentSession(manifest, `smoke-mcp-${server}`);
   const turn = await runTurn(session, question);
   const events = await allEvents(session, turn.id);
@@ -79,6 +97,7 @@ for (const [server, { question, provenance }] of selected) {
       provenance === "source"
         ? /\.\w+:\d+/.test(answer) && answer.includes(sha7)
         : /[\w-]+\/[\w-]+\/[\w-]+/.test(answer),
+    toolResultsExpected: expect.every((text) => responses.some((r) => r.includes(text))),
   };
   const ok = Object.values(checks).every(Boolean);
   failed ||= !ok; // `||=` assigns only when the left side is false

@@ -1,0 +1,58 @@
+{
+  "version": "0.180.0",
+  "model": "openrouter/glm-5-3-flash",
+  "triage": {
+    "session": "01m6tqkfgwcn84vxsf29ysytta",
+    "question": "Two triage steps, then answer. First, search_text for \"compaction\" and pass up to 15 of the files it found to rank_relevance with the question \"Where does TrueForge decide when to compact the context?\"; name the top 3 with their scores. Second, use check_events on Session 01m6ra7cpk853g5rqq1h6gafvv, Turn 01m6ra7cpqtf8d4gpdr7zvxgw9 (an Experiment Session) with one predicate named calls_source_status: \"This event calls the tool source_status.\" Say which events it flags. Give the cost of each triage call. Cite the files.",
+    "checks": {
+      "turnDone": true,
+      "toolResultLabelled": true,
+      "toolResultCited": true,
+      "answerCites": true,
+      "toolResultsExpected": true
+    },
+    "answer": "## Answer\n\nTrueForge decides when to compact in `ContextCompaction.ts`: before each model call, a `PreLLMAgentContextProcessor` sums the thread's `prompt_tokens + completion_tokens` and, if that plus its own ~931-token summarization prompt reaches the configured threshold, it asks the model to summarize and replaces the whole context (an `AGENT_CONTEXT_OVERWRITE` event with `reason: 'compaction'`). The threshold itself comes from the agent spec's `config.context_management.compaction.trigger` (`input_tokens` + value), falling back to 80% of the model's context length, then to a flat 50,000 tokens.\n\n## Triage step 1 — `search_text` \"compaction\" → `rank_relevance`\n\nThe search found 74 matches in 16 files (hit the result cap: 26 matches omitted); I passed the first 15 files to the judge. Top 3 by score:\n\n| Score | Level | File |\n|---|---|---|\n| 1.470 | mentions | `docs/key-features/overview.mdx` |\n| 1.270 | mentions | `packages/trueforge/src/db/postgres/migrations/20260821_000001_agent_compaction.ts` |\n| 0.940 | mentions | `docs/introduction.mdx` |\n\nCost: **$0.0009071**. (Judge: `decisions`; day 2026-11-07, $0.4990929 left of $0.50 cap after both calls.)\n\n## Triage step 2 — `check_events` on Session `01m6ra7cpk853g5rqq1h6gafvv`, Turn `01m6ra7cpqtf8d4gpdr7zvxgw9`\n\nFive events judged against `calls_source_status`:\n\n| Answer | Event | Type |\n|---|---|---|\n| **0.99 — flagged** | `01m6ra7cr7fysns2wjx8273qnv` | `model.message` |\n| 0.05 | `01m6ra7e5js5jvrs324816dppa` | `tool.approval_required` |\n| 0 | `01m6ra7cpzrw3g4tvqj5pv8c65` | `turn.created` |\n| 0 | `01m6ra7cr7fysns2wjx8273qnt` | `mcp.initialize` |\n| 0 | `01m6ra7e5k0b7bh74jkqq4fsts` | `turn.done` |\n\nCost: **$0.000088**. So the turn's model message is the event that (most likely) calls `source_status`, and an approval was needed around the tool call.\n\n## Evidence — where the decision actually lives (read after ranking; the judge's rank is only a pointer)\n\n- `source` `packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts:208-214@d15fbad` — `processPreLLM` computes `contextTokens = prompt_tokens + completion_tokens` and returns early unless `contextTokens + PROMPT_TOKENS >= compactionThresholdTokens`. `PROMPT_TOKENS = 931` (`:44`), the size of the summarization prompt itself.\n- `source` `ContextCompaction.ts:225-243@d15fbad` — when triggered, it calls `modelClient.createNonStream` with a summarization prompt and yields `AGENT_CONTEXT_OVERWRITE` with `reason: 'compaction'` and the summary as the new context. Idiom: context processors are async generators that yield events back into the harness.\n- `source` `ContextCompaction.ts:13-41@d15fbad` — threshold resolution: explicit config wins; else `floor(contextLength × 0.8)` minus any reserved `max_tokens`/`max_completion_tokens` output budget; else `DEFAULT_CONTEXT_COMPACTION_THRESHOLD_TOKENS = 50_000`.\n- `source` `packages/trueforge-core/src/agent-session/builtinsFromSpec.ts:33-37@d15fbad` — the spec is wired to the capability: `if (config.context_management.compaction.enabled)` → `contextCompaction({ compactionThresholdTokens: config.context_management.compaction.trigger?.value, ... })`.\n- `source` `packages/trueforge-core/src/agent-session/schemas/agentSpec.ts:84-87@d15fbad` — the trigger schema: `type: 'input_tokens'`, \"Trigger compaction when the estimated input reaches a token limit.\"\n- `source` `packages/trueforge/src/db/postgres/migrations/20260821_000001_agent_compaction.ts:3-19@d15fbad` — a DB migration reshaping stored specs from a legacy `compaction_threshold_tokens` into `config.context_management.compaction.trigger = {type: 'input_tokens', value: …}`; a SQLite twin mirrors it at `packages/trueforge/src/db/sqlite/migrations/20260821_000001_agent_compaction.ts:4-5@d15fbad`. This is the top-3 file #2; the doc files (#1 `docs/key-features/overview.mdx:12@d15fbad`, #3 `docs/introduction.mdx:49@d15fbad`) only name compaction as a feature.\n\n## Gaps\n\n- The initial search was case-sensitive and capped, so capitalised \"Compaction\" matches may be among the 26 omitted; the top-3 docs files describe the feature rather than the decision — I found the runtime code with follow-up searches over `packages/**/*.ts` (all `source`, `d15fbad`).\n- That `processPreLLM` runs before each model call is read from the interface name `PreLLMAgentContextProcessor` (`ContextCompaction.ts:199@d15fbad`), not from a traced call site — `inferred`.\n- Natural Experiment if you want observed proof: on an Experiment Session, `config_patch` a tiny `trigger.value`, then check the run for an `AGENT_CONTEXT_OVERWRITE` event with `reason: 'compaction'`. I can propose the full plan next Turn if you want it.",
+    "summary": {
+      "status": "done",
+      "wallMs": 56161,
+      "metrics": {
+        "total_input_tokens": 190464,
+        "total_output_tokens": 7818,
+        "total_tokens": 198282,
+        "total_cache_read_tokens": 161152,
+        "total_reasoning_tokens": 4858
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "mcp.initialize": 2,
+        "model.message": 13,
+        "tool.response": 18,
+        "sandbox.created": 1,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "source_status",
+        "list_tools",
+        "list_tools",
+        "get_tool_info",
+        "get_tool_info",
+        "get_tool_info",
+        "exec",
+        "exec",
+        "call_tool",
+        "read_file",
+        "read_file",
+        "read_file",
+        "search_text",
+        "search_text",
+        "read_file",
+        "read_file",
+        "search_text",
+        "read_file"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 161152
+    }
+  }
+}
