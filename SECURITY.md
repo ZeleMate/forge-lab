@@ -10,7 +10,7 @@ A vulnerability in TrueForge itself belongs upstream: follow [TrueForge's securi
 
 ## Who gives instructions
 
-Anyone can open issues and comment on a public repo, and the agents working here read GitHub. So only text authored by `ZeleMate` counts as instructions, for local agents ([AGENTS.md](AGENTS.md)) and for CI alike. Everything else is untrusted data. The [Claude review](.github/workflows/claude-review.yml) fetches the issues a PR references in a plain `run:` step and keeps only text whose author is the owner or a collaborator. Claude itself may run one exact `gh pr view` and cannot read issues or comments.
+Anyone can open issues and comment on a public repo, and the agents working here read GitHub. So for local agents only text authored by `ZeleMate` counts as instructions ([AGENTS.md](AGENTS.md)); everything else is untrusted data. CI treats all GitHub text as data, never as instructions, and also limits what it reads: the [Claude review](.github/workflows/claude-review.yml) fetches the issues a PR references in a plain `run:` step and keeps only text whose author is the owner or a collaborator. Collaborators can push to the repo anyway, and today the owner is the only one. Claude itself may run one exact `gh pr view` and cannot read issues or comments.
 
 ## What GitHub enforces
 
