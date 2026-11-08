@@ -32,7 +32,7 @@ jobs:
             git config --global url."https://x-access-token:${TEMPLATE_READ_TOKEN}@github.com/".insteadOf "https://github.com/"
           fi
           set +e
-          UV_LOCKED=1 uv run --project .github/tools copier check-update --quiet
+          UV_LOCKED=1 uv run --no-build --project .github/tools copier check-update --quiet
           rc=$?
           set -e
           if [ "$rc" -eq 2 ]; then
