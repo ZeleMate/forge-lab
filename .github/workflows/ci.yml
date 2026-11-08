@@ -37,7 +37,7 @@ jobs:
           persist-credentials: false
       - uses: ./.github/actions/setup
       # The read-only form of `bun run lint`, with the same --error-on-warnings.
-      - run: bun x biome ci --error-on-warnings
+      - run: bun run biome ci --error-on-warnings
 
   typecheck:
     runs-on: ubuntu-24.04
