@@ -7,9 +7,9 @@
 // don't fail: Dependabot alerts cover them. Needs the npm registry (network).
 //
 // Some advisories are fixed by the root `overrides` in package.json instead of
-// being accepted (JSON has no comments, so the note lives here): undici, node-forge
-// and follow-redirects. Drop each override at the next TrueForge bump that ships
-// the overridden version or later.
+// being accepted (JSON has no comments, so the note lives here): undici, node-forge,
+// follow-redirects, body-parser, fast-uri and qs. Drop each override at the next
+// TrueForge bump that ships the overridden version or later.
 
 type Severity = "low" | "moderate" | "high" | "critical";
 type Advisory = { url: string; title: string; severity: Severity; vulnerable_versions: string };
@@ -18,17 +18,11 @@ type AuditReport = Record<string, Advisory[]>;
 
 type Accepted = { ghsa: string; pkg: string; reviewBy: string; reason: string };
 
-// body-parser and zod come in through TrueForge itself (@truefoundry/trueforge's own
-// dependencies), so only a TrueForge bump or a root `overrides` pin can fix them.
+// zod comes in through TrueForge itself (@truefoundry/trueforge's own dependencies),
+// so only a TrueForge bump or a root `overrides` pin can fix it.
 // Re-check this list on every bump, and by `reviewBy` at the latest; after
 // that date the entry stops applying and the job fails until someone looks again.
 const ACCEPTED: Accepted[] = [
-  {
-    ghsa: "GHSA-27r3-jxmh-p828",
-    pkg: "body-parser",
-    reviewBy: "2027-01-24",
-    reason: "DoS on compressed request bodies; the server listens on 127.0.0.1 only, and only while working",
-  },
   {
     ghsa: "GHSA-mrhx-c7xc-m3w5",
     pkg: "zod",
