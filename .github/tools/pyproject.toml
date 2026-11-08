@@ -1,0 +1,18 @@
+# CI-only tools, locked with hashes apart from the app (uv.lock next to this file).
+# `uvx tool@version` would pin the tool but resolve its dependencies fresh on every
+# run; a lockfile pins all of them. Run with `uv run --project .github/tools <tool>`.
+[project]
+name = "ci-tools"
+version = "0"
+requires-python = ">=3.13"
+dependencies = [
+    "copier>=9.19",
+    "diff-cover>=11.0",
+    "pre-commit>=4.7",
+    "semgrep>=1.181",
+]
+
+[tool.uv]
+package = false
+# Same 7-day supply-chain cooldown as the app's dependencies.
+exclude-newer = "7 days"

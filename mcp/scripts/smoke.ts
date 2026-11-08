@@ -116,7 +116,8 @@ for (const [server, { question: asked, provenance, expect = [] }] of selected) {
   const ok = Object.values(checks).every(Boolean);
   failed ||= !ok; // `||=` assigns only when the left side is false
   results[server] = { session, question, checks, answer, summary: summarise(turn, events) };
-  console.log(`== ${server}: ${ok ? "ok" : "FAILED"}`, checks);
+  // `%s` and `%O` (an inspected object) are `util.format`-style placeholders; a literal format string means nothing in the data can act as one.
+  console.log("== %s: %s %O", server, ok ? "ok" : "FAILED", checks);
 }
 
 console.log(`Saved to ${await saveResults(`${import.meta.dir}/../smoke-results`, results)}`);

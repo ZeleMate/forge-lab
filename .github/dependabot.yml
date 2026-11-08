@@ -15,6 +15,18 @@ updates:
       minor-and-patch:
         update-types: [minor, patch]
 
+  # CI-only tools (.github/tools/uv.lock: semgrep, copier), locked apart from the app.
+  # From the repo template.
+  - package-ecosystem: uv
+    directory: /.github/tools
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      ci-tools:
+        patterns: ["*"]
+
   - package-ecosystem: github-actions
     directory: /
     schedule:

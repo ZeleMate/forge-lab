@@ -1,0 +1,13 @@
+# uv at one pinned version, from its verified release archive, for the CI tools in
+# .github/tools (security.yml, template-update.yml). Bump the URL and its SHA-256
+# together; the digest is the release's `.sha256` file. Dependabot doesn't track this.
+name: uv
+description: Install uv 0.13.6 from its verified release archive.
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/fetch-binary
+      with:
+        name: uv
+        url: https://github.com/astral-sh/uv/releases/download/0.13.6/uv-x86_64-unknown-linux-gnu.tar.gz
+        sha256: f29c3e94ffabd7e6f3ba521dba169a9b7ec12100bf3257087f0f24f6123f3645

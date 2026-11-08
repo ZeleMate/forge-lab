@@ -1,6 +1,25 @@
-node_modules/
+# Secrets — never commit
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+
+# Editors / OS
 .DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Virtualenvs (the CI tools in .github/tools have one)
+.venv/
+
+# Claude Code personal files and worktrees
+CLAUDE.local.md
+.claude/settings.local.json
 .claude/worktrees/
+
+# Node / TypeScript / Bun
+node_modules/
+coverage/
+*.tsbuildinfo
