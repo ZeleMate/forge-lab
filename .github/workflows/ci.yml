@@ -93,10 +93,17 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          # HEAD and its first parent: on a PR, HEAD is the merge commit and HEAD^1
+          # the base branch's tip, which the release-age check compares bun.lock with.
+          fetch-depth: 2
       # Includes `bun install --frozen-lockfile --ignore-scripts`.
       - uses: ./.github/actions/setup
       - name: Exact pins and install rules
         run: bun run check:pins
+      # `--frozen-lockfile` above installs whatever bun.lock names, however young.
+      # Looks up only the versions this change adds, on registry.npmjs.org (no token).
+      - name: Release age of versions added to bun.lock
+        run: bun run check:release-age --base HEAD^1
       - name: Source Snapshot pin matches TrueForge
         run: bun scripts/snapshot.ts check-pin
       - name: Known vulnerabilities

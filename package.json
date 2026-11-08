@@ -16,6 +16,7 @@
     "snapshot": "bun scripts/snapshot.ts ensure",
     "snapshot:pin": "bun scripts/snapshot.ts pin",
     "check:pins": "bun scripts/check-pins.ts",
+    "check:release-age": "bun scripts/check-release-age.ts",
     "audit": "bun scripts/audit.ts",
     "lint": "biome check --error-on-warnings",
     "format": "biome check --write",
