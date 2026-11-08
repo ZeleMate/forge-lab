@@ -1,6 +1,6 @@
 # CI (#31): the backstop behind the git hooks (#30). `ci-ok` sums up every job and
-# is the check the `main` ruleset requires (.github/rulesets/main.json); until the
-# owner applies it, treat a red run as "don't merge yet". See SECURITY.md.
+# is the check the `main` ruleset requires (.github/rulesets/main.json), so a red run
+# blocks the merge. See SECURITY.md.
 #
 # Hardening: no token permissions beyond reading the repo, every action pinned to
 # a full commit SHA, and tools fetched from their releases with pinned SHA-256
@@ -133,7 +133,7 @@ jobs:
       # Workflows, the composite actions and dependabot.yml; config in .github/zizmor.yml.
       - run: zizmor --offline --no-progress .
 
-  # From the repo template: Semgrep and OSV-Scanner (Gitleaks is the `secrets` job above).
+  # From the repo template: OSV-Scanner (Gitleaks is the `secrets` job above).
   security:
     uses: ./.github/workflows/security.yml
     permissions:

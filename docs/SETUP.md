@@ -1,17 +1,17 @@
 # Setup checklist — forge-lab
 
-From the repo template (v0.3.0), for a **public** repo on GitHub **Free**. forge-lab already exists, so the script skips creating it.
+From the repo template (v0.3.0), for a **public** repo on GitHub **Free**. forge-lab is public and these settings are applied. The script skips creating the repo, so it's only needed to reapply them.
 
 ## Automated
 
 `./scripts/bootstrap-github.sh` (run with `--dry-run` first) does:
 
-- [ ] Initial commit; create `ZeleMate/forge-lab` and push
-- [ ] Squash-only merges, PR title as commit message, auto-delete branches
-- [ ] Read-only default `GITHUB_TOKEN`; Actions must be pinned to full SHAs; the Actions allowlist stays on ("selected")
-- [ ] Dependabot alerts and security updates
-- [ ] Secret scanning + push protection, private vulnerability reporting, CodeQL default setup, approval before fork PR workflows run for every outside contributor
-- [ ] Ruleset `main`: PR required, `ci-ok` required, review threads resolved, no force-push/delete, linear history
+- Initial commit; create `ZeleMate/forge-lab` and push
+- Squash-only merges, PR title as commit message, auto-delete branches
+- Read-only default `GITHUB_TOKEN`; Actions must be pinned to full SHAs; the Actions allowlist stays on ("selected")
+- Dependabot alerts and security updates
+- Secret scanning + push protection, private vulnerability reporting, CodeQL default setup, approval before fork PR workflows run for every outside contributor
+- Ruleset `main`: PR required, `ci-ok` required, review threads resolved, no force-push/delete, linear history
 
 ## Manual steps
 
