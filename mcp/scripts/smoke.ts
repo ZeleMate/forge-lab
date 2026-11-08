@@ -108,6 +108,7 @@ for (const [server, { question: asked, provenance, expect = [] }] of selected) {
     toolResultCited: responses.some((r) => r.includes('"citation"')),
     // The instructions ask for `path:line@sha7`; a smoke model may write the sha
     // once for the whole answer instead, which still pins every `file:line`.
+    // Non-source answers must cite a three-segment path such as `a/b/c`.
     answerCites:
       provenance === "source" ? /\.\w+:\d+/.test(answer) && answer.includes(sha7) : /[\w-]\/[\w-]+\/[\w-]/.test(answer),
     toolResultsExpected: expect.every((text) => responses.some((r) => r.includes(text))),
