@@ -4,6 +4,8 @@ status: accepted
 
 # Adopt the repo template, keep the Bun toolchain
 
+Partly superseded by [0004](0004-advisory-review-and-fewer-ci-gates.md): the CI SonarQube job, Claude's fix commit and `bun run audit` are gone.
+
 ## Context and problem statement
 
 forge-lab adopted `ZeleMate/repo-template` v0.3.0 (TypeScript, public, agentic) before going public, to get its security baseline and to receive later template updates with `copier update`. The template assumes pnpm, ESLint, Prettier, Vitest, pre-commit and release-please. forge-lab already had a stricter, Bun-based setup: exact pins, a 7-day release age, no install scripts, Lefthook hooks, tools fetched with pinned digests, and a hardened Claude review with an author filter.

@@ -41,7 +41,7 @@ Use STRIDE for the classic part. Status: open / mitigated / accepted.
 | T3 | Compromised GitHub Action | CI | Actions pinned to SHAs, `permissions: {}` default, zizmor | mitigated |
 | T4 | Unreviewed change reaches main | repo | PR-only ruleset, `ci-ok` required, ADR 0002 | accepted (solo) |
 | T5 | A web page drives TrueForge's API by DNS rebinding (no login, no Host check) | TrueForge | Loopback only; run the server only while working | accepted (upstream) |
-| T6 | A stranger's issue or comment steers an agent with write access | CI review, local agents | Only `ZeleMate`'s text counts as instructions; the CI review reads owner/collaborator text only, and its fix commit runs only on the owner's PRs | mitigated |
+| T6 | A stranger's issue or comment steers an agent with write access | CI review, local agents | Only `ZeleMate`'s text counts as instructions; the CI review reads owner/collaborator text only, and has no way to change the repo: it can only comment | mitigated |
 | T7 | Code leaves the machine through the SonarQube MCP server | local agents | The hosted endpoint runs read-only (`SONARQUBE_READ_ONLY`) and only read tools are auto-allowed. Its analysis tool (`analyze_code_snippet`) sends the file content or snippet it is given to SonarQube; it is disabled on the hosted server and not allowed. The repo is public, and CI already sends the code to SonarQube Cloud | accepted |
 
 ## 5. Agentic threats

@@ -1,44 +1,14 @@
-# OSV-Scanner's accept list (security.yml's `dependencies` job). Same rule as
-# scripts/audit.ts: every entry has a reason and an `ignoreUntil` review date, after
-# which the scan fails again. Re-check on every bump. Taken over on 2026-11-07, when
-# the repo template's scan first ran; none of these is reachable from the network.
+# OSV-Scanner's accept list (security.yml's `dependencies` job), the repo's one
+# vulnerability gate. Every entry has a reason and an `ignoreUntil` review date, after
+# which the scan fails again. Re-check on every bump. None of these is reachable from
+# the network.
 
 # npm (bun.lock)
 
 [[IgnoredVulns]]
-id = "GHSA-27r3-jxmh-p828"
-ignoreUntil = 2027-01-24
-reason = "body-parser via express via the MCP SDK in TrueForge: DoS on compressed bodies; the server listens on 127.0.0.1 only, while working. Accepted in scripts/audit.ts too."
-
-[[IgnoredVulns]]
 id = "GHSA-mrhx-c7xc-m3w5"
 ignoreUntil = 2027-01-24
-reason = "zod 3.x inside the MCP SDK: memory exhaustion on oversized input; only loopback clients reach it. Accepted in scripts/audit.ts too."
-
-[[IgnoredVulns]]
-id = "GHSA-6pq8-jhm2-2vcw"
-ignoreUntil = 2027-01-24
-reason = "qs via body-parser in TrueForge's MCP SDK (moderate): loopback-only server. Fixed in 6.16.1, within range; goes with the next lockfile refresh."
-
-[[IgnoredVulns]]
-id = "GHSA-333x-w4r6-6crp"
-ignoreUntil = 2027-01-24
-reason = "fast-uri via ajv in the MCP SDK (low): validates our own tool schemas, not untrusted URIs. Fixed in 3.1.9, within range; next lockfile refresh."
-
-[[IgnoredVulns]]
-id = "GHSA-w74x-v6f9-j3xg"
-ignoreUntil = 2027-01-24
-reason = "fast-uri via ajv in the MCP SDK (moderate): as GHSA-333x-w4r6-6crp."
-
-[[IgnoredVulns]]
-id = "GHSA-wjr9-j795-jxcr"
-ignoreUntil = 2027-01-24
-reason = "fast-uri via ajv in the MCP SDK (moderate): as GHSA-333x-w4r6-6crp."
-
-[[IgnoredVulns]]
-id = "GHSA-xhq7-xmqj-769h"
-ignoreUntil = 2027-01-24
-reason = "fast-uri via ajv in the MCP SDK (low): as GHSA-333x-w4r6-6crp."
+reason = "zod 3.x inside the MCP SDK: memory exhaustion on oversized input; only loopback clients reach it."
 
 [[IgnoredVulns]]
 id = "GHSA-g3hv-75wg-m249"

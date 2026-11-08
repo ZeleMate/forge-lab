@@ -4,17 +4,14 @@
 #
 # Hardening: no token permissions beyond reading the repo, every action pinned to
 # a full commit SHA, and tools fetched from their releases with pinned SHA-256
-# digests (.github/actions/) instead of third-party actions. The exceptions, from
-# the repo template: the sonarqube job reads SONAR_TOKEN and runs SonarSource's scanner image.
+# digests (.github/actions/) instead of third-party actions. The weekly scan of
+# unchanged code is security.yml's.
 name: CI
 
 on:
   pull_request:
   push:
     branches: [main]
-  schedule:
-    # Mondays 06:17 UTC: new advisories and secret rules land even without commits.
-    - cron: "17 6 * * 1"
   workflow_dispatch:
 
 # No token permissions by default; each job asks for read access only.
@@ -73,16 +70,10 @@ jobs:
       - run: bun run snapshot
         env:
           SOURCE_SNAPSHOT_DIR: ${{ runner.temp }}/trueforge-src
-      # No --pass-with-no-tests: a run that finds no tests is a failure. The lcov report
-      # feeds the sonarqube job.
-      - run: bun test --coverage --coverage-reporter=lcov --coverage-dir=coverage
+      # No --pass-with-no-tests: a run that finds no tests is a failure.
+      - run: bun test
         env:
           SOURCE_SNAPSHOT_DIR: ${{ runner.temp }}/trueforge-src
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: coverage
-          path: ./coverage/lcov.info
-          retention-days: 1
 
   deps:
     runs-on: ubuntu-24.04
@@ -99,8 +90,6 @@ jobs:
         run: bun run check:pins
       - name: Source Snapshot pin matches TrueForge
         run: bun scripts/snapshot.ts check-pin
-      - name: Known vulnerabilities
-        run: bun run audit
 
   secrets:
     runs-on: ubuntu-24.04
@@ -150,49 +139,11 @@ jobs:
     permissions:
       contents: read
 
-  # From the repo template: SonarQube Cloud maintainability metrics, with the coverage from `test`.
-  sonarqube:
-    # Fork PRs get no secrets, so they cannot be analysed.
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-    needs: [test]
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    permissions:
-      contents: read
-    env:
-      # Secrets can't be read in `if:`, so expose only whether this one is set.
-      HAS_SONAR_TOKEN: ${{ secrets.SONAR_TOKEN != '' }}
-    steps:
-      - name: Skip without a SonarQube token
-        if: env.HAS_SONAR_TOKEN != 'true'
-        run: echo "::warning::SONAR_TOKEN is not set, so the analysis was skipped. See docs/SETUP.md."
-      - if: env.HAS_SONAR_TOKEN == 'true'
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - if: env.HAS_SONAR_TOKEN == 'true'
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: coverage
-          path: ./coverage
-      # SonarSource's scanner image, pinned by digest, instead of its action: a third-party action
-      # off the Actions allowlist fails the whole workflow at startup, even when its step is skipped.
-      - name: SonarQube Cloud analysis
-        if: env.HAS_SONAR_TOKEN == 'true'
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          docker run --rm -e SONAR_TOKEN -e SONAR_HOST_URL=https://sonarcloud.io \
-            -v "$GITHUB_WORKSPACE:/usr/src" \
-            sonarsource/sonar-scanner-cli:12.3.0.4285_8.1.0@sha256:47956b669bf486bdad919e1cbd0533223515aa0b6d1d31763e5a3754942df6d7 \
-            -Dsonar.working.directory=/tmp/.scannerwork
-
   # The single required status check for the `main` ruleset (.github/rulesets/main.json).
-  # Fails if any job failed or was cancelled; a skipped job (sonarqube on a fork PR) passes.
+  # Fails if any job failed or was cancelled.
   ci-ok:
     if: always()
-    needs: [lint, typecheck, test, deps, secrets, workflows, security, sonarqube]
+    needs: [lint, typecheck, test, deps, secrets, workflows, security]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions: {}
