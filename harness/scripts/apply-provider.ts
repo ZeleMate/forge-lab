@@ -93,8 +93,8 @@ if (text.includes(apiKey)) {
 
 if (!res.ok) {
   console.error(`TrueForge rejected the provider: HTTP ${res.status}`);
-  // JSON.stringify escapes line breaks and control characters, so the response can't fake log lines.
-  console.error(JSON.stringify(text));
+  // \p{Cc} matches control characters (line breaks, terminal escapes), so the response can't fake log lines.
+  console.error(text.replace(/\p{Cc}/gu, " "));
   process.exit(1);
 }
 
