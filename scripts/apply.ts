@@ -60,8 +60,8 @@ function diff(repo: Json, server: Json, path = ""): Change[] {
     return Object.entries(repo).flatMap(([key, value]) => diff(value, server[key], path ? `${path}.${key}` : key));
   }
   if (Array.isArray(repo) && repo.some(isObject)) {
-    const names = repo.map(label);
-    const serverNames = Array.isArray(server) ? server.map(label) : [];
+    const names = repo.map((item, index) => label(item, index));
+    const serverNames = Array.isArray(server) ? server.map((item, index) => label(item, index)) : [];
     if (names.join() !== serverNames.join()) {
       return [{ path, server: `[${serverNames.join(", ")}]`, repo: `[${names.join(", ")}]` }];
     }

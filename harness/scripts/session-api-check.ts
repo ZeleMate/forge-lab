@@ -235,7 +235,7 @@ record("E1_E3_whoami", {
     mcpSessionId,
     meta,
   })),
-  headerNamesSeen: [...new Set(probe.log.flatMap((r) => Object.keys(r.headers)))].sort(),
+  headerNamesSeen: [...new Set(probe.log.flatMap((r) => Object.keys(r.headers)))].sort((a, b) => a.localeCompare(b)),
 });
 
 // ---------- E4: self-cancel through previous_turn_id "auto" ----------
