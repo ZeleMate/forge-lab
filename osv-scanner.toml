@@ -1,0 +1,73 @@
+# OSV-Scanner's accept list (security.yml's `dependencies` job). Same rule as
+# scripts/audit.ts: every entry has a reason and an `ignoreUntil` review date, after
+# which the scan fails again. Re-check on every bump. Taken over on 2026-11-07, when
+# the repo template's scan first ran; none of these is reachable from the network.
+
+# npm (bun.lock)
+
+[[IgnoredVulns]]
+id = "GHSA-27r3-jxmh-p828"
+ignoreUntil = 2027-01-24
+reason = "body-parser via express via the MCP SDK in TrueForge: DoS on compressed bodies; the server listens on 127.0.0.1 only, while working. Accepted in scripts/audit.ts too."
+
+[[IgnoredVulns]]
+id = "GHSA-mrhx-c7xc-m3w5"
+ignoreUntil = 2027-01-24
+reason = "zod 3.x inside the MCP SDK: memory exhaustion on oversized input; only loopback clients reach it. Accepted in scripts/audit.ts too."
+
+[[IgnoredVulns]]
+id = "GHSA-6pq8-jhm2-2vcw"
+ignoreUntil = 2027-01-24
+reason = "qs via body-parser in TrueForge's MCP SDK (moderate): loopback-only server. Fixed in 6.16.1, within range; goes with the next lockfile refresh."
+
+[[IgnoredVulns]]
+id = "GHSA-333x-w4r6-6crp"
+ignoreUntil = 2027-01-24
+reason = "fast-uri via ajv in the MCP SDK (low): validates our own tool schemas, not untrusted URIs. Fixed in 3.1.9, within range; next lockfile refresh."
+
+[[IgnoredVulns]]
+id = "GHSA-w74x-v6f9-j3xg"
+ignoreUntil = 2027-01-24
+reason = "fast-uri via ajv in the MCP SDK (moderate): as GHSA-333x-w4r6-6crp."
+
+[[IgnoredVulns]]
+id = "GHSA-wjr9-j795-jxcr"
+ignoreUntil = 2027-01-24
+reason = "fast-uri via ajv in the MCP SDK (moderate): as GHSA-333x-w4r6-6crp."
+
+[[IgnoredVulns]]
+id = "GHSA-xhq7-xmqj-769h"
+ignoreUntil = 2027-01-24
+reason = "fast-uri via ajv in the MCP SDK (low): as GHSA-333x-w4r6-6crp."
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-01-24
+reason = "minimatch 10 via ts-morph (moderate): ts-morph matches its own file globs over the pinned Source Snapshot; no user-supplied pattern reaches it. The fix is a major (11) that ts-morph doesn't allow yet."
+
+# PyPI (.github/tools/uv.lock: CI-only tools)
+
+[[IgnoredVulns]]
+id = "GHSA-5h93-6whr-6q8j"
+ignoreUntil = 2027-01-24
+reason = "mcp (Python) is a semgrep dependency for its `semgrep mcp` server, which CI never starts. Drops out when semgrep moves to mcp >= 1.30."
+
+[[IgnoredVulns]]
+id = "GHSA-84m7-p3x7-pcfv"
+ignoreUntil = 2027-01-24
+reason = "mcp (Python) via semgrep: as GHSA-5h93-6whr-6q8j."
+
+[[IgnoredVulns]]
+id = "GHSA-rwrf-2pqf-9j8j"
+ignoreUntil = 2027-01-24
+reason = "mcp (Python) via semgrep: as GHSA-5h93-6whr-6q8j."
+
+[[IgnoredVulns]]
+id = "GHSA-w4fh-qvv9-3v23"
+ignoreUntil = 2027-01-24
+reason = "mcp (Python) via semgrep: as GHSA-5h93-6whr-6q8j."
+
+[[IgnoredVulns]]
+id = "GHSA-xcq7-p3pf-p88h"
+ignoreUntil = 2027-01-24
+reason = "opentelemetry-api via semgrep (moderate): semgrep runs with --metrics off and exports no telemetry in CI."

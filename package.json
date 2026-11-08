@@ -1,6 +1,7 @@
 {
   "name": "forge-lab",
   "private": true,
+  "license": "MIT",
   "description": "Cartographer on a local TrueForge. Bun workspaces: one lockfile (bun.lock) and one bunfig.toml at this root.",
   "workspaces": [
     "agents",
