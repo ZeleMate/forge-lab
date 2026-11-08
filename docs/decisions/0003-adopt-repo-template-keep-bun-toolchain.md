@@ -4,6 +4,8 @@ status: accepted
 
 # Adopt the repo template, keep the Bun toolchain
 
+Partly superseded by [0004](0004-advisory-review-and-fewer-ci-gates.md): the CI SonarQube job, Claude's fix commit and `bun run audit` are gone.
+
 ## Context and problem statement
 
 forge-lab adopted `ZeleMate/repo-template` v0.3.0 (TypeScript, public, agentic) before going public, to get its security baseline and to receive later template updates with `copier update`. The template assumes pnpm, ESLint, Prettier, Vitest, pre-commit and release-please. forge-lab already had a stricter, Bun-based setup: exact pins, a 7-day release age, no install scripts, Lefthook hooks, tools fetched with pinned digests, and a hardened Claude review with an author filter.
@@ -12,9 +14,9 @@ forge-lab adopted `ZeleMate/repo-template` v0.3.0 (TypeScript, public, agentic) 
 
 Take the template's baseline around forge-lab's own toolchain, and keep forge-lab's choice wherever it is stricter or already in place:
 
-- **Taken:** `ci-ok` and the `main` ruleset, Semgrep and OSV-Scanner (`security.yml`), SonarQube Cloud, the template update check, Dependabot for the CI tools, MIT licence with REUSE, `REVIEW.md`, the `code-reviewer` agent and `spec-review` skill, issue and PR templates, the threat model, agent policy, ADRs, setup checklist and bootstrap script.
+- **Taken:** `ci-ok` and the `main` ruleset, Semgrep and OSV-Scanner (`security.yml`), SonarQube Cloud (through its GitHub app, see 0004), the template update check, Dependabot for the CI tools, MIT licence with REUSE, `REVIEW.md`, the `code-reviewer` agent and `spec-review` skill, issue and PR templates, the threat model, agent policy, ADRs, setup checklist and bootstrap script.
 - **Kept:** Bun (not pnpm), Biome (not ESLint or Prettier), `bun test` (not Vitest), Lefthook (not pre-commit), forge-lab's CI jobs and `claude-review.yml`, and tools fetched through `.github/actions/fetch-binary` (uv too) instead of setup actions.
-- **Changed from the template:** the bootstrap script keeps the Actions allowlist (`selected`, not `all`), the sonarqube job runs SonarSource's scanner image pinned by digest (no new third-party action) and is skipped with a warning until `SONAR_TOKEN` exists, Gitleaks runs once (ci.yml), and OSV-Scanner has an accept list with review dates, like `bun run audit`.
+- **Changed from the template:** the bootstrap script keeps the Actions allowlist (`selected`, not `all`), Gitleaks runs once (ci.yml), and OSV-Scanner has an accept list with review dates.
 - **Added on the owner's decision:** the SonarQube MCP server for local coding agents (`.mcp.json`), on Sonar's hosted endpoint in read-only mode, with only its read tools allowed.
 - **Accepted exceptions to the security review's rules:** that MCP endpoint is a third-party service, not loopback, and is reachable only by coding agents, not by Cartographer (threat model T7). Semgrep's `p/default` rules are fetched at run time rather than pinned, so a rule update can fail CI on unchanged code; pinning them would mean vendoring and hand-updating them.
 - **Left out:** release-please, `CHANGELOG.md` and SBOM (nothing is versioned or released), the Inspect AI eval suite (placeholder cases, an Anthropic key and unpinned Python dependencies; Cartographer runs on OpenRouter), `docs/slo.md` (nothing is deployed), and the diff-cover changed-line coverage gate (a new habit worth its own decision).

@@ -35,7 +35,7 @@ Done so far:
 | [`snapshot.json`](snapshot.json), [`scripts/snapshot.ts`](scripts/snapshot.ts) | The Source Snapshot pin (0.180.0 → attested commit `d15fbad7`) and its lifecycle: `bun run snapshot` fetches and generates it read-only in `~/Library/Caches/forge-lab/trueforge-src/<sha>/`; `bun run snapshot:pin` re-pins after a TrueForge bump |
 | [`docs/research/`](docs/research/) | Findings behind each research ticket, with superseded ones marked |
 | [`lefthook.yml`](lefthook.yml), [`scripts/hooks.ts`](scripts/hooks.ts), [`scripts/check-pins.ts`](scripts/check-pins.ts) | The git hooks and the checks they run (see below) |
-| [`.github/`](.github/) | CI (`workflows/ci.yml`), its verified-download actions, Dependabot and zizmor config; [`scripts/audit.ts`](scripts/audit.ts) is the `bun audit` accept list |
+| [`.github/`](.github/) | CI (`workflows/ci.yml`), its verified-download actions, Dependabot and zizmor config; [`osv-scanner.toml`](osv-scanner.toml) is the accepted-advisories list |
 
 ## Git hooks
 
@@ -52,7 +52,7 @@ lefthook install
 - **pre-commit** (staged files only): Gitleaks, no `.env` files except `.env.example`, Biome with fixes re-staged, exact pins and install rules (`bun run check:pins`), the Source Snapshot pin, and `actionlint` plus `zizmor` on `.github/` files.
 - **pre-push:** no pushes to `main` (push a branch and open a PR), Gitleaks on the pushed commits, the pin, Source Snapshot and workflow checks again over the whole tree (so a `--no-verify` commit can't skip them), `bun install --frozen-lockfile`, `bun run check` and `bun test`.
 
-**CI** ([`ci.yml`](.github/workflows/ci.yml)) runs on every PR, on pushes to `main`, and weekly: `lint`, `typecheck`, `test`, `deps` (frozen install, exact pins, Source Snapshot pin, `bun run audit`), `secrets` (Gitleaks over the full history), `workflows` (`actionlint`, `zizmor`), `security` (Semgrep, OSV-Scanner) and `sonarqube`. `ci-ok` sums them up and is the check the `main` ruleset requires; until the owner applies the ruleset, it can't block a merge, so don't merge a PR with a red run.
+**CI** ([`ci.yml`](.github/workflows/ci.yml)) runs on every PR and on pushes to `main`: `lint`, `typecheck`, `test`, `deps` (frozen install, exact pins, Source Snapshot pin), `secrets` (Gitleaks over the full history), `workflows` (`actionlint`, `zizmor`) and `security` (Semgrep, OSV-Scanner; also weekly). `ci-ok` sums them up and is the check the `main` ruleset requires; until the owner applies the ruleset, it can't block a merge, so don't merge a PR with a red run. The [Claude review](.github/workflows/claude-review.yml) runs once per PR and is advisory, and the SonarCloud app analyses PRs on its own.
 
 Never skip the hooks with `--no-verify`. If a hook is wrong, fix the hook in its own PR. The one exception is a documented reason in the commit or PR description.
 

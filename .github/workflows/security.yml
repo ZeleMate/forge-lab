@@ -27,6 +27,7 @@ jobs:
         with:
           persist-credentials: false
       - uses: ./.github/actions/uv
+      # Temporary: this job goes right after the repo turns public, when CodeQL is turned on (ADR 0004).
       # Semgrep Community Edition runs entirely in CI; no code leaves the runner except rule downloads.
       # Add project rules under .semgrep/ and they are picked up automatically.
       - env:
