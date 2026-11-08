@@ -2,8 +2,7 @@ name: Security
 
 # Called from ci.yml on every PR/push (so it feeds the ci-ok check), and run weekly
 # so new advisories against unchanged code are caught.
-# From the repo template; Gitleaks stays in ci.yml's `secrets` job, and uv comes from
-# its verified release archive (.github/actions/uv) instead of setup-uv.
+# Code scanning is CodeQL default setup, a repo setting, not a job here. Gitleaks is ci.yml's `secrets` job.
 on:
   workflow_call:
   workflow_dispatch:
@@ -12,34 +11,7 @@ on:
 
 permissions: {}
 
-env:
-  UV_LOCKED: "1"
-
 jobs:
-  sast:
-    name: sast (semgrep)
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: ./.github/actions/uv
-      # Temporary: this job goes right after the repo turns public, when CodeQL is turned on (ADR 0004).
-      # Semgrep Community Edition runs entirely in CI; no code leaves the runner except rule downloads.
-      # Add project rules under .semgrep/ and they are picked up automatically.
-      - env:
-          # semgrep-core can segfault in its io_uring backend on ubuntu-24.04
-          # runners; Eio's portable backend avoids it.
-          EIO_BACKEND: posix
-        run: |
-          configs=(--config p/default)
-          [ -d .semgrep ] && configs+=(--config .semgrep)
-          uv run --no-build --project .github/tools semgrep scan "${configs[@]}" --error --metrics off --disable-version-check
-    # CodeQL runs via GitHub "default setup" (enabled by scripts/bootstrap-github.sh), not in this file.
-
   dependencies:
     name: dependencies (osv-scanner)
     runs-on: ubuntu-24.04

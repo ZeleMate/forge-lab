@@ -3,8 +3,8 @@
 //   bun scripts/hooks.ts no-env <file>...   refuse staged .env files (pre-commit)
 //   bun scripts/hooks.ts pre-push           refuse pushes to main, scan pushed commits (pre-push)
 //
-// The hooks are the only gate on this repo: GitHub Free can't protect `main`
-// on a private repo, so CI reports but can't block (SECURITY.md).
+// The hooks are the first gate on this repo; CI and the ruleset on `main` come
+// after (SECURITY.md).
 
 import { basename } from "node:path";
 

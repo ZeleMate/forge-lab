@@ -9,7 +9,6 @@ dependencies = [
     "copier>=9.19",
     "diff-cover>=11.0",
     "pre-commit>=4.7",
-    "semgrep>=1.181",
 ]
 
 [tool.uv]

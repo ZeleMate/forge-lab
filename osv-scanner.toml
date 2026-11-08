@@ -14,30 +14,3 @@ reason = "zod 3.x inside the MCP SDK: memory exhaustion on oversized input; only
 id = "GHSA-g3hv-75wg-m249"
 ignoreUntil = 2027-01-24
 reason = "minimatch 10 via ts-morph (moderate): ts-morph matches its own file globs over the pinned Source Snapshot; no user-supplied pattern reaches it. The fix is a major (11) that ts-morph doesn't allow yet."
-
-# PyPI (.github/tools/uv.lock: CI-only tools)
-
-[[IgnoredVulns]]
-id = "GHSA-5h93-6whr-6q8j"
-ignoreUntil = 2027-01-24
-reason = "mcp (Python) is a semgrep dependency for its `semgrep mcp` server, which CI never starts. Drops out when semgrep moves to mcp >= 1.30."
-
-[[IgnoredVulns]]
-id = "GHSA-84m7-p3x7-pcfv"
-ignoreUntil = 2027-01-24
-reason = "mcp (Python) via semgrep: as GHSA-5h93-6whr-6q8j."
-
-[[IgnoredVulns]]
-id = "GHSA-rwrf-2pqf-9j8j"
-ignoreUntil = 2027-01-24
-reason = "mcp (Python) via semgrep: as GHSA-5h93-6whr-6q8j."
-
-[[IgnoredVulns]]
-id = "GHSA-w4fh-qvv9-3v23"
-ignoreUntil = 2027-01-24
-reason = "mcp (Python) via semgrep: as GHSA-5h93-6whr-6q8j."
-
-[[IgnoredVulns]]
-id = "GHSA-xcq7-p3pf-p88h"
-ignoreUntil = 2027-01-24
-reason = "opentelemetry-api via semgrep (moderate): semgrep runs with --metrics off and exports no telemetry in CI."

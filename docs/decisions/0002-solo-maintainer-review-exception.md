@@ -13,7 +13,7 @@ OpenSSF OSPS Baseline QA-07.01, the Scorecard Code-Review check and the Best Pra
 Accept the gap and document it. Mitigations, all enforced on the default branch:
 
 - Every change goes through a pull request; direct pushes and force-pushes are blocked by a ruleset (where the plan allows it).
-- The `ci-ok` required check aggregates tests, linters, type checks, SAST, dependency and secret scanning.
+- The `ci-ok` required check aggregates tests, linters, type checks, dependency and secret scanning. CodeQL default setup does the static analysis, outside `ci-ok`.
 - AI review (see `REVIEW.md`) and the `spec-review` skill run on every PR, and review threads must be resolved before merge.
 - Dependency updates are held back by a cooldown before they can be merged.
 
