@@ -68,8 +68,9 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
   # Both reviews run on the owner's Claude subscription (CLAUDE_CODE_OAUTH_TOKEN, from
-  # `claude setup-token`), so they share its usage limits with local Claude Code use. Neither gets git or a shell beyond the exact `gh` commands it needs, and
-  # neither can read /proc, where its own environment (and so the token) shows.
+  # `claude setup-token`), so they share its usage limits with local Claude Code use. Neither
+  # gets git or a shell beyond the exact `gh` commands it needs, and neither can read /proc,
+  # where its own environment (and so the token) shows.
   claude-code-review:
     name: code review (Claude)
     needs: gate
