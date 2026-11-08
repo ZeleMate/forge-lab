@@ -55,7 +55,8 @@ jobs:
       # A bare binary, not an archive, so fetch-binary can't take it.
       - name: Install osv-scanner (checksum-verified)
         run: |
-          curl -fsSL --proto '=https' --tlsv1.2 -o osv-scanner "https://github.com/google/osv-scanner/releases/download/v${OSV_VERSION}/osv-scanner_linux_amd64"
+          # --retry covers GitHub's occasional 5xx on release downloads.
+          curl -fsSL --proto '=https' --tlsv1.2 --retry 3 --retry-delay 5 --max-time 120 -o osv-scanner "https://github.com/google/osv-scanner/releases/download/v${OSV_VERSION}/osv-scanner_linux_amd64"
           echo "${OSV_SHA256}  osv-scanner" | sha256sum -c -
           chmod +x osv-scanner
       # Accepted advisories, each with a reason and a review date, are in osv-scanner.toml. Named
