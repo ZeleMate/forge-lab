@@ -57,7 +57,7 @@ The UI is at http://127.0.0.1:8790. Stop the server with Ctrl-C when you're done
 | `start` | Starts TrueForge on `127.0.0.1:8790` with telemetry off |
 | `apply:provider` | Upserts the `openrouter` provider: `opus-5-5` (main), `glm-5-3-flash`, `deepseek-v4-flash`, `openrouter-auto` |
 | `smoke [model…]` | Tool discovery, cache reads, and (on GLM) parallel subagents, via DeepWiki. Results go to `smoke-results/` |
-| `sandbox-check` | Local sandbox exec, code mode, and isolation probes (network, real home, repo `.env`, writes). Results go to `sandbox-results/` |
+| `sandbox-check` | Local sandbox exec, code mode, and isolation probes (network, TrueForge on loopback, real home, repo `.env`, writes). Results go to `sandbox-results/` |
 | `session-api-check [guard]` | What an MCP tool sees of its own Session, self-cancel, forks from paused/cancelled/error Turns, inline replay and `PATCH`. Runs a throwaway MCP server on `127.0.0.1:8799` (8791 until #33; that port now belongs to Cartographer's MCP server). Expected vs observed in `session-api-results/README.md` |
 | `ts-morph-bench -- --snapshot <dir> [--runs N]` | ts-morph cold start, first and warm latency of `find_declaration` / `find_references` / `type_of`, and RSS, on Bun and Node, over a Source Snapshot fetched outside the repo. Needs no server. Expected vs observed in `ts-morph-results/README.md` |
 | `typecheck` | `tsc --noEmit` with [`tsconfig.json`](tsconfig.json), which extends the root `tsconfig.base.json`. `bun run typecheck` at the root runs it in every package. `bun run check` at the root runs it after Biome |

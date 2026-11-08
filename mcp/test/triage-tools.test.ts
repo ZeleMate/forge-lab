@@ -143,7 +143,7 @@ describe("check_events", () => {
     fake.addSession("chat");
     fake.addTurn("chat", "c1");
     const { client } = await connect(testDeps(source, { api: fake }, { decide }), "triage");
-    return { client };
+    return { client, fake };
   }
   const predicates = [{ name: "calls_exec", instructions: "This event calls the tool exec." }];
 
@@ -194,6 +194,16 @@ describe("check_events", () => {
     const r = await call(client, "check_events", { session_id: "chat", turn_id: "c1", predicates });
     expect(r.isError).toBe(true);
     expect(r.text).toMatch(/not an Experiment Session/);
+    expect(calls).toHaveLength(0);
+  });
+
+  test("refuses a replay of the user's chat: fork_turn's `origin` tag marks it", async () => {
+    const { decide, calls } = fakeDecide();
+    const { client, fake } = await withSessions(decide);
+    fake.addSession("replayed", { metadata: { experiment: "x", depth: "1", origin: "chat:c1" }, inline: true });
+    const r = await call(client, "check_events", { session_id: "replayed", turn_id: "r1", predicates });
+    expect(r.isError).toBe(true);
+    expect(r.text).toMatch(/replays the user's chat/);
     expect(calls).toHaveLength(0);
   });
 

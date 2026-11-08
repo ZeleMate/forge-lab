@@ -17,6 +17,9 @@ pre-commit:
       glob: "**/.env*"
       run: bun scripts/hooks.ts no-env {staged_files}
 
+    - name: no home paths
+      run: bun scripts/hooks.ts no-home-paths
+
     - name: biome
       glob: "**/*.{ts,json,jsonc}"
       # Same flags as `bun run lint`, so warnings fail here too, not only on pre-push.

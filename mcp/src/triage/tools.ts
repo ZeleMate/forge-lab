@@ -236,7 +236,7 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     "check_events",
     {
       title: "Check events against predicates (costs money)",
-      description: `Asks a cheap judge, once per event, how likely each yes/no predicate is true of one Turn's events in an Experiment Session (never the user's chat). Phrase each predicate as a concrete action the event shows ("This event calls the tool exec", "The tool response reports an error"), never as a topic: the judge reads messages about approvals as approvals. Each event's type is always passed. At most ${MAX_EVENTS} events. Returns \`unscored\` with a reason when the daily budget is spent or no backend is set.`,
+      description: `Asks a cheap judge, once per event, how likely each yes/no predicate is true of one Turn's events in an Experiment Session (never the user's chat or a replay of it). Phrase each predicate as a concrete action the event shows ("This event calls the tool exec", "The tool response reports an error"), never as a topic: the judge reads messages about approvals as approvals. Each event's type is always passed. At most ${MAX_EVENTS} events. Returns \`unscored\` with a reason when the daily budget is spent or no backend is set.`,
       inputSchema: z.object({
         session_id: z.string().min(1),
         turn_id: z.string().min(1),
@@ -272,6 +272,13 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       if (!isExperiment(session))
         return refuse(
           `Session ${session.id} is not an Experiment Session, and the user's chat isn't sent to the triage judge`,
+          "use list_events and read the events yourself",
+        );
+      // fork_turn sets `origin` only when it replays the user's chat into a new
+      // Experiment Session, so that Session's events hold the chat's messages.
+      if (session.metadata.origin !== undefined)
+        return refuse(
+          `Session ${session.id} replays the user's chat (origin ${session.metadata.origin}), and the user's chat isn't sent to the triage judge`,
           "use list_events and read the events yourself",
         );
       // Page through the Turn until `limit` events match, so the type filter

@@ -90,6 +90,8 @@ jobs:
         run: bun run check:pins
       - name: Source Snapshot pin matches TrueForge
         run: bun scripts/snapshot.ts check-pin
+      - name: No real home paths in tracked files
+        run: bun scripts/hooks.ts no-home-paths
 
   secrets:
     runs-on: ubuntu-24.04
