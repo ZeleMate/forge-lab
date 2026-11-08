@@ -109,9 +109,7 @@ for (const [server, { question: asked, provenance, expect = [] }] of selected) {
     // The instructions ask for `path:line@sha7`; a smoke model may write the sha
     // once for the whole answer instead, which still pins every `file:line`.
     answerCites:
-      provenance === "source"
-        ? /\.\w+:\d+/.test(answer) && answer.includes(sha7)
-        : /[\w-]+\/[\w-]+\/[\w-]+/.test(answer),
+      provenance === "source" ? /\.\w+:\d+/.test(answer) && answer.includes(sha7) : /[\w-]\/[\w-]+\/[\w-]/.test(answer),
     toolResultsExpected: expect.every((text) => responses.some((r) => r.includes(text))),
   };
   const ok = Object.values(checks).every(Boolean);
