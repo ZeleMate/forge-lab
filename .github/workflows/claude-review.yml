@@ -395,6 +395,7 @@ jobs:
           BASE: ${{ github.event.pull_request.base.sha }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
+          # Keep in step with the list in claude-fix's prompt, which tells the model what it may not edit.
           protected='(^|/)(\.github|\.claude|\.config|\.husky|LICENSES)/|^(scripts|bin|patches)/|(^|/)([^/]*lefthook[^/]*|package\.json|bun\.lock|bunfig\.toml|pnpm-lock\.yaml|pnpm-workspace\.yaml|\.pnpmfile\.cjs|\.npmrc|Brewfile|AGENTS\.md|CLAUDE\.md|REVIEW\.md|\.mcp\.json|osv-scanner\.toml|sonar-project\.properties|\.copier-answers\.yml|REUSE\.toml|LICENSE|\.editorconfig|\.gitattributes|\.gitmodules|\.gitignore|biome\.jsonc?|snapshot\.json|tsconfig[^/]*\.json|\.gitleaks[^/]*|\.markdownlint[^/]*|zizmor\.ya?ml|\.shellcheckrc|[^/]*\.test\.[jt]sx?)$'
           lines() { grep -v '^$' || true; }
           base64 -d <<<"$COMMENT" > "$RUNNER_TEMP/comment.md"

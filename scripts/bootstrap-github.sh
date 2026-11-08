@@ -5,6 +5,8 @@
 #   ./scripts/bootstrap-github.sh             # do it
 #
 # Needs: gh (authenticated as ZeleMate or an org admin), git.
+# The private-repo, plan and first-commit branches can't run for forge-lab; they stay so that
+# `copier update` merges cleanly with the template.
 set -euo pipefail
 
 OWNER="ZeleMate"

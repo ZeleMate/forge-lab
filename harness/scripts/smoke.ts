@@ -63,7 +63,7 @@ for (const model of models) {
 
   results[model] = r;
   console.log(`== ${model}`);
-  // A literal format string, so nothing in the data can act as a `%` specifier.
+  // `%s` is a `util.format`-style placeholder; a literal format string means nothing in the data can act as one.
   console.log("%s\n", JSON.stringify(r, null, 2));
 }
 
