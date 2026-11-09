@@ -82,6 +82,16 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     return { day: s.day, spent_today_usd: s.spentUsd, cap_usd: s.capUsd, left_usd: s.leftUsd };
   };
 
+  // Whether an `origin` tag points at an Experiment Session. An origin that can't
+  // be read (a deleted Session, a malformed tag) counts as the user's chat.
+  async function originIsExperiment(origin: string): Promise<boolean> {
+    const [sourceId] = origin.split(":");
+    if (!sourceId) return false;
+    // `.catch` turns a failed lookup into `undefined` instead of an exception.
+    const source = await deps.sessions.getSession(sourceId).catch(() => undefined);
+    return source !== undefined && isExperiment(source);
+  }
+
   // Why a call can't run now, or undefined when it can.
   function blocked(estimateUsd: number): string | undefined {
     if (!decide) return "no triage backend: neither OPENAI_API_KEY nor OPENROUTER_API_KEY is set in mcp/.env";
@@ -236,7 +246,7 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     "check_events",
     {
       title: "Check events against predicates (costs money)",
-      description: `Asks a cheap judge, once per event, how likely each yes/no predicate is true of one Turn's events in an Experiment Session (never the user's chat). Phrase each predicate as a concrete action the event shows ("This event calls the tool exec", "The tool response reports an error"), never as a topic: the judge reads messages about approvals as approvals. Each event's type is always passed. At most ${MAX_EVENTS} events. Returns \`unscored\` with a reason when the daily budget is spent or no backend is set.`,
+      description: `Asks a cheap judge, once per event, how likely each yes/no predicate is true of one Turn's events in an Experiment Session (never the user's chat or a replay of it). Phrase each predicate as a concrete action the event shows ("This event calls the tool exec", "The tool response reports an error"), never as a topic: the judge reads messages about approvals as approvals. Each event's type is always passed. At most ${MAX_EVENTS} events. Returns \`unscored\` with a reason when the daily budget is spent or no backend is set.`,
       inputSchema: z.object({
         session_id: z.string().min(1),
         turn_id: z.string().min(1),
@@ -272,6 +282,14 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       if (!isExperiment(session))
         return refuse(
           `Session ${session.id} is not an Experiment Session, and the user's chat isn't sent to the triage judge`,
+          "use list_events and read the events yourself",
+        );
+      // `origin` is `<session>:<turn>`. When that Session is the user's chat, this
+      // one is fork_turn's replay of it and its events hold the chat's messages.
+      const origin = session.metadata.origin;
+      if (origin !== undefined && !(await originIsExperiment(origin)))
+        return refuse(
+          `Session ${session.id} replays the user's chat (origin ${origin}), and the user's chat isn't sent to the triage judge`,
           "use list_events and read the events yourself",
         );
       // Page through the Turn until `limit` events match, so the type filter

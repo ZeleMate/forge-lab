@@ -2,6 +2,7 @@
 //
 //   bun scripts/hooks.ts no-env <file>...   refuse staged .env files (pre-commit)
 //   bun scripts/hooks.ts pre-push           refuse pushes to main, scan pushed commits (pre-push)
+//   bun scripts/hooks.ts no-home-paths      refuse a real macOS home path in the index (pre-commit, CI)
 //
 // The hooks are the first gate on this repo; CI and the ruleset on `main` come
 // after (SECURITY.md).
@@ -14,6 +15,7 @@ const GITLEAKS = "/opt/homebrew/bin/gitleaks";
 const MAIN = "refs/heads/main";
 // Git sends forty zeros for "no commit": a new branch's remote side, or a deletion's local side.
 const NO_COMMIT = /^0{40}$/;
+const GIT = "/usr/bin/git";
 
 function fail(message: string): never {
   console.error(`hooks: ${message}`);
@@ -26,6 +28,28 @@ function noEnv(files: string[]): void {
   if (staged.length > 0) {
     fail(`refusing to commit ${staged.join(", ")}; unstage with \`git restore --staged <file>\``);
   }
+}
+
+// Recorded results once carried the owner's username in sandbox paths, and
+// Gitleaks doesn't flag those. `/Users/<user>` is the placeholder saveResults writes.
+function noHomePaths(): void {
+  // `--cached` searches what would be committed; `-I` skips binaries. Git exits 0 on a match.
+  // `-z` ends each file name with a NUL, so a path with `:` in it still splits cleanly.
+  const grep = Bun.spawnSync(
+    [GIT, "grep", "--cached", "-z", "-n", "-I", "-E", "/Users/[^[<[:space:]\"'`]", "--", "."],
+    {
+      stdout: "pipe",
+      stderr: "inherit",
+      env: { PATH: "/usr/bin:/bin", HOME: process.env.HOME ?? "" },
+    },
+  );
+  if (grep.exitCode === 1) return;
+  if (grep.exitCode !== 0) fail(`git grep exited ${grep.exitCode}`);
+  // File and line only: the match itself would repeat the username in CI's public log.
+  const places = grep.stdout.toString().split("\n").filter(Boolean);
+  // Each line is `<file>\0<line>\0<text>`; keep the first two parts.
+  const where = places.map((line) => line.split("\0").slice(0, 2).join(":"));
+  fail(`real home paths in tracked files; replace them with /Users/<user>:\n  ${where.join("\n  ")}`);
 }
 
 // Git runs pre-push with one stdin line per ref being pushed:
@@ -61,6 +85,9 @@ switch (command) {
   case "pre-push":
     await prePush();
     break;
+  case "no-home-paths":
+    noHomePaths();
+    break;
   default:
-    fail(`unknown command ${command}; use no-env or pre-push`);
+    fail(`unknown command ${command}; use no-env, pre-push or no-home-paths`);
 }

@@ -8,6 +8,7 @@
 
 import { homedir } from "node:os";
 import { resolve } from "node:path";
+import { TRUEFORGE_ORIGIN } from "@forge-lab/lib/ports";
 import {
   allEvents,
   ensureDeepWiki,
@@ -44,6 +45,10 @@ const prompts = {
     "In the sandbox, run this exact shell snippet and report its output verbatim:",
     "curl -s -o /dev/null -m 8 https://example.com && echo 'net example.com: ALLOWED' || echo 'net example.com: BLOCKED';",
     "curl -s -o /dev/null -m 8 https://pypi.org && echo 'net pypi.org: ALLOWED' || echo 'net pypi.org: BLOCKED';",
+    // TrueForge has no login, so a sandbox that reaches it could change its own limits.
+    // It's up while this runs, so a failed curl means blocked. Direct, then through the sandbox's proxy.
+    `curl -s -o /dev/null -m 8 --noproxy '*' ${TRUEFORGE_ORIGIN}/healthz && echo 'net TrueForge direct: ALLOWED' || echo 'net TrueForge direct: BLOCKED';`,
+    `curl -s -o /dev/null -m 8 ${TRUEFORGE_ORIGIN}/healthz && echo 'net TrueForge via proxy: ALLOWED' || echo 'net TrueForge via proxy: BLOCKED';`,
     `test -r '${REAL_HOME}/.zshrc' && echo 'read real ~/.zshrc: ALLOWED' || echo 'read real ~/.zshrc: BLOCKED';`,
     `test -r '${REPO_ENV}' && echo 'read repo .env: ALLOWED' || echo 'read repo .env: BLOCKED';`,
     `touch '${REAL_HOME}/tf-sandbox-write-probe' 2>/dev/null && echo 'write real ~/: ALLOWED' || echo 'write real ~/: BLOCKED';`,
@@ -55,6 +60,9 @@ const prompts = {
 const results: Record<string, unknown> = { session };
 let previous: string | undefined;
 for (const [name, prompt] of Object.entries(prompts)) {
+  // The loopback probes print BLOCKED on any failure, so record that the host
+  // itself could reach TrueForge right before; otherwise BLOCKED proves nothing.
+  if (name === "isolation") results.trueforgeUpFromHost = (await serverVersion()) !== "unreachable";
   const turn = await runTurn(session, prompt, previous, 300_000);
   previous = turn.id;
   const events = await allEvents(session, turn.id);

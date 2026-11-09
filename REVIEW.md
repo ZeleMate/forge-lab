@@ -24,14 +24,14 @@ Report only findings you can point to in the diff. Prefer a concrete suggested c
 - New dependencies: real, maintained, needed, licence-compatible.
 - CI changes: permissions widened, actions not SHA-pinned, untrusted input in `run:`.
 
-## 4. Agentic risks (OWASP LLM Top 10 2026 / Agentic Top 10)
+## 4. Agentic risks (OWASP LLM Top 10 2025 / Agentic Top 10)
 
-- New or widened tool permissions (LLM03 Excessive Agency, ASI02 Tool Misuse). Is it in `docs/agent-policy.md`?
-- Model or tool output used without schema validation (LLM10 Improper Output Handling).
+- New or widened tool permissions (LLM06 Excessive Agency, ASI02 Tool Misuse). Is it in `docs/agent-policy.md`?
+- Model or tool output used without schema validation (LLM05 Improper Output Handling).
 - Untrusted content (web, RAG, files, issues) able to steer the agent (LLM01, ASI01 Goal Hijack).
 - Irreversible actions without human approval (ASI09).
-- Secrets or internal context in prompts (LLM08 Hidden Context Exposure).
-- Missing iteration, token or cost limits (LLM06 Unbounded Consumption).
+- Secrets or internal context in prompts (LLM02 Sensitive Information Disclosure, LLM07 System Prompt Leakage).
+- Missing iteration, token or cost limits (LLM10 Unbounded Consumption).
 
 ## Severity
 

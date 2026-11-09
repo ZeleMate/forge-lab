@@ -1,6 +1,7 @@
 // Shared helpers for talking to the local TrueForge server.
 // Scripts import what they need: `import { api, runTurn } from "@forge-lab/lib/trueforge"`.
 
+import { homedir } from "node:os";
 import { TRUEFORGE_ORIGIN } from "./ports";
 
 export const ORIGIN = TRUEFORGE_ORIGIN;
@@ -237,6 +238,7 @@ export function summarise(turn: Turn & { wallMs?: number }, events: Event[]) {
 // (`import.meta.dir` is the folder of the file that writes it, so it names the caller's own).
 export async function saveResults(dir: string, results: unknown) {
   const file = `${dir}/${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
-  await Bun.write(file, JSON.stringify(results, null, 2));
+  // Results get committed, and sandbox paths in them contain the home folder and so the username.
+  await Bun.write(file, JSON.stringify(results, null, 2).replaceAll(homedir(), "/Users/<user>"));
   return file;
 }

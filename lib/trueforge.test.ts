@@ -1,8 +1,20 @@
 // lib changes made for #55 come with a test (#54). `fetch` is replaced for the
 // call, so no TrueForge server is needed.
 import { afterAll, afterEach, expect, spyOn, test } from "bun:test";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
+import { join } from "node:path";
 import { TRUEFORGE_ORIGIN } from "./ports";
-import { onSmokeModel, openInlineExperimentSession, SMOKE_MODEL } from "./trueforge";
+import { onSmokeModel, openInlineExperimentSession, SMOKE_MODEL, saveResults } from "./trueforge";
+
+test("saveResults replaces the home folder, so a recorded path can't name the user", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "forge-lab-results-"));
+  const file = await saveResults(dir, { sandbox: `${homedir()}/Library/x` });
+  const saved = readFileSync(file, "utf8");
+  rmSync(dir, { recursive: true });
+  expect(saved).toContain("/Users/<user>/Library/x");
+  expect(saved).not.toContain(homedir());
+});
 
 // `spyOn` swaps in a fake that records every call. `mockReset` clears it between
 // tests; `mockRestore` puts the real fetch back, since every test file shares one process.
