@@ -5,6 +5,7 @@
   "description": "Cartographer on a local TrueForge. Bun workspaces: one lockfile (bun.lock) and one bunfig.toml at this root.",
   "workspaces": [
     "agents",
+    "app",
     "harness",
     "lib",
     "mcp"
@@ -31,7 +32,10 @@
     "@types/bun": "1.4.4",
     "typescript": "7.0.2"
   },
+  "//overrides": "@assistant-ui/store and tap match TrueForge's own pnpm-lock.yaml: newer versions make TrueForgeUI loop forever on mount. app/src/overrides.test.ts fails if a TrueForge bump moves them.",
   "overrides": {
+    "@assistant-ui/store": "0.2.21",
+    "@assistant-ui/tap": "0.9.5",
     "body-parser": "2.4.0",
     "fast-uri": "3.1.9",
     "follow-redirects": "1.16.2",
