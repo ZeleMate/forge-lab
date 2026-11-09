@@ -4,7 +4,8 @@
 // The user's chats hold their own messages, which a prompt injection could have
 // Cartographer copy out of the sandbox. So get_turn, list_events and wait_turn
 // read Experiment Sessions and Cartographer's own Session (already in its
-// context) freely, and refuse any other chat. Two twins, get_chat_turn and
+// context) freely, and refuse any other chat or a replay of one (wait_turn shows
+// those status only). Two twins, get_chat_turn and
 // list_chat_events, read chats; Cartographer's spec gates them by name, so each
 // call waits for the user's Approval, and TrueForge refuses them from sandbox code.
 
@@ -28,7 +29,7 @@ import {
 } from "./project";
 import {
   CHAT_READ_TOOLS,
-  isExperiment,
+  holdsChat,
   isUnfinished,
   POLL_MS,
   READ_ANNOTATIONS,
@@ -41,11 +42,18 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
   const { api, clock } = deps;
 
   // A refusal when `session` is one of the user's chats other than the caller's own.
-  async function chatRefusal(session: Session): Promise<CallToolResult | undefined> {
-    if (isExperiment(session)) return undefined;
+  // Whether the model may read `session`'s messages without asking: an Experiment
+  // Session that doesn't replay a chat, or the caller's own Session. A replay counts
+  // as the chat, since fork_turn's Approval reads as a write, not as opening the chat.
+  async function readsFreely(session: Session): Promise<boolean> {
+    if (!(await holdsChat(api, session))) return true;
     // No `caller_session_id` here: only a Session the scan found counts as the caller's.
     const own = await findOwn();
-    if (own?.detected && own.sessionId === session.id) return undefined;
+    return own?.detected === true && own.sessionId === session.id;
+  }
+
+  async function chatRefusal(session: Session): Promise<CallToolResult | undefined> {
+    if (await readsFreely(session)) return undefined;
     return refuse(
       `Session ${session.id} is the user's chat, and its messages are read only with the user's Approval`,
       `${CHAT_READ_TOOLS.join(" or ")}, which ask the user first`,
@@ -118,9 +126,10 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
 
   // `z.infer` on the schema gives the arguments' type, so both tools share one handler.
   async function getTurn(args: z.infer<typeof GetTurn.inputSchema>, gate: boolean): Promise<CallToolResult> {
-    const [session, turns] = await Promise.all([api.getSession(args.session_id), api.listTurns(args.session_id)]);
+    const session = await api.getSession(args.session_id);
     const refused = gate ? await chatRefusal(session) : undefined;
     if (refused) return refused;
+    const turns = await api.listTurns(args.session_id);
     const turn = args.turn_id ? turns.find((t) => t.id === args.turn_id) : turns.at(-1);
     if (!turn)
       return refuse(
@@ -314,7 +323,7 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
     {
       title: "Wait for a Turn",
       description:
-        "Polls a Turn every 2 s until it stops running, for at most timeout_s (under 90). Returns its summary, or still_running: call it again to keep waiting. Experiment Sessions and your own Session only.",
+        "Polls a Turn every 2 s until it stops running, for at most timeout_s (under 90). Returns its summary, or still_running: call it again to keep waiting. For the user's chats and their replays it shows status only, without the input.",
       inputSchema: z.object({
         session_id: sessionId,
         turn_id: z.string().min(1),
@@ -329,8 +338,9 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
       annotations: READ_ANNOTATIONS,
     },
     guarded(async (args) => {
-      const refused = await chatRefusal(await api.getSession(args.session_id));
-      if (refused) return refused;
+      // A chat is followed by status only: its input is cut to nothing, so waiting
+      // on a fork's replay needs no Approval and shows none of the chat.
+      const inputChars = (await readsFreely(await api.getSession(args.session_id))) ? 500 : 0;
       const started = clock.now();
       const deadline = started + args.timeout_s * 1000;
       let turn = await api.getTurn(args.session_id, args.turn_id);
@@ -342,7 +352,7 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
         provenance: "observed" as const,
         still_running: isUnfinished(turn),
         waited_ms: clock.now() - started,
-        turn: turnSummary(turn, 500),
+        turn: turnSummary(turn, inputChars),
       });
     }),
   );

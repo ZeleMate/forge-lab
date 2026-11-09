@@ -83,7 +83,6 @@ describe("reads", () => {
   for (const [tool, args] of [
     ["get_turn", { session_id: "chat" }],
     ["list_events", { session_id: "chat", turn_id: "c1" }],
-    ["wait_turn", { session_id: "chat", turn_id: "c1", timeout_s: 1 }],
   ] as const) {
     test(`${tool} refuses the user's chat and points to the Approval-gated tools`, async () => {
       const { client } = await setup();
@@ -94,12 +93,35 @@ describe("reads", () => {
     });
   }
 
-  test("an Experiment Session that replays a chat is still read without asking", async () => {
+  // fork_turn's Approval reads as a write, so it mustn't open the chat to free reads.
+  test("an Experiment Session that replays a chat is refused like the chat", async () => {
     const { fake, client } = await setup();
     fake.addSession("replay", { metadata: { experiment: "x", depth: "1", origin: "chat:c1" }, inline: true });
-    fake.addTurn("replay", "r1");
-    const r = await call(client, "get_turn", { session_id: "replay" });
+    fake.addTurn("replay", "r1", { text: "how does compaction fire?" });
+    for (const [tool, args] of [
+      ["get_turn", { session_id: "replay" }],
+      ["list_events", { session_id: "replay", turn_id: "r1" }],
+    ] as const) {
+      const r = await call(client, tool, args);
+      expect(r.isError).toBe(true);
+      expect(r.text).toMatch(/the user's chat/);
+    }
+  });
+
+  test("a fork of an Experiment Session is read without asking", async () => {
+    const { fake, client } = await setup();
+    fake.addSession("fork", { metadata: { experiment: "x", depth: "1", origin: "exp:e1" }, inline: true });
+    fake.addTurn("fork", "f1");
+    const r = await call(client, "get_turn", { session_id: "fork" });
     expect(r.isError).toBe(false);
+  });
+
+  test("wait_turn follows the user's chat with status only, never its text", async () => {
+    const { client } = await setup();
+    const r = await call(client, "wait_turn", { session_id: "chat", turn_id: "c1", timeout_s: 1 });
+    expect(r.isError).toBe(false);
+    expect(r.data.turn.status).toBe("done");
+    expect(JSON.stringify(r.data)).not.toContain("compaction");
   });
 
   test("list_chat_events reads the user's chat", async () => {

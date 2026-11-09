@@ -19,7 +19,7 @@ Changing a model ID is a reviewed change.
 | Tool | What it can do | Scope | Needs human approval? |
 |---|---|---|---|
 | `source_status`, `search_text`, `read_file`, `find_declaration`, `find_references`, `type_of` | read the pinned Source Snapshot | read-only, inside the snapshot (path-traversal checked) | no |
-| `list_sessions`, `get_turn`, `list_events`, `session_stats`, `wait_turn` | read TrueForge Sessions | read-only; `get_turn`, `list_events` and `wait_turn` read only Experiment Sessions and Cartographer's own Session | no |
+| `list_sessions`, `get_turn`, `list_events`, `session_stats`, `wait_turn` | read TrueForge Sessions | read-only; `get_turn` and `list_events` read only Experiment Sessions that don't replay a chat, and Cartographer's own Session; `wait_turn` shows chats and replays status only | no |
 | `get_chat_turn`, `list_chat_events` | read the user's other chats | read-only; gated by name in `agents/cartographer.ts`, and refused from sandbox code | **yes** (Approval) |
 | `fork_turn`, `rerun_turn` | start new Turns | Experiment Sessions only (`metadata.experiment` set) | **yes** (Approval) |
 | `cancel_session` | cancel a running Turn | Experiment Sessions only | **yes** (Approval) |
@@ -31,7 +31,7 @@ TrueForge's own tools are also on: sandbox `exec` and code mode (scripts can cal
 Rules:
 
 - Default deny: Cartographer only gets the tools listed here.
-- The user's other chats are read only through `get_chat_turn` and `list_chat_events`, each behind an Approval. `list_sessions` and `session_stats` still show their titles and figures. The conversation Cartographer runs in is in its context anyway, so its own Session reads freely.
+- The user's other chats, and `fork_turn`'s replays of them, are read only through `get_chat_turn` and `list_chat_events`, each behind an Approval. Approving a fork doesn't open the chat to free reads. `list_sessions` and `session_stats` still show their titles and figures. The conversation Cartographer runs in is in its context anyway, so its own Session reads freely.
 - Write tools act only on Experiment Sessions, never on the user's own chat sessions, and sit behind an Approval.
 - "Subagents are read-only" is an instruction in the brief template, not an enforced limit. The Approval on write tools is the enforced part.
 - Tool and retrieval output (source files, session events, web content) is untrusted: it can inform, never instruct.

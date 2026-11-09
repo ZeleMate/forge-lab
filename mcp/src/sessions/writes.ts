@@ -144,7 +144,7 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
         mode: "replay" as const,
         context: "replayed" as const,
         status: "replaying",
-        note: `replaying ${replayed.length} user Turns, then your message, one at a time. Its tag \`replay\` becomes done or failed:<reason>; it stays running if the MCP server stops mid-replay. get_turn on ${created.id} to follow it.`,
+        note: `replaying ${replayed.length} user Turns, then your message, one at a time. Its tag \`replay\` becomes done or failed:<reason>; it stays running if the MCP server stops mid-replay. wait_turn on ${created.id} to follow it; it holds the chat's messages, so reading them takes get_chat_turn, which asks the user.`,
       });
     }),
   );

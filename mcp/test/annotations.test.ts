@@ -70,10 +70,15 @@ describe.each([...ENDPOINTS])("/mcp/%s", (endpoint) => {
 });
 
 // The chat-reading tools are read-only, so only their names gate them. A rename
-// on either side would quietly drop the Approval, so the spec must name exactly these.
+// on either side would quietly drop the Approval, so the spec names exactly these,
+// and the server serves them (EXPECTED is checked against its tool list above).
 test("Cartographer's spec gates every chat-reading tool by name", async () => {
   // A relative import: the agents package isn't one of mcp's dependencies.
   const { cartographer } = await import("../../agents/cartographer");
   const sessions = cartographer.manifest.mcpServers.find((s) => s.name === "sessions");
-  for (const tool of CHAT_READ_TOOLS) expect(sessions?.requireApprovalForTools).toContain(tool);
+  // Literal names only; `@write` and `@destructive` are tags that match annotations.
+  const named = (sessions?.requireApprovalForTools ?? []).filter((t) => !t.startsWith("@"));
+  expect([...named].sort()).toEqual([...CHAT_READ_TOOLS].sort());
+  // And the server really serves each of them under that name.
+  for (const tool of CHAT_READ_TOOLS) expect(Object.keys(EXPECTED.sessions)).toContain(tool);
 });
