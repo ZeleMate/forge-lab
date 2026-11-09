@@ -41,6 +41,15 @@ describe("historyFetch", () => {
     expect(String(inner.mock.calls[1]?.[0])).toContain(`agent_id=${AGENT_ID}`);
   });
 
+  test("an agent that isn't registered yet is looked up again next time", async () => {
+    let calls = 0;
+    const { fetcher, inner } = setup(async () => (++calls === 1 ? undefined : AGENT_ID));
+    await fetcher(LIST);
+    expect(sentUrl(inner)).toBe(LIST);
+    await fetcher(LIST);
+    expect(String(inner.mock.calls[1]?.[0])).toContain(`agent_id=${AGENT_ID}`);
+  });
+
   test.each([
     "http://127.0.0.1:5173/api/v1/sessions/abc/turns?limit=25",
     "http://127.0.0.1:5173/api/v1/sessions?limit=20",

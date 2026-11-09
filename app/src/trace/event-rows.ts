@@ -20,7 +20,7 @@ const CALL_TOOL = "call_tool";
 // A model call under half the previous call's input means the context was replaced.
 const SHRINK_RATIO = 0.5;
 
-const shortId = (id: string) => id.slice(-8);
+export const shortId = (id: string) => id.slice(-8);
 const tokens = (n: number) => `${n.toLocaleString("en-US")} tokens`;
 
 // A deferred tool runs through the `call_tool` meta-tool, so its real name is inside the
@@ -165,6 +165,8 @@ function contextRow(event: SessionEvent, previous: Map<string, number>): TraceRo
 export function traceRows(events: readonly SessionEvent[], previousTurn: readonly SessionEvent[] = []): TraceRow[] {
   const names = toolNames([...previousTurn, ...events]);
   const inputSizes = new Map<string, number>();
+  // Seeded from the previous Turn, so compaction on a Turn's first call still shows.
+  for (const event of previousTurn) contextRow(event, inputSizes);
   return events.flatMap((event) => {
     const context = contextRow(event, inputSizes);
     return [...(context ? [context] : []), ...rowsFor(event, names)];

@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { listTurnEvents, listTurns, type Turn } from "./client";
-import { type RowKind, type TraceRow, traceRows } from "./event-rows";
+import { type RowKind, shortId, type TraceRow, traceRows } from "./event-rows";
 import { useOpenSessionId, usePolling } from "./hooks";
 import { continuedTurnIds, eventsPollMs, POLL_MS, pendingActions, type TurnPhase, turnPhase } from "./turn-view";
 
@@ -27,7 +27,6 @@ const PHASE_STYLE: Record<TurnPhase, string> = {
   unknown: "bg-zinc-500",
 };
 
-const shortId = (id: string) => id.slice(-8);
 const timeOf = (iso: string) => new Date(iso).toLocaleTimeString();
 
 export function TracePanel() {

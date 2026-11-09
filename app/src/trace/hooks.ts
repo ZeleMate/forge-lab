@@ -43,8 +43,9 @@ export function usePolling<T>(
     const tick = async () => {
       try {
         const value = await read(signal);
-        if (signal.aborted || value === undefined) return;
-        setPolled({ value, error: null });
+        if (signal.aborted) return;
+        // `undefined` only means nothing to show; the next read is still scheduled below.
+        if (value !== undefined) setPolled({ value, error: null });
       } catch (error) {
         if (signal.aborted) return;
         setPolled((previous) => ({ value: previous.value, error: String(error) }));

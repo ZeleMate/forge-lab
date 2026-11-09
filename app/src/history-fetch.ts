@@ -22,7 +22,9 @@ export function historyFetch(
   const resolveId = async () => {
     agentId ??= findAgentId(agentName);
     try {
-      return await agentId;
+      const id = await agentId;
+      if (id === undefined) agentId = undefined; // not registered yet: look again next time
+      return id;
     } catch {
       agentId = undefined;
       return undefined; // history stays empty this time; the chat itself is unaffected

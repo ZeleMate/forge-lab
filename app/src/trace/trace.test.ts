@@ -247,6 +247,11 @@ describe("inferred context shrink", () => {
     expect(rows.some((row) => row.kind === "context")).toBe(false);
   });
 
+  test("a drop on the first call of a Turn is compared with the previous Turn's last call", () => {
+    const rows = traceRows([modelMessage("b", 4_000)], [modelMessage("a", 64_000)]);
+    expect(rows.map((row) => row.kind)).toEqual(["context", "model"]);
+  });
+
   test("threads are compared separately: a small Subagent isn't a shrink of the main thread", () => {
     const rows = traceRows([modelMessage("a", 64_000), modelMessage("b", 3_000, "sub-1")]);
     expect(rows.some((row) => row.kind === "context")).toBe(false);
