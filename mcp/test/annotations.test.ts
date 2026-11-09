@@ -4,6 +4,7 @@
 import { beforeAll, describe, expect, test } from "bun:test";
 import type { ToolAnnotations } from "@modelcontextprotocol/server";
 import { ENDPOINTS, type Endpoint } from "../src/app";
+import { CHAT_READ_TOOLS } from "../src/sessions/shared";
 import type { Snapshot } from "../src/source/snapshot";
 import { connect, fixtureCopy, fixtureSnapshot, testDeps } from "./helpers";
 
@@ -40,6 +41,9 @@ const EXPECTED: Record<Endpoint, Record<string, ToolAnnotations>> = {
     list_events: READ,
     session_stats: READ,
     wait_turn: READ,
+    // Read-only too: Cartographer's spec gates them by name instead (agents/cartographer.ts).
+    get_chat_turn: READ,
+    list_chat_events: READ,
     fork_turn: WRITE,
     rerun_turn: WRITE,
     cancel_session: DESTRUCTIVE,
@@ -63,4 +67,13 @@ describe.each([...ENDPOINTS])("/mcp/%s", (endpoint) => {
     expect(actual).toEqual(EXPECTED[endpoint]);
     for (const tool of tools) expect(tool.outputSchema, tool.name).toBeDefined();
   });
+});
+
+// The chat-reading tools are read-only, so only their names gate them. A rename
+// on either side would quietly drop the Approval, so the spec must name exactly these.
+test("Cartographer's spec gates every chat-reading tool by name", async () => {
+  // A relative import: the agents package isn't one of mcp's dependencies.
+  const { cartographer } = await import("../../agents/cartographer");
+  const sessions = cartographer.manifest.mcpServers.find((s) => s.name === "sessions");
+  for (const tool of CHAT_READ_TOOLS) expect(sessions?.requireApprovalForTools).toContain(tool);
 });

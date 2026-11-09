@@ -10,7 +10,7 @@ import { z } from "zod";
 import { fitList, guarded, listCut, maxChars, ok, refuse, SourceCitation } from "../result";
 import type { SessionEvent, SessionsApi } from "../sessions/api";
 import { excerpt, SessionCitation, textOf } from "../sessions/project";
-import { isExperiment } from "../sessions/shared";
+import { holdsChat, isExperiment } from "../sessions/shared";
 import type { Snapshot } from "../source/snapshot";
 import type { Budget } from "./budget";
 import { type Candidate, candidateFor } from "./candidates";
@@ -82,16 +82,6 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     return { day: s.day, spent_today_usd: s.spentUsd, cap_usd: s.capUsd, left_usd: s.leftUsd };
   };
 
-  // Whether an `origin` tag points at an Experiment Session. An origin that can't
-  // be read (a deleted Session, a malformed tag) counts as the user's chat.
-  async function originIsExperiment(origin: string): Promise<boolean> {
-    const [sourceId] = origin.split(":");
-    if (!sourceId) return false;
-    // `.catch` turns a failed lookup into `undefined` instead of an exception.
-    const source = await deps.sessions.getSession(sourceId).catch(() => undefined);
-    return source !== undefined && isExperiment(source);
-  }
-
   // Why a call can't run now, or undefined when it can.
   function blocked(estimateUsd: number): string | undefined {
     if (!decide) return "no triage backend: neither OPENAI_API_KEY nor OPENROUTER_API_KEY is set in mcp/.env";
@@ -146,7 +136,11 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       title: "Rank files by relevance (costs money)",
       description: `Asks a cheap judge how much each candidate file helps answer a question, in one call, and ranks them best first. Pass up to ${MAX_CANDIDATES} snapshot paths, e.g. from search_text. A rank is an estimate to decide what to read, not evidence: cite the files you then read. Returns \`unscored\` with a reason when the daily budget is spent or no backend is set.`,
       inputSchema: z.object({
-        question: z.string().min(10).describe("The question the files should answer."),
+        question: z
+          .string()
+          .min(10)
+          .max(300)
+          .describe("The question the files should answer, in your own words: it goes to an outside API."),
         paths: z
           .array(z.string().min(1))
           .min(1)
@@ -277,19 +271,17 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     guarded(async (args): Promise<CallToolResult> => {
       const names = args.predicates.map((p) => p.name);
       if (new Set(names).size !== names.length) return refuse("two predicates share a name", "give each a unique name");
-      // Event text goes to an outside API, so only Experiment Sessions qualify (#57).
+      // Event text goes to an outside API, so only Experiment Sessions qualify (#57),
+      // and not a replay of the user's chat either.
       const session = await deps.sessions.getSession(args.session_id);
       if (!isExperiment(session))
         return refuse(
           `Session ${session.id} is not an Experiment Session, and the user's chat isn't sent to the triage judge`,
           "use list_events and read the events yourself",
         );
-      // `origin` is `<session>:<turn>`. When that Session is the user's chat, this
-      // one is fork_turn's replay of it and its events hold the chat's messages.
-      const origin = session.metadata.origin;
-      if (origin !== undefined && !(await originIsExperiment(origin)))
+      if (await holdsChat(deps.sessions, session))
         return refuse(
-          `Session ${session.id} replays the user's chat (origin ${origin}), and the user's chat isn't sent to the triage judge`,
+          `Session ${session.id} replays the user's chat (origin ${session.metadata.origin}), and the user's chat isn't sent to the triage judge`,
           "use list_events and read the events yourself",
         );
       // Page through the Turn until `limit` events match, so the type filter

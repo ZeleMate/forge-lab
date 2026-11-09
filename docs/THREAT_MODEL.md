@@ -1,6 +1,6 @@
 # Threat model — forge-lab
 
-Living document. Update it when a new entry point, data store, external service or agent tool is added. Last reviewed: 2026-11-08. The detailed review of TrueForge itself is [research/security-review.md](research/security-review.md).
+Living document. Update it when a new entry point, data store, external service or agent tool is added. Last reviewed: 2026-11-09. The detailed review of TrueForge itself is [research/security-review.md](research/security-review.md).
 
 ## 1. System overview
 
@@ -60,8 +60,8 @@ Edition-tagged: OWASP Top 10 for LLM Applications **2025** (the numbering on [OW
 | Risk | How it could happen here | Mitigation | Test / eval | Status |
 |---|---|---|---|---|
 | LLM01 Prompt Injection / ASI01 Agent Goal Hijack | Source files or session events steer Cartographer | Tool output treated as data; web search off; Approval for every write. Nothing checks that the model obeys | — (no eval suite yet) | open |
-| LLM02 Sensitive Information Disclosure | Injected text has Cartographer read the user's chats (no Approval) and post them from a sandbox script: the allowlist includes `api.github.com`, `*.github.com` and `*.pypi.org` and can't be configured, so an attacker's token is enough | Keys aren't in the sandbox's env or readable paths. **The chat-reading path is not closed**: gate chat reads behind an Approval, or accept it in §6 | `harness/scripts/sandbox-check.ts` (isolation only) | open |
-| LLM02 Sensitive Information Disclosure | The user's chat reaches the triage judge | `check_events` refuses chats and their replays (`origin` tag). `rank_relevance` sends snapshot outlines plus the model's own `question`, which it could fill with chat text | `mcp/test/triage-tools.test.ts` | mitigated (`question` is free text) |
+| LLM02 Sensitive Information Disclosure | Injected text has Cartographer post the user's chats from a sandbox script: the allowlist includes `api.github.com`, `*.github.com` and `*.pypi.org`, can't be configured, and TrueForge's `exec` can't be gated, so an attacker's token is enough | Other chats: `get_turn`, `list_events` and `wait_turn` refuse them; `get_chat_turn` and `list_chat_events` are gated by name, so each call waits for an Approval, and TrueForge refuses them from sandbox code. **The conversation Cartographer runs in is always in its context, so it stays exposed**; closing that needs a sandbox without egress | `mcp/test/sessions-tools.test.ts`, `mcp/scripts/approvals-check.ts` (live: Approval pause, sandbox refusal, no marker leak) | open (current conversation only) |
+| LLM02 Sensitive Information Disclosure | The user's chat reaches the triage judge | `check_events` refuses chats and their replays (`holdsChat`). `rank_relevance` sends snapshot outlines plus the model's own `question`, capped at 300 characters | `mcp/test/triage-tools.test.ts` | mitigated |
 | LLM03 Supply Chain / ASI04 Agentic Supply Chain | Malicious dependency, MCP server or model | Exact pins, 7-day cooldown, no install scripts, attested snapshot pin; the MCP servers are this repo's; models are named in `apply-provider.ts`. `openrouter-auto` and DeepWiki (smoke tests only) are outside those pins, and Cartographer uses neither | `scripts/check-pins.ts`, CI | mitigated |
 | LLM05 Improper Output Handling | Model output reaches a shell, path or tool call | zod on every tool input, paths kept inside the snapshot, ripgrep spawned without a shell, CI strips line breaks from findings | `mcp/` unit tests | mitigated |
 | LLM06 Excessive Agency / ASI02 Tool Misuse | Agent has broader tools than the task needs | Tool list in `agent-policy.md`; writes only on Experiment Sessions, with Approval and depth limits | `mcp/` unit tests, `mcp/scripts/approvals-check.ts` | mitigated |
@@ -72,7 +72,7 @@ Edition-tagged: OWASP Top 10 for LLM Applications **2025** (the numbering on [OW
 | ASI06 Memory & Context Poisoning | Injected text survives compaction or a replay into a later Turn | No long-term memory; replays carry only user messages | — | accepted |
 | ASI07 Insecure Inter-Agent Communication | A Subagent's brief or result is tampered with | Subagents run inside one TrueForge process, with no agent-to-agent network. Treated as low risk from reading the code | — | accepted |
 | ASI09 Human-Agent Trust Exploitation | User approves a harmful action the agent framed as safe | The Approval shows the tool and its exact arguments; writes reach only Experiment Sessions | `mcp/scripts/approvals-check.ts` | open (no eval of framing) |
-| ASI10 Rogue Agents | An agent keeps acting outside its brief | Iteration and depth limits, Approvals, server runs only while working. Live Approval checks cover `call_tool` only, not sandbox scripts or Subagents, and "Subagents are read-only" is a prompt rule | `mcp/scripts/approvals-check.ts` | open |
+| ASI10 Rogue Agents | An agent keeps acting outside its brief | Iteration and depth limits, Approvals, server runs only while working. The live check covers direct calls and sandbox code (TrueForge refuses Approval-gated tools there); Subagents aren't checked live, and "Subagents are read-only" is a prompt rule | `mcp/scripts/approvals-check.ts` | open (Subagents) |
 
 Not applicable: LLM04 Data and Model Poisoning (nothing is trained), LLM08 Vector and Embedding Weaknesses (no RAG or embeddings), LLM09 Misinformation as a security risk (one reader, who checks the required citations; no eval yet).
 

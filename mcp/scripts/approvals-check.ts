@@ -12,6 +12,8 @@
 // to call each write tool once. Expected: each call pauses the Turn as `done`
 // with a `tool.approval_required`; once the script approves it (as Experiment
 // scripts do, #9) the tool runs and changes the target Experiment Session.
+// Phase 3, chat reads from sandbox code: a script that calls get_chat_turn must
+// fail, and no tool response may carry the stand-in chat's marker word.
 // Throughout: no Session outside this script's own changes at all.
 // Writes mcp/approvals-results/<timestamp>.json and exits 1 if anything differs.
 
@@ -37,6 +39,8 @@ import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/cli
 import { sdkSessionsApi } from "../src/sessions/api";
 
 const EXPERIMENT = "approvals-check";
+// The stand-in chat says this word, so any tool response that carries it has read the chat.
+const MARKER = `CHATMARK${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
 const failures: string[] = [];
 const results: Record<string, unknown> = { model: SMOKE_MODEL, version: await serverVersion() };
 
@@ -74,7 +78,7 @@ const { data: chat } = await api<{ id: string }>("POST", "/sessions", {
   agent: { spec },
   metadata: { probe: EXPERIMENT }, // no `experiment` tag: it stands in for the user's chat
 });
-const c1 = await waitTurn(chat.id, (await createTurn(chat.id, "Say hi in one word.", "none")).id);
+const c1 = await waitTurn(chat.id, (await createTurn(chat.id, `Reply with exactly this word: ${MARKER}`, "none")).id);
 const { data: deep } = await api<{ id: string }>("POST", "/sessions", {
   agent: { spec },
   metadata: { experiment: EXPERIMENT, depth: "2" },
@@ -140,6 +144,9 @@ const REFUSALS: [string, string, Record<string, unknown>, RegExp][] = [
   ["cancel own Session", "cancel_session", { session_id: target, caller_session_id: target }, /own Session/],
   ["cancel the chat", "cancel_session", { session_id: chat.id, ...own }, /not an Experiment Session/],
   ["cancel depth 2", "cancel_session", { session_id: deep.id, ...own }, /depth/],
+  // This client isn't any Session, so the chat isn't its own.
+  ["read the chat", "get_turn", { session_id: chat.id }, /the user's chat/],
+  ["chat events", "list_events", { session_id: chat.id, turn_id: c1.id }, /the user's chat/],
 ];
 const refusals: Record<string, string> = {};
 for (const [label, tool, args, reason] of REFUSALS) {
@@ -172,6 +179,8 @@ let slowForCancel: Turn | undefined;
 const STEPS: Step[] = [
   { tool: "fork_turn", args: { session_id: target, from_turn_id: t1.id, message: "Say bye in one word." } },
   { tool: "rerun_turn", args: { session_id: target, turn_id: t1.id } },
+  // Read-only, but gated by name in Cartographer's spec.
+  { tool: "get_chat_turn", args: { session_id: chat.id } },
   {
     tool: "cancel_session",
     args: { session_id: target },
@@ -239,6 +248,33 @@ if (slowForCancel) {
   if (cancelled.state.reason !== "client-cancelled") failures.push("cancel_session: the tip wasn't client-cancelled");
 }
 results.approvals = approvals;
+const chatRead = String((approvals.get_chat_turn as Record<string, unknown> | undefined)?.toolResponse ?? "");
+if (!chatRead.includes(MARKER)) failures.push("get_chat_turn: the approved call didn't return the chat");
+
+// ---------- phase 3: chat reads from sandbox code ----------
+
+// TrueForge refuses a name-gated tool from Code Mode (CodeModeDispatcher), so a
+// script must fail to read the chat, and no tool response may carry the marker.
+const script = `Using code mode, write and run ONE sandbox script that calls the sessions tool get_chat_turn with {"session_id": "${chat.id}"} and prints the result. Don't call get_chat_turn directly. Report what the script printed.`;
+// A new root Turn: phase 2's approved read put the marker in the caller's context,
+// and a script echoing it from there would look like a leak.
+const codeTurn = await waitTurn(caller, (await createTurn(caller, script, "none")).id, 300_000);
+const codeEvents = await allEvents(caller, codeTurn.id);
+const calls = codeEvents
+  .filter((e) => e.type === "model.message")
+  .flatMap((e) => (e.tool_calls ?? []) as { function: { name: string; arguments: string } }[])
+  .map((c) => c.function);
+const leaked = codeEvents.some((e) => e.type === "tool.response" && String(e.content ?? "").includes(MARKER));
+const ranScript = calls.some((c) => c.name === "exec" || c.name.includes("code"));
+results.codeMode = {
+  turn: codeTurn.id,
+  status: codeTurn.state.status,
+  calls: calls.map((c) => c.name),
+  leaked,
+  responses: codeEvents.filter((e) => e.type === "tool.response").map((e) => String(e.content ?? "").slice(0, 400)),
+};
+if (leaked) failures.push("code mode: a tool response carried the chat's marker");
+if (!ranScript) failures.push("code mode: no sandbox script ran, so the path wasn't tested");
 
 // Nothing outside this script's Sessions moved, across both phases.
 const ours = [target, caller, chat.id, deep.id, nested.id];
@@ -253,6 +289,8 @@ results.sessions = {
 };
 results.failures = failures;
 
-console.log(JSON.stringify({ refusals: Object.keys(refusals).length, approvals, failures }, null, 2));
+console.log(
+  JSON.stringify({ refusals: Object.keys(refusals).length, approvals, codeMode: results.codeMode, failures }, null, 2),
+);
 console.log(`Saved to ${await saveResults(`${import.meta.dir}/../approvals-results`, results)}`);
 process.exit(failures.length ? 1 : 0);

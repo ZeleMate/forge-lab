@@ -51,9 +51,9 @@ describe("reads", () => {
     expect(r.isError).toBe(true);
   });
 
-  test("get_turn shows the newest Turn by default, and every Turn newest first", async () => {
+  test("get_chat_turn shows the newest Turn by default, and every Turn newest first", async () => {
     const { client } = await setup();
-    const r = await call(client, "get_turn", { session_id: "chat" });
+    const r = await call(client, "get_chat_turn", { session_id: "chat" });
     expect(r.data.turn.citation).toEqual({ session_id: "chat", turn_id: "c2" });
     expect(r.data.turn.input).toBe("show me the trigger");
     expect(r.data.turns.map((t: { citation: { turn_id: string } }) => t.citation.turn_id)).toEqual(["c2", "c1"]);
@@ -69,6 +69,44 @@ describe("reads", () => {
         servers: ["source", "sessions"],
       }),
     ]);
+  });
+
+  test("get_turn reads an Experiment Session without asking", async () => {
+    const { client } = await setup();
+    const r = await call(client, "get_turn", { session_id: "exp" });
+    expect(r.isError).toBe(false);
+    expect(r.data.turn.citation).toEqual({ session_id: "exp", turn_id: "e2" });
+  });
+
+  // The user's other chats need an Approval; the Session the tools run in is
+  // already in the model's context, so reading it reveals nothing new.
+  for (const [tool, args] of [
+    ["get_turn", { session_id: "chat" }],
+    ["list_events", { session_id: "chat", turn_id: "c1" }],
+    ["wait_turn", { session_id: "chat", turn_id: "c1", timeout_s: 1 }],
+  ] as const) {
+    test(`${tool} refuses the user's chat and points to the Approval-gated tools`, async () => {
+      const { client } = await setup();
+      const r = await call(client, tool, args);
+      expect(r.isError).toBe(true);
+      expect(r.text).toMatch(/the user's chat/);
+      expect(r.text).toMatch(/get_chat_turn/);
+    });
+  }
+
+  test("an Experiment Session that replays a chat is still read without asking", async () => {
+    const { fake, client } = await setup();
+    fake.addSession("replay", { metadata: { experiment: "x", depth: "1", origin: "chat:c1" }, inline: true });
+    fake.addTurn("replay", "r1");
+    const r = await call(client, "get_turn", { session_id: "replay" });
+    expect(r.isError).toBe(false);
+  });
+
+  test("list_chat_events reads the user's chat", async () => {
+    const { client } = await setup();
+    const r = await call(client, "list_chat_events", { session_id: "chat", turn_id: "c1" });
+    expect(r.isError).toBe(false);
+    expect(r.data.provenance).toBe("observed");
   });
 
   test("session_stats takes a running Turn's figures from its events", async () => {
@@ -271,9 +309,9 @@ describe("the Turn cap", () => {
   test("get_turn reports it as an error, not an older Turn as the newest", async () => {
     const { fake, client } = await setup();
     fake.listTurns = async () => {
-      throw new TooManyTurnsError("chat");
+      throw new TooManyTurnsError("exp");
     };
-    const r = await call(client, "get_turn", { session_id: "chat" });
+    const r = await call(client, "get_turn", { session_id: "exp" });
     expect(r.isError).toBe(true);
     expect(r.text).toMatch(/more than 200 Turns/);
   });
