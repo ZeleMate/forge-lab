@@ -14,3 +14,8 @@ reason = "zod 3.x inside the MCP SDK: memory exhaustion on oversized input; only
 id = "GHSA-g3hv-75wg-m249"
 ignoreUntil = 2027-01-24
 reason = "minimatch 10 via ts-morph (moderate): ts-morph matches its own file globs over the pinned Source Snapshot; no user-supplied pattern reaches it. The fix is a major (11) that ts-morph doesn't allow yet."
+
+[[IgnoredVulns]]
+id = "GHSA-238p-pmpm-9mq7"
+ignoreUntil = 2027-01-24
+reason = "katex 0.16 via the TrueForge UI's math rendering (low): only exploitable if Object.prototype is already polluted by some other bug, and the app is loopback only. The fix (0.18.2) is outside its parents' ^0.16 range, and no 0.16.x release carries it."

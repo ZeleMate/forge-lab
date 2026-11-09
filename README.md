@@ -16,7 +16,7 @@ Done so far:
 - **Harness:** TrueForge 0.180.0, local standalone mode, bound to `127.0.0.1`.
 - **Models (via OpenRouter):** Opus 5.5 as the main model; GLM-5.3-Flash, DeepSeek-V4-Flash and the Auto Router as cheaper alternatives.
 - **Cheap triage:** the OpenAI Decisions API, called from Cartographer's MCP server.
-- **Code:** TypeScript on Bun. Planned: our own MCP server (source, session and triage tools), a React 19 + Vite chat app, and Experiment scripts.
+- **Code:** TypeScript on Bun: our own MCP server (source, session and triage tools) and a React 19 + Vite chat app. Planned: Experiment scripts.
 
 ## Where things are
 
@@ -30,6 +30,7 @@ Done so far:
 | [`.claude/settings.json`](.claude/settings.json) | Project settings for Claude Code: agents may not read `.env` files |
 | [`harness/`](harness/) | The pinned local TrueForge server and its scripts (`start`, `apply:provider`, `smoke`, `sandbox-check`, `session-api-check`, `ts-morph-bench`) |
 | [`lib/`](lib/) | `@forge-lab/lib`: shared TrueForge API helpers the local ports and the Source Snapshot pin reader |
+| [`app/`](app/) | `@forge-lab/app`: the chat app at `http://127.0.0.1:5173`, TrueForge's chat UI (SingleAgent `cartographer`) plus a read-only live trace of the open Session's Turns and persisted events |
 | [`agents/`](agents/) | `@forge-lab/agents`: the Cartographer Agent spec and its instructions, plus the MCP servers it attaches |
 | [`scripts/dev.ts`](scripts/dev.ts), [`scripts/apply.ts`](scripts/apply.ts) | `bun run dev` starts the whole local stack in one terminal tab (snapshot check, TrueForge, MCP server, apply, Vite) and stops it with Ctrl-C; `bun run apply` registers the specs on a running TrueForge (repo wins, diff shown; `-- --dry-run` writes nothing) |
 | [`snapshot.json`](snapshot.json), [`scripts/snapshot.ts`](scripts/snapshot.ts) | The Source Snapshot pin (0.180.0 → attested commit `d15fbad7`) and its lifecycle: `bun run snapshot` fetches and generates it read-only in `~/Library/Caches/forge-lab/trueforge-src/<sha>/`; `bun run snapshot:pin` re-pins after a TrueForge bump |
