@@ -19,10 +19,11 @@ Changing a model ID is a reviewed change.
 | Tool | What it can do | Scope | Needs human approval? |
 |---|---|---|---|
 | `source_status`, `search_text`, `read_file`, `find_declaration`, `find_references`, `type_of` | read the pinned Source Snapshot | read-only, inside the snapshot (path-traversal checked) | no |
-| `list_sessions`, `get_turn`, `list_events`, `session_stats`, `wait_turn` | read TrueForge Sessions | read-only | no |
+| `list_sessions`, `get_turn`, `list_events`, `session_stats`, `wait_turn` | read TrueForge Sessions | read-only; `get_turn` and `list_events` read only Experiment Sessions that don't replay a chat, and Cartographer's own Session; `wait_turn` shows chats and replays status only | no |
+| `get_chat_turn`, `list_chat_events` | read the user's other chats | read-only; gated by name in `agents/cartographer.ts`, and refused from sandbox code | **yes** (Approval) |
 | `fork_turn`, `rerun_turn` | start new Turns | Experiment Sessions only (`metadata.experiment` set) | **yes** (Approval) |
 | `cancel_session` | cancel a running Turn | Experiment Sessions only | **yes** (Approval) |
-| `rank_relevance` | send snapshot file outlines and the model's question to the triage judge | snapshot files; costs money, capped daily | no |
+| `rank_relevance` | send snapshot file outlines and the model's question (at most 300 characters) to the triage judge | snapshot files; costs money, capped daily | no |
 | `check_events` | send one Experiment Turn's events to the triage judge | Experiment Sessions only, never the user's chat or a replay of it; costs money, capped daily | no |
 
 TrueForge's own tools are also on: sandbox `exec` and code mode (scripts can call the tools above), `create_sub_agent` and `ask_user_question`. Web search and generative UI are off (`agents/cartographer.ts`).
@@ -30,7 +31,7 @@ TrueForge's own tools are also on: sandbox `exec` and code mode (scripts can cal
 Rules:
 
 - Default deny: Cartographer only gets the tools listed here.
-- The read tools also reach the user's own chat Sessions, without an Approval. See the sandbox section below.
+- The user's other chats, and `fork_turn`'s replays of them, are read only through `get_chat_turn` and `list_chat_events`, each behind an Approval. Approving a fork doesn't open the chat to free reads. `list_sessions` and `session_stats` still show their titles and figures. The conversation Cartographer runs in is in its context anyway, so its own Session reads freely.
 - Write tools act only on Experiment Sessions, never on the user's own chat sessions, and sit behind an Approval.
 - "Subagents are read-only" is an instruction in the brief template, not an enforced limit. The Approval on write tools is the enforced part.
 - Tool and retrieval output (source files, session events, web content) is untrusted: it can inform, never instruct.
@@ -60,4 +61,4 @@ Follow the MCP Security Best Practices: no token passthrough, minimal scopes, lo
 
 TrueForge's local sandbox (`@anthropic-ai/sandbox-runtime`, a macOS Seatbelt process sandbox, not a VM): network allowlist of PyPI and GitHub only, `$HOME` remapped to a private folder. Verified by `harness/scripts/sandbox-check.ts`; see `harness/README.md`.
 
-The allowlist is a way out as well as a way in. It is hard-coded in TrueForge and includes `api.github.com`, `*.github.com` and `*.pypi.org`, so a script holding an attacker's token could post whatever Cartographer can read, including the user's chats. `THREAT_MODEL.md` §5 tracks this as open.
+The allowlist is a way out as well as a way in. It is hard-coded in TrueForge and includes `api.github.com`, `*.github.com` and `*.pypi.org`, and TrueForge's `exec` tool can't be put behind an Approval. So a script holding an attacker's token could post whatever is in Cartographer's context: since the chat-read gate, that is the current conversation, not the user's other chats. `THREAT_MODEL.md` §5 tracks this as open.

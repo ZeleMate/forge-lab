@@ -32,6 +32,24 @@ export const sessionId = z.string().min(1).describe("A Session id, as list_sessi
 
 export const isExperiment = (s: Session) => s.metadata.experiment !== undefined;
 
+// The read tools that reach the user's chats. agents/cartographer.ts names them
+// in the sessions server's `requireApprovalForTools`, so each call asks the user.
+export const CHAT_READ_TOOLS = ["get_chat_turn", "list_chat_events"] as const;
+
+// Whether a Session holds the user's chat messages: a chat itself, or an
+// Experiment Session whose `origin` (`<session>:<turn>`, set by fork_turn) names a
+// chat. An origin that can't be read counts as a chat.
+export async function holdsChat(api: SessionsApi, s: Session): Promise<boolean> {
+  if (!isExperiment(s)) return true;
+  const origin = s.metadata.origin;
+  if (origin === undefined) return false;
+  const [sourceId] = origin.split(":");
+  if (!sourceId) return true;
+  // `.catch` turns a failed lookup into `undefined` instead of an exception.
+  const source = await api.getSession(sourceId).catch(() => undefined);
+  return source === undefined || !isExperiment(source);
+}
+
 // Still going: running, or `paused` (which #24 never saw on the wire, since an
 // Approval wait shows as `done` with required actions, but the type allows it).
 export const isUnfinished = (t: Turn) => t.state.status === "running" || t.state.status === "paused";
