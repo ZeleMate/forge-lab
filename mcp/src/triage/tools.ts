@@ -82,6 +82,16 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     return { day: s.day, spent_today_usd: s.spentUsd, cap_usd: s.capUsd, left_usd: s.leftUsd };
   };
 
+  // Whether an `origin` tag points at an Experiment Session. An origin that can't
+  // be read (a deleted Session, a malformed tag) counts as the user's chat.
+  async function originIsExperiment(origin: string): Promise<boolean> {
+    const [sourceId] = origin.split(":");
+    if (!sourceId) return false;
+    // `.catch` turns a failed lookup into `undefined` instead of an exception.
+    const source = await deps.sessions.getSession(sourceId).catch(() => undefined);
+    return source !== undefined && isExperiment(source);
+  }
+
   // Why a call can't run now, or undefined when it can.
   function blocked(estimateUsd: number): string | undefined {
     if (!decide) return "no triage backend: neither OPENAI_API_KEY nor OPENROUTER_API_KEY is set in mcp/.env";
@@ -274,11 +284,12 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
           `Session ${session.id} is not an Experiment Session, and the user's chat isn't sent to the triage judge`,
           "use list_events and read the events yourself",
         );
-      // fork_turn sets `origin` only when it replays the user's chat into a new
-      // Experiment Session, so that Session's events hold the chat's messages.
-      if (session.metadata.origin !== undefined)
+      // `origin` is `<session>:<turn>`. When that Session is the user's chat, this
+      // one is fork_turn's replay of it and its events hold the chat's messages.
+      const origin = session.metadata.origin;
+      if (origin !== undefined && !(await originIsExperiment(origin)))
         return refuse(
-          `Session ${session.id} replays the user's chat (origin ${session.metadata.origin}), and the user's chat isn't sent to the triage judge`,
+          `Session ${session.id} replays the user's chat (origin ${origin}), and the user's chat isn't sent to the triage judge`,
           "use list_events and read the events yourself",
         );
       // Page through the Turn until `limit` events match, so the type filter

@@ -197,7 +197,7 @@ describe("check_events", () => {
     expect(calls).toHaveLength(0);
   });
 
-  test("refuses a replay of the user's chat: fork_turn's `origin` tag marks it", async () => {
+  test("refuses a replay of the user's chat: its `origin` names the chat", async () => {
     const { decide, calls } = fakeDecide();
     const { client, fake } = await withSessions(decide);
     fake.addSession("replayed", { metadata: { experiment: "x", depth: "1", origin: "chat:c1" }, inline: true });
@@ -205,6 +205,26 @@ describe("check_events", () => {
     expect(r.isError).toBe(true);
     expect(r.text).toMatch(/replays the user's chat/);
     expect(calls).toHaveLength(0);
+  });
+
+  test("refuses an `origin` that names no readable Session", async () => {
+    const { decide, calls } = fakeDecide();
+    const { client, fake } = await withSessions(decide);
+    fake.addSession("orphan", { metadata: { experiment: "x", depth: "1", origin: "gone:t1" }, inline: true });
+    const r = await call(client, "check_events", { session_id: "orphan", turn_id: "o1", predicates });
+    expect(r.isError).toBe(true);
+    expect(calls).toHaveLength(0);
+  });
+
+  test("judges a fork of an Experiment Session, whose `origin` names that Experiment", async () => {
+    const { decide, calls } = fakeDecide();
+    const { client, fake } = await withSessions(decide);
+    fake.addSession("forked", { metadata: { experiment: "x", depth: "1", origin: "exp:e1" }, inline: true });
+    fake.addTurn("forked", "f1");
+    fake.addMcpInitialize("f1", "conn2");
+    const r = await call(client, "check_events", { session_id: "forked", turn_id: "f1", predicates });
+    expect(r.isError).toBeFalsy();
+    expect(calls.length).toBeGreaterThan(0);
   });
 
   test("filters by type before judging", async () => {

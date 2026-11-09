@@ -34,16 +34,21 @@ function noEnv(files: string[]): void {
 // Gitleaks doesn't flag those. `/Users/<user>` is the placeholder saveResults writes.
 function noHomePaths(): void {
   // `--cached` searches what would be committed; `-I` skips binaries. Git exits 0 on a match.
-  const grep = Bun.spawnSync([GIT, "grep", "--cached", "-n", "-I", "-E", "/Users/[^[<[:space:]\"'`]", "--", "."], {
-    stdout: "pipe",
-    stderr: "inherit",
-    env: { PATH: "/usr/bin:/bin", HOME: process.env.HOME ?? "" },
-  });
+  // `-z` ends each file name with a NUL, so a path with `:` in it still splits cleanly.
+  const grep = Bun.spawnSync(
+    [GIT, "grep", "--cached", "-z", "-n", "-I", "-E", "/Users/[^[<[:space:]\"'`]", "--", "."],
+    {
+      stdout: "pipe",
+      stderr: "inherit",
+      env: { PATH: "/usr/bin:/bin", HOME: process.env.HOME ?? "" },
+    },
+  );
   if (grep.exitCode === 1) return;
   if (grep.exitCode !== 0) fail(`git grep exited ${grep.exitCode}`);
   // File and line only: the match itself would repeat the username in CI's public log.
   const places = grep.stdout.toString().split("\n").filter(Boolean);
-  const where = places.map((line) => line.split(":").slice(0, 2).join(":"));
+  // Each line is `<file>\0<line>\0<text>`; keep the first two parts.
+  const where = places.map((line) => line.split("\0").slice(0, 2).join(":"));
   fail(`real home paths in tracked files; replace them with /Users/<user>:\n  ${where.join("\n  ")}`);
 }
 

@@ -1,7 +1,7 @@
 // lib changes made for #55 come with a test (#54). `fetch` is replaced for the
 // call, so no TrueForge server is needed.
 import { afterAll, afterEach, expect, spyOn, test } from "bun:test";
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import { TRUEFORGE_ORIGIN } from "./ports";
@@ -11,6 +11,7 @@ test("saveResults replaces the home folder, so a recorded path can't name the us
   const dir = mkdtempSync(join(tmpdir(), "forge-lab-results-"));
   const file = await saveResults(dir, { sandbox: `${homedir()}/Library/x` });
   const saved = readFileSync(file, "utf8");
+  rmSync(dir, { recursive: true });
   expect(saved).toContain("/Users/<user>/Library/x");
   expect(saved).not.toContain(homedir());
 });

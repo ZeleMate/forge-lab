@@ -60,6 +60,9 @@ const prompts = {
 const results: Record<string, unknown> = { session };
 let previous: string | undefined;
 for (const [name, prompt] of Object.entries(prompts)) {
+  // The loopback probes print BLOCKED on any failure, so record that the host
+  // itself could reach TrueForge right before; otherwise BLOCKED proves nothing.
+  if (name === "isolation") results.trueforgeUpFromHost = (await serverVersion()) !== "unreachable";
   const turn = await runTurn(session, prompt, previous, 300_000);
   previous = turn.id;
   const events = await allEvents(session, turn.id);
