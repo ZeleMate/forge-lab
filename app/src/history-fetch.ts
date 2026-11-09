@@ -4,8 +4,16 @@
 // this corrects that one query. Delete it once an upstream release fixes the filter.
 
 const SESSIONS_PATH = "/api/v1/sessions";
-// Only used to split a relative URL; it never reaches the output.
-const PARSE_BASE = "http://relative.invalid";
+
+// The path of a relative ("/api/...") or absolute URL; undefined for anything else.
+function pathOf(head: string): string | undefined {
+  if (head.startsWith("/")) return head;
+  try {
+    return new URL(head).pathname;
+  } catch {
+    return undefined;
+  }
+}
 
 // Just the call signature: Bun's global types add a `preconnect` member to `typeof fetch`.
 export type Fetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -34,15 +42,17 @@ export function historyFetch(
   return async (input, init) => {
     // A `Request` object carries its own body, so it passes through; the SDK sends URLs.
     if (input instanceof Request) return inner(input, init);
+    // Split by hand rather than parse against a made-up base, so a relative URL stays
+    // relative and the request still goes through Vite's proxy.
     const original = String(input);
-    const url = new URL(original, PARSE_BASE);
-    if (url.pathname !== SESSIONS_PATH || url.searchParams.get("agent_id") !== agentName) return inner(input, init);
+    const queryAt = original.indexOf("?");
+    const head = queryAt < 0 ? original : original.slice(0, queryAt);
+    const params = new URLSearchParams(queryAt < 0 ? "" : original.slice(queryAt + 1));
+    if (pathOf(head) !== SESSIONS_PATH || params.get("agent_id") !== agentName) return inner(input, init);
 
     const id = await resolveId();
     if (!id) return inner(input, init);
-    url.searchParams.set("agent_id", id);
-    // A relative URL stays relative, so the request still goes through Vite's proxy.
-    const fixed = original.startsWith("/") ? `${url.pathname}${url.search}` : url.href;
-    return inner(fixed, init);
+    params.set("agent_id", id); // `set` keeps the parameter where it was
+    return inner(`${head}?${params}`, init);
   };
 }
