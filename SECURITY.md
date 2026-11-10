@@ -35,6 +35,13 @@ The local Lefthook hooks stay the first gate (Gitleaks, Biome, `tsc`, an exact-p
 - **Approval before workflows run on any outside contributor's fork PR.** Fork PRs never get the Claude review anyway; see CI below.
 - **[CODEOWNERS](.github/CODEOWNERS)** names the owner for every path.
 
+## Third-party GitHub Apps
+
+Each installed GitHub App holds a standing credential for the repos it can reach, so each one is listed here with what it can do. Review the list at **Settings → Applications → Installed GitHub Apps**.
+
+- **Socket** (`socket-security`, free plan), installed on this repo only ([trial](https://github.com/ZeleMate/forge-lab/issues/42)). It flags malicious packages on dependency PRs, which CVE feeds miss until an advisory exists. It reads text `bun.lock` across the workspaces and comments a per-package score table on PRs, Dependabot's included, with two checks that aren't required. Permissions: read and **write** on code, checks and pull requests (write so it can open "Socket Patch" PRs), and read on issues, merge queues and metadata. The `main` ruleset still stops it changing `main` except through a PR. It keeps a dependency list (SBOM) for each scanned commit on its dashboard. Its default policy doesn't alert on install scripts; `ignoreScripts` covers those. Remove it if it gets broader permissions or stops reporting on Bun.
+- **SonarQube Cloud**: see CI below.
+
 ## Rules
 
 - **Dependencies:** exact versions only, published at least 7 days ago (`bunfig.toml`). No `trustedDependencies`, and `ignoreScripts = true` stops every install script, including those for packages on Bun's built-in trust list. To check, run `bun install --verbose | grep Scripts`; it should print nothing. Under the isolated linker `bun pm untrusted` reports nothing even when scripts were skipped, so it is no check.
