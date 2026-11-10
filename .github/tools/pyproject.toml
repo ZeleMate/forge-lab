@@ -1,6 +1,6 @@
 # CI-only tools, locked with hashes apart from the app (uv.lock next to this file).
 # `uvx tool@version` would pin the tool but resolve its dependencies fresh on every
-# run; a lockfile pins all of them. Run with `uv run --project .github/tools <tool>`.
+# run; a lockfile pins all of them. Run with `uv run --no-build --project .github/tools <tool>`.
 [project]
 name = "ci-tools"
 version = "0"

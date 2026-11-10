@@ -41,5 +41,6 @@ jobs:
               gh issue create --title "$title" --body "Run \`uvx copier update --trust\` locally, review the diff, and open a PR."
             fi
           elif [ "$rc" -ne 0 ]; then
-            echo "copier check-update failed (rc=$rc)"; exit "$rc"
+            echo "::error::copier check-update failed (rc=$rc). If the template repo is private, set the TEMPLATE_READ_TOKEN secret (see docs/SETUP.md)."
+            exit "$rc"
           fi
