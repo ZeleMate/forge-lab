@@ -1,0 +1,86 @@
+name: Local CI
+
+# This file is forge-lab's own: the template wrote it once and never updates it.
+# ci.yml calls it on every PR and push, and the merge gate (ci-ok) waits for it.
+# These are the Bun and Biome jobs from the old ci.yml (#31), the backstop behind the
+# git hooks (#30). Gitleaks, actionlint and zizmor now run in ci.yml's central
+# `security` and `repo-lint` calls.
+#
+# Rules: no job may need a secret (Dependabot PRs get none), every action is pinned
+# to a full commit SHA, and each job asks for read access only. Tools come from their
+# releases with pinned SHA-256 digests (.github/actions/), not third-party actions.
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      # The read-only form of `bun run lint`, with the same --error-on-warnings.
+      - run: bun run biome ci --error-on-warnings
+
+  typecheck:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - run: bun run typecheck
+
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      # search_text runs ripgrep; this is the version Homebrew has locally.
+      - uses: ./.github/actions/fetch-binary
+        with:
+          name: rg
+          url: https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-unknown-linux-musl.tar.gz
+          sha256: 33e15bcf1624b25cdd2a55813a47a2f95dbe126268203e76aa6a585d1e7b149c
+      # The source tools' tests read the real pinned Source Snapshot (#54). It's
+      # fetched read-only from TrueForge's public repo; nothing in it runs.
+      # (`runner.temp` exists only at step level, so both steps name the folder.)
+      - run: bun run snapshot
+        env:
+          SOURCE_SNAPSHOT_DIR: ${{ runner.temp }}/trueforge-src
+      # No --pass-with-no-tests: a run that finds no tests is a failure.
+      - run: bun test
+        env:
+          SOURCE_SNAPSHOT_DIR: ${{ runner.temp }}/trueforge-src
+
+  deps:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Includes `bun install --frozen-lockfile --ignore-scripts`.
+      - uses: ./.github/actions/setup
+      - name: Exact pins and install rules
+        run: bun run check:pins
+      - name: Source Snapshot pin matches TrueForge
+        run: bun scripts/snapshot.ts check-pin
+      - name: No real home paths in tracked files
+        run: bun scripts/hooks.ts no-home-paths
