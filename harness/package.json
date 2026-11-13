@@ -16,8 +16,8 @@
     "@forge-lab/lib": "workspace:*"
   },
   "devDependencies": {
-    "@truefoundry/trueforge": "0.180.0",
-    "@truefoundry/trueforge-sdk": "0.180.0",
+    "@truefoundry/trueforge": "0.184.2",
+    "@truefoundry/trueforge-sdk": "0.184.1",
     "ts-morph": "28.0.0"
   }
 }
