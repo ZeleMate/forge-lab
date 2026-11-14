@@ -70,6 +70,8 @@ export class FakeSessionsApi implements SessionsApi {
         : { type: "reference", id: CARTOGRAPHER_ID, name: "cartographer" },
       createdAt: this.stamp(),
       createdBySubject: { subjectType: "user", subjectId: "trueforge-default", subjectDisplayName: "Local user" },
+      // A new session has run no Turn yet (the SDK added this field in 0.184).
+      lastTurnDetails: null,
       metadata: opts.metadata ?? {},
       metrics: { totalTurns: 0, totalDurationMs: 0, totalCostInUsd: 0 },
       shared: false,
