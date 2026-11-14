@@ -11,9 +11,9 @@ import { call, connect, testDeps } from "./helpers";
 const pin = readPin();
 const SHA7 = pin.sha.slice(0, 7);
 const AGENT_THREAD = "packages/trueforge-core/src/core/runtime/AgentThread.ts";
-// Facts at 0.180.0 / d15fbad7 (0.179.2 / 198a2ead had 419 files and line 496).
-const FILES_INDEXED = 423;
-const AGENT_THREAD_LINE = 509;
+// Facts at 0.184.2 / 235518c2 (0.180.0 / d15fbad7 had 423 files and line 509).
+const FILES_INDEXED = 490;
+const AGENT_THREAD_LINE = 512;
 let client: Client;
 
 // Building the index takes about 0.3 s warm, a few seconds on a cold disk.

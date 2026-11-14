@@ -1,7 +1,7 @@
 {
-  "version": "0.180.0",
-  "sha": "d15fbad7d9c0296316cfdc3712a73039219c10ba",
-  "tagSha": "b27acd9b06fcc8ea0765cd09188f9735da1c633c",
+  "version": "0.184.2",
+  "sha": "235518c23fc10371a88ee28de6f34df007147730",
+  "tagSha": "0117d640c87d3cb94f3753a94d3ab7f8c1642163",
   "repo": "https://github.com/truefoundry/trueforge",
-  "subjectDigest": "e00a36a945e29f6658c20976b04194818dd2d2cdc3842c1431023cda0055411ee3dde2c050d402945d305cee5cdf90b1c6b65c2b35223d3bab20eb4c347cd345"
+  "subjectDigest": "7009f8f56de552db4e572968cc3898fff7b138e05d2ffb98ef1f221fb6c5ee4feece48b6e5c306fccce5d208f75170bf2557983f1469d1b0265651aa91f2b035"
 }
