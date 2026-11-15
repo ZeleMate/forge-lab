@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier. Do not edit by hand; run `copier update`.
-_commit: v0.6.0
+_commit: v1.0.0
 _src_path: gh:ZeleMate/repo-template
 agentic: true
 ai_reviewers:
@@ -17,5 +17,6 @@ license: MIT
 project_name: forge-lab
 project_slug: forge-lab
 quality_platform: sonarqube-cloud
+repo_name: forge-lab
 sonar_organization: zelemate
 visibility: public
