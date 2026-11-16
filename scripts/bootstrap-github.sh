@@ -123,7 +123,6 @@ JSON
   fi
 fi
 
-# ------------------------------------------------------------------ secrets
 # ------------------------------------------------------------------ manual steps
 say "Done. Remaining manual steps (also in docs/SETUP.md):"
 sed -n '/^## Manual steps/,$p' docs/SETUP.md | tail -n +2
