@@ -11,6 +11,11 @@ ignoreUntil = 2027-01-24
 reason = "zod 3.x inside the MCP SDK: memory exhaustion on oversized input; only loopback clients reach it."
 
 [[IgnoredVulns]]
+id = "GHSA-fc5q-39xc-vjpf"
+ignoreUntil = 2026-12-17
+reason = "picomatch 2.3.2 and 4.0.7 (ReDoS via crafted extglobs), via tinyglobby (ts-morph, vite) and fast-glob (@daytona/sdk under TrueForge); no fixed release yet. Every pattern they match is hard-coded (ts-morph's src/**/*.ts, vite's config); the MCP search tool's model-supplied globs go to ripgrep, not picomatch."
+
+[[IgnoredVulns]]
 id = "GHSA-g3hv-75wg-m249"
 ignoreUntil = 2027-01-24
 reason = "minimatch 10 via ts-morph (moderate): ts-morph matches its own file globs over the pinned Source Snapshot; no user-supplied pattern reaches it. The fix is a major (11) that ts-morph doesn't allow yet."
