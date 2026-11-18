@@ -11,7 +11,9 @@ The user enters every live key ([AGENTS.md](../AGENTS.md)). Agents read variable
 | The owner's `gh` token | macOS keychain, through `gh auth login` | the owner and local agents | keep only the scopes this repo needs: `repo`, `read:org`, `workflow` |
 | `CLAUDE_CODE_OAUTH_TOKEN` | GitHub Actions secret | `claude-review.yml` | yearly (the token expires after 1 year) or on leak |
 | `SONARQUBE_TOKEN` (SonarQube Cloud user token) | the owner's keychain, passed only to the Claude Code process (`docs/SETUP.md`); never in a file | `.mcp.json` (SonarQube MCP server, read through `${SONARQUBE_TOKEN:-}`, so a shell or CI job without the token still parses the config) | yearly, or on leak |
-| `TEMPLATE_READ_TOKEN` (only if the template repo is private) | GitHub Actions secret | `template-update.yml` | ≤ 1 year |
+| `TEMPLATE_READ_TOKEN` (only if the template repo is private) | GitHub Actions secret | `template-update.yml` | fine-grained PAT, contents:read on the template repo, ≤ 1 year |
+
+The machine-readable list is `.github/secret-requirements.json`; the GitHub audit reads it.
 
 ## Rules
 
