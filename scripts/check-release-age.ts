@@ -157,7 +157,7 @@ function git(...args: string[]): string {
 
 async function fetchPackument(name: string): Promise<Packument> {
   // A scoped name keeps its `@` but encodes the slash: `@scope%2fname`.
-  const url = `${REGISTRY}/${name.replace("/", "%2f")}`;
+  const url = `${REGISTRY}/${name.replaceAll("/", "%2f")}`;
   let response: Response;
   try {
     // `AbortSignal.timeout` cancels the request if the registry hangs.
