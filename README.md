@@ -16,7 +16,7 @@ Done so far:
 - **Harness:** TrueForge 0.180.0, local standalone mode, bound to `127.0.0.1`.
 - **Models (via OpenRouter):** Opus 5.5 as the main model; GLM-5.3-Flash, DeepSeek-V4-Flash and the Auto Router as cheaper alternatives.
 - **Cheap triage:** the OpenAI Decisions API, called from Cartographer's MCP server.
-- **Code:** TypeScript on Bun. Planned: our own MCP server (source, session and triage tools), a React 19 + Vite chat app, and Experiment scripts.
+- **Code:** TypeScript on Bun: our own MCP server (source, session and triage tools) and a React 19 + Vite chat app. Planned: Experiment scripts.
 
 ## Where things are
 
@@ -30,16 +30,17 @@ Done so far:
 | [`.claude/settings.json`](.claude/settings.json) | Project settings for Claude Code: agents may not read `.env` files |
 | [`harness/`](harness/) | The pinned local TrueForge server and its scripts (`start`, `apply:provider`, `smoke`, `sandbox-check`, `session-api-check`, `ts-morph-bench`) |
 | [`lib/`](lib/) | `@forge-lab/lib`: shared TrueForge API helpers the local ports and the Source Snapshot pin reader |
+| [`app/`](app/) | `@forge-lab/app`: the chat app at `http://127.0.0.1:5173`, TrueForge's chat UI (SingleAgent `cartographer`) plus a read-only live trace of the open Session's Turns and persisted events |
 | [`agents/`](agents/) | `@forge-lab/agents`: the Cartographer Agent spec and its instructions, plus the MCP servers it attaches |
 | [`scripts/dev.ts`](scripts/dev.ts), [`scripts/apply.ts`](scripts/apply.ts) | `bun run dev` starts the whole local stack in one terminal tab (snapshot check, TrueForge, MCP server, apply, Vite) and stops it with Ctrl-C; `bun run apply` registers the specs on a running TrueForge (repo wins, diff shown; `-- --dry-run` writes nothing) |
 | [`snapshot.json`](snapshot.json), [`scripts/snapshot.ts`](scripts/snapshot.ts) | The Source Snapshot pin (0.180.0 → attested commit `d15fbad7`) and its lifecycle: `bun run snapshot` fetches and generates it read-only in `~/Library/Caches/forge-lab/trueforge-src/<sha>/`; `bun run snapshot:pin` re-pins after a TrueForge bump |
 | [`docs/research/`](docs/research/) | Findings behind each research ticket, with superseded ones marked |
 | [`lefthook.yml`](lefthook.yml), [`scripts/hooks.ts`](scripts/hooks.ts), [`scripts/check-pins.ts`](scripts/check-pins.ts) | The git hooks and the checks they run (see below) |
-| [`.github/`](.github/) | CI (`workflows/ci.yml`), its verified-download actions, Dependabot and zizmor config; [`scripts/audit.ts`](scripts/audit.ts) is the `bun audit` accept list |
+| [`.github/`](.github/) | CI (`workflows/ci.yml`), its verified-download actions, Dependabot and zizmor config; [`osv-scanner.toml`](osv-scanner.toml) is the accepted-advisories list |
 
 ## Git hooks
 
-The hooks in [`lefthook.yml`](lefthook.yml) are the only gate on this repo: it's private on GitHub Free, so nothing on GitHub can block a merge (see [`SECURITY.md`](SECURITY.md)). Set them up once per clone:
+The hooks in [`lefthook.yml`](lefthook.yml) are the first gate on this repo; CI and the ruleset on `main` come after (see [`SECURITY.md`](SECURITY.md)). Set them up once per clone:
 
 ```bash
 brew install lefthook gitleaks actionlint zizmor
@@ -52,6 +53,14 @@ lefthook install
 - **pre-commit** (staged files only): Gitleaks, no `.env` files except `.env.example`, Biome with fixes re-staged, exact pins and install rules (`bun run check:pins`), the Source Snapshot pin, and `actionlint` plus `zizmor` on `.github/` files.
 - **pre-push:** no pushes to `main` (push a branch and open a PR), Gitleaks on the pushed commits, the pin, Source Snapshot and workflow checks again over the whole tree (so a `--no-verify` commit can't skip them), `bun install --frozen-lockfile`, `bun run check` and `bun test`.
 
-**CI** ([`ci.yml`](.github/workflows/ci.yml)) runs on every PR, on pushes to `main`, and weekly: `lint`, `typecheck`, `test`, `deps` (frozen install, exact pins, Source Snapshot pin, `bun run audit`), `secrets` (Gitleaks over the full history) and `workflows` (`actionlint`, `zizmor`). It can't block a merge on GitHub Free, so don't merge a PR with a red run.
+**CI** ([`ci.yml`](.github/workflows/ci.yml)) runs on every PR and on pushes to `main`: `lint`, `typecheck`, `test`, `deps` (frozen install, exact pins, Source Snapshot pin), `secrets` (Gitleaks over the full history), `workflows` (`actionlint`, `zizmor`) and `security` (OSV-Scanner; also weekly). `ci-ok` sums them up and is the check the `main` ruleset requires, so a red run blocks the merge. Code scanning is CodeQL default setup, a repo setting. The [Claude review](.github/workflows/claude-review.yml) runs once per PR and is advisory, and the SonarCloud app analyses PRs on its own.
 
 Never skip the hooks with `--no-verify`. If a hook is wrong, fix the hook in its own PR. The one exception is a documented reason in the commit or PR description.
+
+## Repo baseline
+
+The CI, security and agent setup comes from [`ZeleMate/repo-template`](https://github.com/ZeleMate/repo-template), adopted at v0.3.0 and adapted to Bun, Biome and Lefthook ([`.copier-answers.yml`](.copier-answers.yml); `uvx copier update --trust` pulls later versions). See the [setup checklist](docs/SETUP.md), [architecture decisions](docs/decisions/), [threat model](docs/THREAT_MODEL.md), [agent policy](docs/agent-policy.md) and [contributing guide](CONTRIBUTING.md).
+
+## Licence
+
+MIT. See [LICENSE](LICENSE).

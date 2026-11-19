@@ -1,0 +1,26 @@
+# OSV-Scanner's accept list (security.yml's `dependencies` job), the repo's one
+# vulnerability gate. Every entry has a reason and an `ignoreUntil` review date, after
+# which the scan fails again. Re-check on every bump. None of these is reachable from
+# the network.
+
+# npm (bun.lock)
+
+[[IgnoredVulns]]
+id = "GHSA-mrhx-c7xc-m3w5"
+ignoreUntil = 2027-01-24
+reason = "zod 3.x inside the MCP SDK: memory exhaustion on oversized input; only loopback clients reach it."
+
+[[IgnoredVulns]]
+id = "GHSA-fc5q-39xc-vjpf"
+ignoreUntil = 2026-12-17
+reason = "picomatch 2.3.2 and 4.0.7 (ReDoS via crafted extglobs), via tinyglobby (ts-morph, vite) and fast-glob (@daytona/sdk under TrueForge); no fixed release yet. Every pattern they match is hard-coded (ts-morph's src/**/*.ts, vite's config); the MCP search tool's model-supplied globs go to ripgrep, not picomatch."
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-01-24
+reason = "minimatch 10 via ts-morph (moderate): ts-morph matches its own file globs over the pinned Source Snapshot; no user-supplied pattern reaches it. The fix is a major (11) that ts-morph doesn't allow yet."
+
+[[IgnoredVulns]]
+id = "GHSA-238p-pmpm-9mq7"
+ignoreUntil = 2027-01-24
+reason = "katex 0.16 via the TrueForge UI's math rendering (low): only exploitable if Object.prototype is already polluted by some other bug, and the app is loopback only. The fix (0.18.2) is outside its parents' ^0.16 range, and no 0.16.x release carries it."

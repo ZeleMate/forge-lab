@@ -1,0 +1,10 @@
+{
+  "name": "@truefoundry/trueforge-core",
+  "exports": {
+    "./core": {
+      "trueforge-dev": {
+        "types": "./src/core/index.ts"
+      }
+    }
+  }
+}

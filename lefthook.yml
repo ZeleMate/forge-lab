@@ -1,5 +1,5 @@
-# Git hooks (#30). They're the only gate on this repo: GitHub Free can't protect
-# `main` on a private repo, so CI (#31) reports but can't block. See SECURITY.md.
+# Git hooks (#30). The first gate on this repo; CI (#31) and the ruleset on
+# `main` come after. See SECURITY.md.
 #
 # One-time setup: `brew install lefthook gitleaks actionlint zizmor`, then
 # `lefthook install` at the repo root. Never skip them with `--no-verify`.
@@ -16,6 +16,9 @@ pre-commit:
     - name: no .env files
       glob: "**/.env*"
       run: bun scripts/hooks.ts no-env {staged_files}
+
+    - name: no home paths
+      run: bun scripts/hooks.ts no-home-paths
 
     - name: biome
       glob: "**/*.{ts,json,jsonc}"
@@ -73,4 +76,5 @@ pre-push:
       run: bun run check
 
     - name: test
-      run: bun test --pass-with-no-tests
+      # Real-snapshot tests fail with "run `bun run snapshot`" if it's missing (#54).
+      run: bun test

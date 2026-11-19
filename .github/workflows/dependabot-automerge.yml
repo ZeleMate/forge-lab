@@ -1,0 +1,48 @@
+name: Dependabot automerge
+
+# Turns on auto-merge for Dependabot PRs that are not major updates. The merge still waits
+# for the merge gate (ci-ok), which the ruleset requires. Majors stay manual.
+# It merges the way the repo allows: the methods the repo settings and every ruleset on the
+# base branch permit, preferring squash, then a merge commit, then rebase.
+# Kept in this repo, not in the central workflow repo, because it holds write permissions.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions: {}
+
+jobs:
+  automerge:
+    # The PR author, not github.actor: anyone who pushes to the branch becomes the actor.
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98  # v3.1.0
+        id: metadata
+      # A grouped PR reports its highest update type.
+      - name: Enable auto-merge for non-major updates
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          # A setting the token can't see (null) counts as allowed; the rulesets still narrow it.
+          allowed=$(gh api "repos/$GITHUB_REPOSITORY" --jq '[
+            (select(.allow_squash_merge != false) | "squash"),
+            (select(.allow_merge_commit != false) | "merge"),
+            (select(.allow_rebase_merge != false) | "rebase")]')
+          rules=$(gh api "repos/$GITHUB_REPOSITORY/rules/branches/$BASE" \
+            --jq '[.[] | select(.type == "pull_request") | .parameters.allowed_merge_methods // empty]')
+          method=$(jq -rn --argjson a "$allowed" --argjson r "$rules" \
+            'reduce $r[] as $x ($a; map(select(. as $m | $x | index($m)))) | .[0] // empty')
+          if [ -z "$method" ]; then
+            echo "::error::no merge method is allowed by both the repo settings ($allowed) and the rulesets on $BASE ($rules)"
+            exit 1
+          fi
+          echo "merging with: $method"
+          gh pr merge --auto "--$method" "$PR_URL"

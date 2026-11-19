@@ -46,7 +46,14 @@ const manifest = {
       preloadTools: ["source_status", "search_text", "read_file"],
       requireApprovalForTools: gated,
     },
-    { name: "sessions", enableTools: ["@all"], requireApprovalForTools: gated },
+    // The two tools that read the user's other chats are read-only, so their
+    // annotations don't match `@write`; naming them makes each call ask the user.
+    // TrueForge also refuses a name-gated tool from sandbox code (CodeModeDispatcher).
+    {
+      name: "sessions",
+      enableTools: ["@all"],
+      requireApprovalForTools: [...gated, "get_chat_turn", "list_chat_events"],
+    },
     { name: "triage", enableTools: ["@all"], requireApprovalForTools: gated },
   ],
   config: {

@@ -1,0 +1,81 @@
+{
+  "session": "01m70wzafb7nm4fwxqj928ms9r",
+  "exec": {
+    "status": "done",
+    "wallMs": 10026,
+    "metrics": {
+      "total_input_tokens": 11518,
+      "total_output_tokens": 360,
+      "total_tokens": 11878,
+      "total_cache_read_tokens": 2304,
+      "total_reasoning_tokens": 106
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 3,
+      "sandbox.created": 1,
+      "tool.response": 2,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "exec",
+      "exec"
+    ],
+    "usedMetaTools": false,
+    "usedSubagent": false,
+    "cacheReadTokens": 2304,
+    "answer": "Script ran successfully. The three lines, exactly as printed:\n\n```\n3.13.18 (main, Oct 25 2026, 18:31:23) [Clang 21.0.0 (clang-2100.3.34.2)]\nmacOS-27.2-arm64-arm-64bit\n500000500000\n```"
+  },
+  "codeMode": {
+    "status": "done",
+    "wallMs": 42125,
+    "metrics": {
+      "total_input_tokens": 18165,
+      "total_output_tokens": 803,
+      "total_tokens": 18968,
+      "total_cache_read_tokens": 9216,
+      "total_reasoning_tokens": 302
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 4,
+      "mcp.initialize": 1,
+      "tool.response": 3,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "list_tools",
+      "get_tool_info",
+      "exec"
+    ],
+    "usedMetaTools": true,
+    "usedSubagent": false,
+    "cacheReadTokens": 9216,
+    "answer": "The script ran successfully. Here's exactly what it printed:\n\n```\n=== Answer 1 (first 200 chars) ===\nContext compaction is triggered when the estimated input token count for an agent's conversation history reaches a configured threshold . This threshold is determined by the `CompactionSettingsSchema`\n=== Answer 2 (first 200 chars) ===\nWhen a tool call requires human verification, the turn pauses its execution and transitions to a `user-input-required` state. This pause is communicated to the UI through `TurnStateDone` containing `r\n```\n\nOne script (`deepwiki_two_questions.py`) made both sequential calls to deepwiki's `ask_wiki_question` on `truefoundry/trueforge` — first the context-compaction question, then the tool-approval question — and sliced each `result` to the first 200 characters."
+  },
+  "trueforgeUpFromHost": true,
+  "isolation": {
+    "status": "done",
+    "wallMs": 10038,
+    "metrics": {
+      "total_input_tokens": 13011,
+      "total_output_tokens": 1656,
+      "total_tokens": 14667,
+      "total_cache_read_tokens": 6912,
+      "total_reasoning_tokens": 1122
+    },
+    "eventCounts": {
+      "turn.created": 1,
+      "model.message": 2,
+      "tool.response": 1,
+      "turn.done": 1
+    },
+    "toolCalls": [
+      "exec"
+    ],
+    "usedMetaTools": false,
+    "usedSubagent": false,
+    "cacheReadTokens": 6912,
+    "answer": "Ran verbatim. Output:\n\n```\nnet example.com: BLOCKED\nnet pypi.org: ALLOWED\nnet TrueForge direct: BLOCKED\nnet TrueForge via proxy: BLOCKED\nread real ~/.zshrc: BLOCKED\nread repo .env: BLOCKED\nwrite real ~/: BLOCKED\nwrite /tmp: BLOCKED\nsandbox HOME: /Users/<user>/Library/Application Support/trueforge/sandboxes/01m70wzafb7nm4fwxqj928ms9r/01m70wzcjfm16fsfg5fqkpzyfn/.home\n```"
+  }
+}

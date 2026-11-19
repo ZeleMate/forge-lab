@@ -1,0 +1,78 @@
+{
+  "model": "openrouter/glm-5-3-flash",
+  "version": "0.180.0",
+  "refusals": {
+    "no own Session": "refused: can't tell which Session I'm running in, so I can't rule out acting on it. Try: pass caller_session_id (your Session's id)",
+    "pending Approval": "refused: Turn 01m6hemt8jc4skb7812f5pgrp6 is waiting on an Approval or answer (1 pending). Try: pick an earlier Turn, or resolve it in the UI first",
+    "running": "refused: Turn 01m6k3dw3kh395rgw09we0cv6p is still running. Try: wait_turn until it finishes, or pick a finished Turn",
+    "auto": "refused: `auto` isn't allowed: every write names an explicit Turn id. Try: get_turn to find the Turn's id",
+    "depth 2": "refused: Session 01m6k3dt4gqgbbfamjbtqjvw1b is at depth 2; writes stop at depth 2. Try: work in a shallower Experiment Session",
+    "replay from depth 1": "refused: I'm running at depth 1 (assumed, since I couldn't confirm my Session), so a new Experiment Session would be depth 2; writes stop at depth 2. Try: fork from inside the user's chat or a depth-0 Session",
+    "own Session, in place": "refused: a fork in place in my own Session would move its tip off this Turn. Try: use another Experiment Session",
+    "rerun own Session": "refused: a re-run in my own Session would move its tip off this Turn. Try: use another Experiment Session",
+    "rerun the chat": "refused: Session 01m6k3dr5e6ywedwqvx0pcenhd is not an Experiment Session, so it's read-only. Try: fork_turn from it instead, which replays into a new Experiment Session",
+    "rerun depth 2": "refused: Session 01m6k3dt4gqgbbfamjbtqjvw1b is at depth 2; writes stop at depth 2. Try: work in a shallower Experiment Session",
+    "cancel own Session": "refused: cancelling my own Session would end this Turn. Try: the user can stop it in the UI",
+    "cancel the chat": "refused: Session 01m6k3dr5e6ywedwqvx0pcenhd is not an Experiment Session, so it's read-only. Try: the user can stop it in the UI",
+    "cancel depth 2": "refused: Session 01m6k3dt4gqgbbfamjbtqjvw1b is at depth 2; writes stop at depth 2. Try: work in a shallower Experiment Session"
+  },
+  "approvals": {
+    "fork_turn": {
+      "pausedTurn": "01m6k3dwhz82mhxtf6v7wvj8r4",
+      "status": "done",
+      "gated": {
+        "name": "call_tool",
+        "arguments": "{\"mcp_server\": \"sessions\", \"tool_name\": \"fork_turn\", \"input\": {\"session_id\": \"01m6k3dj8p5762je363png892y\", \"from_turn_id\": \"01m6k3dj8tfcqpepcbbefv5f4w\", \"message\": \"Say bye in one word.\"}}"
+      },
+      "toolResponse": "{\"provenance\":\"observed\",\"citation\":{\"session_id\":\"01m6k3dj8p5762je363png892y\",\"turn_id\":\"01m6k3e2esvvjc0p7gaw4zbqkm\"},\"mode\":\"in-place\",\"context\":\"kept\",\"status\":\"running\",\"note\":\"wait_turn to follow it\"}",
+      "targetTurns": [
+        2,
+        3
+      ]
+    },
+    "rerun_turn": {
+      "pausedTurn": "01m6k3ea97ngtb0twmm9t4k18m",
+      "status": "done",
+      "gated": {
+        "name": "call_tool",
+        "arguments": "{\"input\": {\"session_id\": \"01m6k3dj8p5762je363png892y\", \"turn_id\": \"01m6k3dj8tfcqpepcbbefv5f4w\"}, \"mcp_server\": \"sessions\", \"tool_name\": \"rerun_turn\"}"
+      },
+      "toolResponse": "{\"provenance\":\"observed\",\"citation\":{\"session_id\":\"01m6k3dj8p5762je363png892y\",\"turn_id\":\"01m6k3ec9anxn6hd8kbqxvkztw\"},\"mode\":\"in-place\",\"context\":\"kept\",\"status\":\"running\",\"note\":\"re-runs 01m6k3dj8tfcqpepcbbefv5f4w's input from the root; wait_turn to follow it\"}",
+      "targetTurns": [
+        3,
+        4
+      ]
+    },
+    "cancel_session": {
+      "pausedTurn": "01m6k3ee7kze60ryaf15hv4skn",
+      "status": "done",
+      "gated": {
+        "name": "call_tool",
+        "arguments": "{\"input\": {\"session_id\": \"01m6k3dj8p5762je363png892y\"}, \"mcp_server\": \"sessions\", \"tool_name\": \"cancel_session\"}"
+      },
+      "toolResponse": "{\"provenance\":\"observed\",\"citation\":{\"session_id\":\"01m6k3dj8p5762je363png892y\",\"turn_id\":\"01m6k3eg6s2m4bdjgy22xcydjr\"},\"mode\":\"cancel\",\"status\":\"cancelled\",\"note\":\"cancelled\"}",
+      "targetTurns": [
+        4,
+        5
+      ],
+      "cancelledTurn": {
+        "status": "cancelled",
+        "reason": "client-cancelled",
+        "completed_at": "2026-11-04T11:00:01.400Z",
+        "metrics": {
+          "total_input_tokens": 0,
+          "total_output_tokens": 0,
+          "total_tokens": 0
+        }
+      }
+    }
+  },
+  "sessions": {
+    "target": "01m6k3dj8p5762je363png892y",
+    "caller": "01m6k3dr5b9emcvszsx60h2ycm",
+    "chat": "01m6k3dr5e6ywedwqvx0pcenhd",
+    "deep": "01m6k3dt4gqgbbfamjbtqjvw1b",
+    "untouchedOthers": 49
+  },
+  "failures": []
+}

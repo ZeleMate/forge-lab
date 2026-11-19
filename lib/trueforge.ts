@@ -1,6 +1,7 @@
 // Shared helpers for talking to the local TrueForge server.
 // Scripts import what they need: `import { api, runTurn } from "@forge-lab/lib/trueforge"`.
 
+import { homedir } from "node:os";
 import { TRUEFORGE_ORIGIN } from "./ports";
 
 export const ORIGIN = TRUEFORGE_ORIGIN;
@@ -126,6 +127,37 @@ export async function openExperimentSession(agent: string, experiment: string) {
   return data.id;
 }
 
+// Opens an inline Experiment Session: it carries its own copy of an Agent spec
+// (snake_case, as GET /agents returns it), so changing it never touches the
+// named Agent (#9, #24).
+export async function openInlineExperimentSession(spec: Record<string, unknown>, experiment: string) {
+  const { data } = await api<{ id: string }>("POST", "/sessions", {
+    agent: { spec },
+    metadata: { experiment, depth: "0" },
+  });
+  return data.id;
+}
+
+// The model smoke runs and mechanics Experiments use, and a prompt slow enough
+// that a script can act on the Turn while it's still running.
+export const SMOKE_MODEL = "openrouter/glm-5-3-flash";
+export const SLOW_PROMPT = "Write a 600-word essay about how maps changed navigation. No tools.";
+
+// The parts of a snake_case spec the scripts change.
+export type WireSpec = {
+  model: { name: string; params?: Record<string, unknown> };
+  mcp_servers?: { name: string; require_approval_for_tools?: string[] }[];
+  config?: Record<string, unknown>;
+};
+
+// A copy of a registered spec on the smoke model. GLM rejects reasoning_effort
+// (its provider manifest declares no reasoning_efforts), so that param is dropped.
+export function onSmokeModel(manifest: Record<string, unknown>): WireSpec {
+  const spec = structuredClone(manifest) as WireSpec;
+  const { reasoning_effort: _dropped, ...params } = spec.model.params ?? {};
+  return { ...spec, model: { ...spec.model, name: SMOKE_MODEL, params } };
+}
+
 // ---------- running turns ----------
 
 // Starts a Turn and returns at once (`stream: false`), still `running`.
@@ -206,6 +238,7 @@ export function summarise(turn: Turn & { wallMs?: number }, events: Event[]) {
 // (`import.meta.dir` is the folder of the file that writes it, so it names the caller's own).
 export async function saveResults(dir: string, results: unknown) {
   const file = `${dir}/${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
-  await Bun.write(file, JSON.stringify(results, null, 2));
+  // Results get committed, and sandbox paths in them contain the home folder and so the username.
+  await Bun.write(file, JSON.stringify(results, null, 2).replaceAll(homedir(), "/Users/<user>"));
   return file;
 }

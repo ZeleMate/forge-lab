@@ -1,0 +1,47 @@
+{
+  "version": "0.180.0",
+  "model": "openrouter/glm-5-3-flash",
+  "source": {
+    "session": "01m6b9k3a87e8r5vn4c6svkg0y",
+    "question": "Where is the AgentThread class declared in TrueForge, and which method runs the agent loop? Cite the lines.",
+    "checks": {
+      "turnDone": true,
+      "toolResultLabelled": true,
+      "toolResultCited": true,
+      "answerCites": true
+    },
+    "answer": "Found both. Here's the answer:\n\n**The `AgentThread` class is declared at `packages/trueforge-core/src/core/runtime/AgentThread.ts:509`, and its agent loop runs in the `execute()` method — an async generator starting at line 1422, whose `for (;;)` loop (lines 1465–1515) steps the thread until the model stops calling tools.**\n\nEvidence (all `source` @ `d15fbad`, v0.180.0):\n\n- `packages/trueforge-core/src/core/runtime/AgentThread.ts:509` — `export class AgentThread {`\n- `packages/trueforge-core/src/core/runtime/AgentThread.ts:1422` — the loop driver: `public async *execute(options?: { signal?: AbortSignal | undefined; }): AsyncGenerator<AgentThreadEvent, void, unknown> {`\n- `packages/trueforge-core/src/core/runtime/AgentThread.ts:1465` — the loop itself: `for (;;) {` … at `1474` it calls `this.deriveState()`, then at `1476–1507` a `switch` dispatches per state:\n  - `'llm-call-required'` → `yield* this.stepLLMCall(tools, toolMapping, signal)` (`:1490`), guarded by the iteration limit at `:1482`\n  - `'tool-response-required'` → `yield* this.stepToolResponse(toolMapping)` (`:1499`)\n  - `'user-input-required'` → `yield* this.stepUserInputRequired(currentModelMessageEventId)` (`:1505`)\n- `packages/trueforge-core/src/core/runtime/AgentThread.ts:1512` — the only exit: `if (outcome === 'exit') { return; }`\n\nWorth knowing: `execute()` is an **async generator** — the loop `yield`s `AgentThreadEvent`s one at a time instead of returning a result, and each `step*` method is itself a generator (`yield*`ed in). There is no method literally named `run` or `step` on this class; `execute` is the loop. The outer entry point is `AgentThreadOrchestrator.send()` at `packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts:314`, which delegates via `yield* thread.send(messages)` (`:397`).\n\nGaps: I confirmed `execute` is the loop from its structure, but I haven't traced where the orchestrator invokes `execute()` (i.e., what wraps the generator at runtime) — say the word and I'll trace that chain next, or we could fork a Turn to watch `execute`'s events fire live.",
+    "summary": {
+      "status": "done",
+      "wallMs": 48083,
+      "metrics": {
+        "total_input_tokens": 41218,
+        "total_output_tokens": 1713,
+        "total_tokens": 42931,
+        "total_cache_read_tokens": 26240,
+        "total_reasoning_tokens": 674
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "mcp.initialize": 1,
+        "model.message": 6,
+        "tool.response": 9,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "source_status",
+        "search_text",
+        "search_text",
+        "search_text",
+        "search_text",
+        "search_text",
+        "search_text",
+        "read_file",
+        "search_text"
+      ],
+      "usedMetaTools": false,
+      "usedSubagent": false,
+      "cacheReadTokens": 26240
+    }
+  }
+}

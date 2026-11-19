@@ -83,17 +83,18 @@ const res = await fetch(`${TRUEFORGE_URL}/api/v1/settings/model-providers`, {
   body: JSON.stringify({ manifest }),
 });
 
-if (!res.ok) {
-  // Print the server's error, but never the request body (it holds the key).
-  console.error(`TrueForge rejected the provider: HTTP ${res.status}`);
-  console.error(await res.text());
-  process.exit(1);
-}
-
-// The response should show the key redacted. Fail loudly if it ever doesn't.
+// The response should show the key redacted. Fail loudly if it ever doesn't, on an
+// error response too, since that's the one printed below.
 const text = await res.text();
 if (text.includes(apiKey)) {
   console.error("Unexpected: the response echoed the raw key. Not printing it.");
+  process.exit(1);
+}
+
+if (!res.ok) {
+  console.error(`TrueForge rejected the provider: HTTP ${res.status}`);
+  // \p{Cc} matches control characters (line breaks, terminal escapes), so the response can't fake log lines.
+  console.error(text.replace(/\p{Cc}/gu, " "));
   process.exit(1);
 }
 

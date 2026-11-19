@@ -1,0 +1,361 @@
+{
+  "model": "gpt-6-luna",
+  "version": "0.180.0",
+  "score": {
+    "request": {
+      "model": "gpt-6-luna",
+      "input": "Question about the TrueForge agent harness: Which method runs the agent loop?\n\nCandidate files:\n\n### C01\npackages/trueforge-core/src/core/runtime/AgentThread.ts\nexport class AgentThread\n\n### C02\npackages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts\nexport async function* wrapWithSubAgentSpan( parentTrace: AgentExecutionTrace, currentThread: AgentThread, signal?: AbortSignal, ): AsyncGenerator<AgentThreadEvent>\nexport interface AgentThreadOrchestratorInput\nexport class AgentThreadOrchestrator\n\n### C03\npackages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts\nexport function resolveCompactionThresholdTokens(input:\nexport function contextCompaction(options:\nexport class ContextCompaction implements PreLLMAgentContextProcessor\nexport interface ContextCompactionSettings\n\n### C04\npackages/trueforge/src/apis/turns.ts\n/**\n * DB-backed turns API (mounted at /api/v1/sessions).\n */\nexport function toWireTurn(record: TurnRecordWithoutSnapshot): Turn\nexport function toContentDisposition(path: string): string\nexport function deriveSessionTitle(input: TurnInputItem[] | undefined): string | undefined\nexport function turnEventSsePayload(event: TurnStreamingEvent, sequenceNumber: number):\nexport function streamTTLSecondsFor(event: TurnStreamingEvent): number | undefined\nexport function turnStreamId(tenantId: string, sessionId: string, turnId: string): string\nexport async function drainTurnEvents(input:\nexport async function beginTurnExecution( params: BeginTurnExecutionParams, ): Promise<\nexport async function startTurnInProcess(params: BeginTurnExecutionParams): Promise<TurnHandle>\nexport function getTurnExecutionError(error: unknown): TurnExecutionError | undefined\nexport function resolveAfterSequenceNumber(c: Context, bodyAfterSequenceNumber?: number): number | undefined\nexport function createTurnsRouter(deps: TurnsRouterDeps)\nexport interface TurnsRouterDeps\nexport type BeginTurnExecutionDeps = Pick< TurnsRouterDeps, 'activeTurns' | 'eventSubscriptions' | 'logger' | 'sandboxEnvironmentStore' > &\nexport interface TurnEventDrainInput\nexport interface TurnExecutionError\n\n### C05\npackages/trueforge/src/config.ts\n/**\n * Server configuration.\n *\n * Environment variables are read once at module load into a typed\n * `configuration` object exported as default. Any invalid value throws at\n * import time, so a misconfigured server fails fast at boot instead of\n * mid-run.\n *\n * `STANDALONE` is a discriminated mode selector:\n * - `true` (default): SQLite only; no Redis / executor peering.\n * - `false`: Postgres; Redis required for the server (optional for controller / migrate).\n */\nexport function parseOidcScopes(raw: string): string[]\nexport function parseCommaSeparatedEnvList(raw: string | undefined): string[]\nexport function parseJsonStringArrayEnv(\nexport function parseOidcAllowedEmails(raw: string | undefined): string[]\nexport function parseTenantIdToAllowedModelProviderAccounts(raw: string | undefined): Record<string, string[]>\nexport function parseTrueFoundryWebSearchProvider( raw: string | undefined, ): TrueFoundryWebSearchProviderEnv | undefined\nexport function buildRedisStandaloneUrl(parts:\nexport function isOidcConfigured( value: ServerConfiguration, ): value is DistributedServerConfiguration &\nexport function isTrueFoundryModeEnabled( config: ServerConfiguration = configuration, ): config is DistributedServerConfiguration &\nexport function getTrueForgeAuthMode(config: ServerConfiguration = configuration): TrueForgeAuthMode\nexport function getPublicBaseUrl(config: ServerConfiguration = configuration): string\nexport function getPublicUiBasePath(config: ServerConfiguration = configuration): string\nexport interface GetEnvOptions\nexport interface PostgresSslConfig\nexport interface TrueFoundryWebSearchProviderEnv\nexport interface OIDCConfig\nexport interface SharedServerConfiguration\nexport type StandaloneServerConfiguration = SharedServerConfiguration &\nexport type DistributedServerConfiguration = SharedServerConfiguration &\nexport type ServerConfiguration = StandaloneServerConfiguration | DistributedServerConfiguration;\nexport enum TrueForgeA",
+      "questions": [
+        {
+          "type": "score",
+          "name": "C01",
+          "instructions": "How much does candidate C01 (packages/trueforge-core/src/core/runtime/AgentThread.ts) help answer the question? Judge C01 only.",
+          "levels": [
+            {
+              "label": "irrelevant",
+              "description": "Nothing in this file bears on the question."
+            },
+            {
+              "label": "mentions",
+              "description": "Touches the topic (imports it, passes it through, names it) but doesn't implement it."
+            },
+            {
+              "label": "partial",
+              "description": "Implements part of the answer, or a closely related step."
+            },
+            {
+              "label": "answers",
+              "description": "A primary place to read: it implements or defines the mechanism the question asks about."
+            }
+          ]
+        },
+        {
+          "type": "score",
+          "name": "C02",
+          "instructions": "How much does candidate C02 (packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts) help answer the question? Judge C02 only.",
+          "levels": [
+            {
+              "label": "irrelevant",
+              "description": "Nothing in this file bears on the question."
+            },
+            {
+              "label": "mentions",
+              "description": "Touches the topic (imports it, passes it through, names it) but doesn't implement it."
+            },
+            {
+              "label": "partial",
+              "description": "Implements part of the answer, or a closely related step."
+            },
+            {
+              "label": "answers",
+              "description": "A primary place to read: it implements or defines the mechanism the question asks about."
+            }
+          ]
+        },
+        {
+          "type": "score",
+          "name": "C03",
+          "instructions": "How much does candidate C03 (packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts) help answer the question? Judge C03 only.",
+          "levels": [
+            {
+              "label": "irrelevant",
+              "description": "Nothing in this file bears on the question."
+            },
+            {
+              "label": "mentions",
+              "description": "Touches the topic (imports it, passes it through, names it) but doesn't implement it."
+            },
+            {
+              "label": "partial",
+              "description": "Implements part of the answer, or a closely related step."
+            },
+            {
+              "label": "answers",
+              "description": "A primary place to read: it implements or defines the mechanism the question asks about."
+            }
+          ]
+        },
+        {
+          "type": "score",
+          "name": "C04",
+          "instructions": "How much does candidate C04 (packages/trueforge/src/apis/turns.ts) help answer the question? Judge C04 only.",
+          "levels": [
+            {
+              "label": "irrelevant",
+              "description": "Nothing in this file bears on the question."
+            },
+            {
+              "label": "mentions",
+              "description": "Touches the topic (imports it, passes it through, names it) but doesn't implement it."
+            },
+            {
+              "label": "partial",
+              "description": "Implements part of the answer, or a closely related step."
+            },
+            {
+              "label": "answers",
+              "description": "A primary place to read: it implements or defines the mechanism the question asks about."
+            }
+          ]
+        },
+        {
+          "type": "score",
+          "name": "C05",
+          "instructions": "How much does candidate C05 (packages/trueforge/src/config.ts) help answer the question? Judge C05 only.",
+          "levels": [
+            {
+              "label": "irrelevant",
+              "description": "Nothing in this file bears on the question."
+            },
+            {
+              "label": "mentions",
+              "description": "Touches the topic (imports it, passes it through, names it) but doesn't implement it."
+            },
+            {
+              "label": "partial",
+              "description": "Implements part of the answer, or a closely related step."
+            },
+            {
+              "label": "answers",
+              "description": "A primary place to read: it implements or defines the mechanism the question asks about."
+            }
+          ]
+        }
+      ]
+    },
+    "response": {
+      "model": "gpt-6-luna",
+      "answers": [
+        {
+          "type": "score",
+          "name": "C01",
+          "score": 2.44,
+          "probabilities": [
+            {
+              "value": 0,
+              "label": "irrelevant",
+              "probability": 0.05
+            },
+            {
+              "value": 1,
+              "label": "mentions",
+              "probability": 0.03
+            },
+            {
+              "value": 2,
+              "label": "partial",
+              "probability": 0.35
+            },
+            {
+              "value": 3,
+              "label": "answers",
+              "probability": 0.57
+            }
+          ],
+          "confidence": 0.44
+        },
+        {
+          "type": "score",
+          "name": "C02",
+          "score": 2.24,
+          "probabilities": [
+            {
+              "value": 0,
+              "label": "irrelevant",
+              "probability": 0.03
+            },
+            {
+              "value": 1,
+              "label": "mentions",
+              "probability": 0.12
+            },
+            {
+              "value": 2,
+              "label": "partial",
+              "probability": 0.43
+            },
+            {
+              "value": 3,
+              "label": "answers",
+              "probability": 0.42
+            }
+          ],
+          "confidence": 0.4
+        },
+        {
+          "type": "score",
+          "name": "C03",
+          "score": 0.01,
+          "probabilities": [
+            {
+              "value": 0,
+              "label": "irrelevant",
+              "probability": 0.99
+            },
+            {
+              "value": 1,
+              "label": "mentions",
+              "probability": 0.01
+            },
+            {
+              "value": 2,
+              "label": "partial",
+              "probability": 0
+            },
+            {
+              "value": 3,
+              "label": "answers",
+              "probability": 0
+            }
+          ],
+          "confidence": 0.99
+        },
+        {
+          "type": "score",
+          "name": "C04",
+          "score": 1.99,
+          "probabilities": [
+            {
+              "value": 0,
+              "label": "irrelevant",
+              "probability": 0.01
+            },
+            {
+              "value": 1,
+              "label": "mentions",
+              "probability": 0.03
+            },
+            {
+              "value": 2,
+              "label": "partial",
+              "probability": 0.92
+            },
+            {
+              "value": 3,
+              "label": "answers",
+              "probability": 0.04
+            }
+          ],
+          "confidence": 0.91
+        },
+        {
+          "type": "score",
+          "name": "C05",
+          "score": 0,
+          "probabilities": [
+            {
+              "value": 0,
+              "label": "irrelevant",
+              "probability": 1
+            },
+            {
+              "value": 1,
+              "label": "mentions",
+              "probability": 0
+            },
+            {
+              "value": 2,
+              "label": "partial",
+              "probability": 0
+            },
+            {
+              "value": 3,
+              "label": "answers",
+              "probability": 0
+            }
+          ],
+          "confidence": 1
+        }
+      ],
+      "usage": {
+        "input_tokens": 1815,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1815
+      }
+    }
+  },
+  "predicate": {
+    "request": {
+      "model": "gpt-6-luna",
+      "input": "One persisted event from a TrueForge agent Session.\nEvent type: model.message\nCalls tool source_status with {}",
+      "questions": [
+        {
+          "type": "predicate",
+          "name": "calls_source_status",
+          "instructions": "This event calls the tool source_status."
+        }
+      ]
+    },
+    "response": {
+      "model": "gpt-6-luna",
+      "answers": [
+        {
+          "type": "predicate",
+          "name": "calls_source_status",
+          "probability": 0.99
+        }
+      ],
+      "usage": {
+        "input_tokens": 178,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 0,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 178
+      }
+    }
+  },
+  "overBudget": {
+    "result": {
+      "provenance": "source",
+      "budget": {
+        "day": "2026-11-07",
+        "spent_today_usd": 0.5,
+        "cap_usd": 0.5,
+        "left_usd": 0
+      },
+      "status": "unscored",
+      "reason": "the daily triage budget is spent ($0.5000 of $0.50 on 2026-11-07 UTC)",
+      "unscored": [
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThread.ts",
+          "reason": "not judged"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/runtime/AgentThreadOrchestrator.ts",
+          "reason": "not judged"
+        },
+        {
+          "path": "packages/trueforge-core/src/core/capabilities/builtins/ContextCompaction.ts",
+          "reason": "not judged"
+        },
+        {
+          "path": "packages/trueforge/src/apis/turns.ts",
+          "reason": "not judged"
+        },
+        {
+          "path": "packages/trueforge/src/config.ts",
+          "reason": "not judged"
+        }
+      ],
+      "cost_usd": 0,
+      "ranked": [],
+      "truncated": false,
+      "omitted": 0
+    },
+    "judgeCalls": 0
+  },
+  "costUsd": 0.00019930000000000002,
+  "failures": []
+}

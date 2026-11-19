@@ -75,6 +75,6 @@
     "usedMetaTools": false,
     "usedSubagent": false,
     "cacheReadTokens": 11776,
-    "answer": "Ran the snippet exactly as provided. Output verbatim:\n\n```\nnet example.com: BLOCKED\nnet pypi.org: ALLOWED\nread ~/.zshrc: BLOCKED\nwrite ~/: ALLOWED\ncwd: /Users/zelenyianszkimate/Library/Application Support/trueforge/sandboxes/01m5a8rpckhp6ne9zqm28cdn1m/01m5a8rr10ce9qryjmkjd86v7h\n```\n\nNote: since `write ~/: ALLOWED`, the probe created the file `~/tf-sandbox-write-probe` on the host home directory. I have not run any cleanup or extra commands beyond the snippet you provided."
+    "answer": "Ran the snippet exactly as provided. Output verbatim:\n\n```\nnet example.com: BLOCKED\nnet pypi.org: ALLOWED\nread ~/.zshrc: BLOCKED\nwrite ~/: ALLOWED\ncwd: /Users/<user>/Library/Application Support/trueforge/sandboxes/01m5a8rpckhp6ne9zqm28cdn1m/01m5a8rr10ce9qryjmkjd86v7h\n```\n\nNote: since `write ~/: ALLOWED`, the probe created the file `~/tf-sandbox-write-probe` on the host home directory. I have not run any cleanup or extra commands beyond the snippet you provided."
   }
 }

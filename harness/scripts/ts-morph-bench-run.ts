@@ -48,8 +48,8 @@ function runOnce(runtime: RuntimeName): Pass {
   const stderr = proc.stderr.toString();
   if (proc.exitCode !== 0) throw new Error(`${runtime} run failed:\n${stderr}`);
   const pass = JSON.parse(stdout.trim().split("\n").at(-1) ?? "") as Pass;
-  pass.wallMs = Number(/([\d.]+) real/.exec(stderr)?.[1]) * 1000;
-  pass.peakRssMb = Math.round(Number(/(\d+)\s+maximum resident set size/.exec(stderr)?.[1]) / 1024 / 1024);
+  pass.wallMs = Number(/\b(\d+(?:\.\d+)?) real/.exec(stderr)?.[1]) * 1000;
+  pass.peakRssMb = Math.round(Number(/\b(\d+)\s+maximum resident set size/.exec(stderr)?.[1]) / 1024 / 1024);
   return pass;
 }
 

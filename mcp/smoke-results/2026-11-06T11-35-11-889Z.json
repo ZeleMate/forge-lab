@@ -1,0 +1,44 @@
+{
+  "version": "0.180.0",
+  "model": "openrouter/glm-5-3-flash",
+  "sessions": {
+    "session": "01m6ra7qn7nx53ez2f56bms6jw",
+    "question": "Which Experiment Sessions ran most recently? List up to three, then give the status and token totals of the newest Turn in the first one. Cite the ids.",
+    "checks": {
+      "turnDone": true,
+      "toolResultLabelled": true,
+      "toolResultCited": true,
+      "answerCites": true
+    },
+    "answer": "**Answer:** The three most recently updated Experiment Sessions are `01m6ra7qn7nx53ez2f56bms6jw`, `01m6ra7kn8n890x0w04yk1zt7r`, and `01m6ra7cpk853g5rqq1h6gafvv`. The first one is this very Session (tagged `experiment: smoke-mcp-sessions`); its newest Turn `01m6ra7qn98myb44xfvwb6y05c` is still **running**, so it has no token totals yet — metrics appear only once a Turn completes.\n\n**Evidence (all `observed`, via `sessions` tools):**\n- Top 3 Experiment Sessions, most recently updated first (`list_sessions`, sorted newest-first): \n  1. `01m6ra7qn7nx53ez2f56bms6jw` — \"Which Experiment Sessions ran most recently?…\" — `experiment: smoke-mcp-sessions`, depth 0, 1 turn, updated 2026-11-06T11:34:51.8Z\n  2. `01m6ra7kn8n890x0w04yk1zt7r` — \"Call source_status, then search_text for AgentThre…\" — `experiment: fixtures-record`, depth 1, 1 turn, updated 11:34:47.7Z\n  3. `01m6ra7cpk853g5rqq1h6gafvv` — \"Call the source_status tool once…\" — `experiment: fixtures-record`, depth 0, 4 turns, updated 11:34:46.7Z\n- Newest Turn of the first Session (`get_turn` on `01m6ra7qn7nx53ez2f56bms6jw`): turn `01m6ra7qn98myb44xfvwb6y05c`, status `running`, `previous_turn_id: null`, input is this question, created 11:34:51.8Z — `metrics` is absent, so input/output/reasoning/cache tokens are not yet recorded.\n- Idiom note: `list_sessions`' `experiment` parameter filters by the *value* of the `experiment` tag, not a boolean — I passed `experiment: \"true\"` and got zero Sessions; filtering on the returned `experiment: true` flag worked instead.\n\n**Gaps:** Token totals are `inferred`-unavailable: the Turn I was asked about is the Turn answering you, so totals can only exist after it completes. Next step: re-run this same query after this Turn finishes (or I could propose an Experiment that checks a completed Session's newest Turn metrics, e.g. one of the `fixtures-record` Sessions above).",
+    "summary": {
+      "status": "done",
+      "wallMs": 20067,
+      "metrics": {
+        "total_input_tokens": 45877,
+        "total_output_tokens": 2313,
+        "total_tokens": 48190,
+        "total_cache_read_tokens": 30016,
+        "total_reasoning_tokens": 1411
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "mcp.initialize": 2,
+        "model.message": 6,
+        "tool.response": 6,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "list_tools",
+        "get_tool_info",
+        "get_tool_info",
+        "call_tool",
+        "call_tool",
+        "call_tool"
+      ],
+      "usedMetaTools": true,
+      "usedSubagent": false,
+      "cacheReadTokens": 30016
+    }
+  }
+}

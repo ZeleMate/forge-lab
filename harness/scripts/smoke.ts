@@ -63,7 +63,8 @@ for (const model of models) {
 
   results[model] = r;
   console.log(`== ${model}`);
-  console.log(JSON.stringify(r, null, 2), "\n");
+  // `%s` is a `util.format`-style placeholder; a literal format string means nothing in the data can act as one.
+  console.log("%s\n", JSON.stringify(r, null, 2));
 }
 
 console.log(`Saved to ${await saveResults(`${import.meta.dir}/../smoke-results`, results)}`);

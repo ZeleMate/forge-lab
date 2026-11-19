@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    // Browser code: DOM types, plus Bun's for the `*.test.ts` files next to it.
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client", "bun"],
+    // JSX compiled by React 19's runtime, so a file needn't import React to use JSX.
+    "jsx": "react-jsx"
+  },
+  "include": ["src", "vite.config.ts"]
+}

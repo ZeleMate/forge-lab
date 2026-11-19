@@ -75,6 +75,6 @@
     "usedMetaTools": false,
     "usedSubagent": false,
     "cacheReadTokens": 11264,
-    "answer": "Output, verbatim:\n\n```\nnet example.com: BLOCKED\nnet pypi.org: ALLOWED\nread real ~/.zshrc: BLOCKED\nread repo .env: BLOCKED\nwrite real ~/: BLOCKED\nwrite /tmp: BLOCKED\nsandbox HOME: /Users/zelenyianszkimate/Library/Application Support/trueforge/sandboxes/01m5a8vej7jbt9sessad0zmbgz/01m5a8vh0qn57p6dpm9g9wxfy8/.home\n```"
+    "answer": "Output, verbatim:\n\n```\nnet example.com: BLOCKED\nnet pypi.org: ALLOWED\nread real ~/.zshrc: BLOCKED\nread repo .env: BLOCKED\nwrite real ~/: BLOCKED\nwrite /tmp: BLOCKED\nsandbox HOME: /Users/<user>/Library/Application Support/trueforge/sandboxes/01m5a8vej7jbt9sessad0zmbgz/01m5a8vh0qn57p6dpm9g9wxfy8/.home\n```"
   }
 }

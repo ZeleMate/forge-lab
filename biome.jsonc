@@ -6,7 +6,7 @@
   "files": {
     // TypeScript and JSON only. A leading `!` excludes: the `*-results/` folders
     // hold recorded Experiment output, which stays exactly as it was written.
-    "includes": ["**/*.ts", "**/*.json", "**/*.jsonc", "!**/*-results"]
+    "includes": ["**/*.ts", "**/*.tsx", "**/*.json", "**/*.jsonc", "!**/*-results"]
   },
   "formatter": {
     "enabled": true,

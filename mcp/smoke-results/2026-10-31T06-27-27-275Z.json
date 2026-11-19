@@ -1,0 +1,51 @@
+{
+  "version": "0.179.2",
+  "model": "openrouter/glm-5-3-flash",
+  "source": {
+    "session": "01m68a7sva72tp2mar5v4drfex",
+    "question": "Where is the AgentThread class declared in TrueForge, and which method runs the agent loop? Cite the lines.",
+    "checks": {
+      "turnDone": true,
+      "toolResultLabelled": true,
+      "toolResultCited": true,
+      "answerCites": false
+    },
+    "answer": "The agent loop lives in `AgentThread.execute()` — a state-machine loop that alternates LLM calls and tool responses until it exits.\n\n**Evidence** (`source`, all @ `198a2ea` = v0.179.2):\n\n- **Class declaration**: `packages/trueforge-core/src/core/runtime/AgentThread.ts:496` — `export class AgentThread {`, with `threadId`, `definition`, context array, processors, sandbox, etc. at lines 497–530. (A separate `AgentThreadOrchestrator` class exists at `AgentThreadOrchestrator.ts:237`.)\n- **The loop**: `AgentThread.ts:1403` — `public async *execute(options?: { signal?: AbortSignal | undefined; }): AsyncGenerator<AgentThreadEvent, void, unknown>`. The actual loop is the `for (;;) {` at line 1446:\n  - `deriveState()` (line 1455) picks the next step: `'llm-call-required'` → `yield* this.stepLLMCall(...)` (1471), `'tool-response-required'` → `yield* this.stepToolResponse(...)` (1480), `'user-input-required'` → `stepUserInputRequired` (1486).\n  - It enforces `iterationLimit` (1438, 1463) and exits when `outcome === 'exit'` (1493–1494).\n  - By contrast, `send()` (line 603) only validates and appends user messages/approvals to context — it does not run the loop.\n- **Who drives it**: the orchestrator pumps the generator — `wrapGeneratorWithTrace(trace, thread.execute({ signal }))` at `AgentThreadOrchestrator.ts:156` and line 199 for sub-agents.\n\nTypeScript idiom worth noting: `execute` is an **async generator** (`yield*`), so the loop streams `AgentThreadEvent`s to the orchestrator step-by-step rather than returning a result.\n\n**Gaps**: I read the loop but not `deriveState()` itself (it maps pending tool calls / approvals to the three states); say the word and I'll trace it with line citations.",
+    "summary": {
+      "status": "done",
+      "wallMs": 24115,
+      "metrics": {
+        "total_input_tokens": 89509,
+        "total_output_tokens": 2320,
+        "total_tokens": 91829,
+        "total_cache_read_tokens": 72960,
+        "total_reasoning_tokens": 1320
+      },
+      "eventCounts": {
+        "turn.created": 1,
+        "mcp.initialize": 1,
+        "model.message": 10,
+        "tool.response": 13,
+        "turn.done": 1
+      },
+      "toolCalls": [
+        "source_status",
+        "search_text",
+        "search_text",
+        "read_file",
+        "search_text",
+        "search_text",
+        "search_text",
+        "read_file",
+        "read_file",
+        "search_text",
+        "search_text",
+        "search_text",
+        "search_text"
+      ],
+      "usedMetaTools": false,
+      "usedSubagent": false,
+      "cacheReadTokens": 72960
+    }
+  }
+}
