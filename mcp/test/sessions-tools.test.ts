@@ -179,6 +179,24 @@ describe("writes", () => {
     ]);
   });
 
+  // A Replay holds the chat's messages but is an Experiment Session, so writes
+  // act on it in place, not by replaying it again. Finding that out reads the
+  // Session its `origin` names.
+  test("fork_turn and rerun_turn on a Replay act in place", async () => {
+    const { fake, client } = await setup();
+    fake.addSession("replay", { metadata: { experiment: "x", depth: "1", origin: "chat:c1" }, inline: true });
+    fake.addTurn("replay", "r1", { text: "how does compaction fire?" });
+    const forked = await call(client, "fork_turn", { session_id: "replay", from_turn_id: "r1", message: "and then?" });
+    expect(forked.data).toMatchObject({ mode: "in-place", context: "kept" });
+    const rerun = await call(client, "rerun_turn", { session_id: "replay", turn_id: "r1" });
+    expect(rerun.data).toMatchObject({ mode: "in-place", context: "kept" });
+    expect(fake.mutations().map((c) => [c.method, c.args[0]])).toEqual([
+      ["createTurn", "replay"],
+      ["createTurn", "replay"],
+    ]);
+    expect(fake.calls).toContainEqual({ method: "getSession", args: ["chat"] });
+  });
+
   test("fork_turn from the user's chat replays into a new tagged inline Session", async () => {
     const { fake, client, tasks } = await setup();
     const r = await call(client, "fork_turn", {
