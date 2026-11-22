@@ -3,6 +3,7 @@
 // caller and Turn checks in checks.ts first, then asks the access policy
 // (access.ts) about the target, so it acts only on Experiment Sessions.
 
+import { withReplay } from "@forge-lab/lib/experiment-tags";
 import type { CallToolResult, McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { guarded, ok, refuse } from "../result";
@@ -121,7 +122,7 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       const spec = args.config_patch ? applyConfigPatch(base, args.config_patch) : { ok: true as const, spec: base };
       if (!spec.ok) return refuse(`config_patch doesn't fit the spec: ${spec.reason}`, "fix the patch's values");
 
-      const tags = { ...replayTags(session.id, source.id, own, args.experiment), replay: "running" };
+      const tags = withReplay(replayTags(session.id, source.id, own, args.experiment), { status: "running" });
       const created = await api.createSession({ spec: spec.spec, metadata: tags });
       const inputs = [...replayed.map(userMessagesOf), [message]];
       spawn(replay(created.id, tags, inputs));

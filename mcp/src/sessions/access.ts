@@ -7,6 +7,7 @@
 // Two steps: `classify` reads what the Session is (one lookup for an Experiment
 // Session with an `origin`), then `refusalFor` answers one ask, without I/O.
 
+import { decodeExperimentTags, encodeExperimentTags } from "@forge-lab/lib/experiment-tags";
 import type { CallToolResult } from "@modelcontextprotocol/server";
 import { refuse } from "../result";
 import type { Metadata, Session, SessionsApi } from "./api";
@@ -49,17 +50,21 @@ const MAX_DEPTH = 2;
 
 export const isExperiment = (s: Session) => s.metadata.experiment !== undefined;
 
+// The tag codec (@forge-lab/lib/experiment-tags) parses; the policy picks the
+// fallbacks. `switch` on `kind` narrows the union, so `value` exists only when valid.
 export function depthOf(metadata: Metadata): number {
-  // An untagged Session (the user's chat) is depth 0, like a script's root Experiment.
-  const raw = metadata.depth;
-  if (raw === undefined) return 0;
-  // A tag that isn't a small integer counts as too deep, so writes refuse it.
-  return /^\d$/.test(raw) ? Number(raw) : Number.POSITIVE_INFINITY;
+  const depth = decodeExperimentTags(metadata).depth;
+  switch (depth.kind) {
+    // An untagged Session (the user's chat) is depth 0, like a script's root Experiment.
+    case "absent":
+      return 0;
+    case "valid":
+      return depth.value;
+    // A tag that isn't one digit counts as too deep, so writes refuse it.
+    case "malformed":
+      return Number.POSITIVE_INFINITY;
+  }
 }
-
-// `origin` is `<session>:<turn>`, the chat and Turn a fork started from.
-const formatOrigin = (sessionId: string, turnId: string) => `${sessionId}:${turnId}`;
-const originSession = (origin: string) => origin.split(":")[0] ?? "";
 
 export async function classify(api: SessionsApi, session: Session): Promise<Classified> {
   const base = { id: session.id, depth: depthOf(session.metadata), depthTag: session.metadata.depth };
@@ -67,10 +72,11 @@ export async function classify(api: SessionsApi, session: Session): Promise<Clas
   if (!isExperiment(session)) return { ...base, kind: "chat", origin, holdsChat: true };
   if (origin === undefined) return { ...base, kind: "experiment", origin, holdsChat: false };
   // A replay of a chat, unless the origin names a readable Experiment Session.
-  // An origin that can't be read counts as a chat.
-  const sourceId = originSession(origin);
+  // An origin that can't be read (malformed, or naming no Session) counts as a chat.
+  const parsed = decodeExperimentTags(session.metadata).origin;
   // `.catch` turns a failed lookup into `undefined` instead of an exception.
-  const source = sourceId ? await api.getSession(sourceId).catch(() => undefined) : undefined;
+  const source =
+    parsed.kind === "valid" ? await api.getSession(parsed.value.sessionId).catch(() => undefined) : undefined;
   const replay = source === undefined || !isExperiment(source);
   return { ...base, kind: replay ? "replay" : "experiment", origin, holdsChat: replay };
 }
@@ -78,7 +84,11 @@ export async function classify(api: SessionsApi, session: Session): Promise<Clas
 // The tags of a new Experiment Session replayed from `chatId` at `turnId`: one
 // level below its caller, with an origin `classify` reads back as a Replay.
 export function replayTags(chatId: string, turnId: string, caller: Caller, experiment: string): Metadata {
-  return { experiment, depth: String(callerDepth(caller) + 1), origin: formatOrigin(chatId, turnId) };
+  return encodeExperimentTags({
+    experiment,
+    depth: callerDepth(caller) + 1,
+    origin: { sessionId: chatId, turnId },
+  });
 }
 
 // A caller named only by `caller_session_id` might be deeper than the Session

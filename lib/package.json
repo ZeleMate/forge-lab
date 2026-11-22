@@ -1,10 +1,11 @@
 {
   "name": "@forge-lab/lib",
   "private": true,
-  "description": "Shared helpers for forge-lab scripts: the TrueForge REST helpers, the local ports and the Source Snapshot pin. TypeScript source, no build step.",
+  "description": "Shared helpers for forge-lab scripts: the TrueForge REST helpers, the Experiment Session tags, the local ports and the Source Snapshot pin. TypeScript source, no build step.",
   "type": "module",
   "exports": {
     "./trueforge": "./trueforge.ts",
+    "./experiment-tags": "./experiment-tags.ts",
     "./ports": "./ports.ts",
     "./snapshot": "./snapshot.ts"
   },

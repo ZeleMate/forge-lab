@@ -27,7 +27,20 @@ beforeAll(async () => {
   fake.addSession("orphan", { metadata: { experiment: "x", depth: "1", origin: "gone:t1" }, inline: true });
   fake.addSession("blank-origin", { metadata: { experiment: "x", depth: "1", origin: "" }, inline: true });
   fake.addSession("fork", { metadata: { experiment: "x", depth: "1", origin: "exp:e1" }, inline: true });
-  for (const id of ["chat", "deep-chat", "exp", "deep", "odd-depth", "replay", "orphan", "blank-origin", "fork"])
+  // Names a readable Experiment Session before its extra colon, but the codec reads it as malformed.
+  fake.addSession("bad-origin", { metadata: { experiment: "x", depth: "1", origin: "exp:e1:extra" }, inline: true });
+  for (const id of [
+    "chat",
+    "deep-chat",
+    "exp",
+    "deep",
+    "odd-depth",
+    "replay",
+    "orphan",
+    "blank-origin",
+    "fork",
+    "bad-origin",
+  ])
     classes.set(id, await classify(fake, await fake.getSession(id)));
 });
 
@@ -55,6 +68,7 @@ describe("classify", () => {
     ["replay", "replay", true],
     ["orphan", "replay", true], // an origin that names no readable Session counts as a chat
     ["blank-origin", "replay", true],
+    ["bad-origin", "replay", true], // a malformed origin isn't looked up, so it counts as a chat
   ])("%s is a %s Session (holds chat content: %p)", (id, kind, holdsChat) => {
     expect(of(id)).toMatchObject({ id, kind, holdsChat });
   });

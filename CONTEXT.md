@@ -38,7 +38,7 @@ A named, repeatable scenario that deliberately triggers one harness behaviour (e
 _Avoid_: test, demo
 
 **Experiment Session**:
-A Session tagged with `experiment` metadata, created for an Experiment. It's an inline Session carrying its own copy of Cartographer's spec, so an Experiment changes that copy and never the Cartographer Agent. It's the only kind of Session Cartographer's write tools (fork, re-run, cancel) may act on in place; the user's own chat Sessions are never tagged. Forking a chat Session replays its user messages into a new Experiment Session: the context is replayed, never copied.
+A Session tagged with `experiment` metadata, created for an Experiment. It's an inline Session carrying its own copy of Cartographer's spec, so an Experiment changes that copy and never the Cartographer Agent. It's the only kind of Session Cartographer's write tools (fork, re-run, cancel) may act on in place; the user's own chat Sessions are never tagged. Forking a chat Session replays its user messages into a new Experiment Session: the context is replayed, never copied. Its tags record its Experiment's name, its depth (how many forks it is from a root: a script's own Experiment Session and the user's chat are both depth 0), its origin (the Session and Turn it was forked from), and, while a fork replays a chat, whether the replay is running, done or failed.
 
 **Chat Session**:
 A Session the user holds with Cartographer, as opposed to an Experiment Session. It's never tagged. Its messages are the user's own, so Cartographer reads another one only with the user's Approval; the Session it's running in is already in its context.

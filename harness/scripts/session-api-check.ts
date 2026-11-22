@@ -7,6 +7,7 @@
 // Expected results are written down in session-api-results/README.md.
 // Uses the cheap GLM model. Every Session it creates is an Experiment Session.
 
+import { encodeExperimentTags } from "@forge-lab/lib/experiment-tags";
 import { PORTS } from "@forge-lab/lib/ports";
 import {
   allEvents,
@@ -330,7 +331,8 @@ const specCopy = (agentRead.data.manifest ?? agentSpec) as typeof agentSpec;
 
 const createInline = await request("POST", "/sessions", {
   agent: { spec: specCopy },
-  metadata: { experiment: EXPERIMENT, depth: "1", origin: sourceS, context: "replayed" },
+  // The origin names the source's tip, the last Turn replayed.
+  metadata: encodeExperimentTags({ experiment: EXPERIMENT, depth: 1, origin: { sessionId: sourceS, turnId: prev } }),
 });
 const sessionR = (createInline.json as { data: { id: string; agent: unknown } }).data.id;
 const replayed: Awaited<ReturnType<typeof turn>>[] = [];
