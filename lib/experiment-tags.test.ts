@@ -42,6 +42,9 @@ describe("encodeExperimentTags", () => {
     { sessionId: "s1", turnId: "" },
     { sessionId: "s:1", turnId: "t1" },
     { sessionId: "s1", turnId: "t:1" },
+    // TrueForge's placeholders for "a new root" and "the tip" name no Turn.
+    { sessionId: "s1", turnId: "none" },
+    { sessionId: "s1", turnId: "auto" },
   ])("refuses an origin that wouldn't read back: %p", (origin) => {
     expect(() => encodeExperimentTags({ experiment: "x", depth: 1, origin })).toThrow(RangeError);
   });
@@ -86,7 +89,7 @@ describe("decodeExperimentTags", () => {
     expect(decodeExperimentTags({ depth: raw }).depth).toMatchObject({ kind: "malformed", raw });
   });
 
-  test.each(["abc", ":t1", "s1:", "s1:t1:x", ":", ""])("origin %p is malformed", (raw) => {
+  test.each(["abc", ":t1", "s1:", "s1:t1:x", ":", "", "s1:none", "s1:auto"])("origin %p is malformed", (raw) => {
     expect(decodeExperimentTags({ origin: raw }).origin).toMatchObject({ kind: "malformed", raw });
   });
 

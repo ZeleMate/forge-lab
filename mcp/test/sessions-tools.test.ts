@@ -208,12 +208,10 @@ describe("writes", () => {
     const [created, ...rest] = fake.mutations();
     expect(created?.method).toBe("createSession");
     const body = created?.args[0] as { spec: typeof SPEC; metadata: Record<string, string> };
-    expect(body.metadata).toEqual({
-      experiment: "compaction-trigger",
-      depth: "1",
-      origin: "chat:c2",
-      replay: "running",
-    });
+    // JSON.stringify keeps key order, so this pins the tags' exact bytes on the wire.
+    expect(JSON.stringify(body.metadata)).toBe(
+      '{"experiment":"compaction-trigger","depth":"1","origin":"chat:c2","replay":"running"}',
+    );
     expect(body.spec.config?.iterationLimit).toBe(5);
     // The chat itself is never written to.
     expect(fake.mutations().some((c) => c.args[0] === "chat")).toBe(false);
