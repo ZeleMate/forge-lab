@@ -37,6 +37,7 @@ import {
 } from "@forge-lab/lib/trueforge";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { sdkSessionsApi } from "../src/sessions/api";
+import { allSessions } from "../src/sessions/turns";
 
 const EXPERIMENT = "approvals-check";
 // The stand-in chat says this word, so any tool response that carries it has read the chat.
@@ -53,16 +54,18 @@ const spec = onSmokeModel(agent.manifest);
 
 const sessions = sdkSessionsApi(ORIGIN);
 
+// The fingerprint must cover every Session; this cap (5,000 Sessions) only
+// stops a runaway list from making the check run forever.
+const FINGERPRINT_PAGES = 200;
+
 // Every Session's Turn count and tags, to prove what a phase didn't touch.
 async function fingerprint(): Promise<Record<string, string>> {
-  const out: Record<string, string> = {};
-  let cursor: string | undefined;
-  do {
-    const page = await sessions.listSessions({ limit: 25, ...(cursor ? { cursor } : {}) });
-    for (const s of page.items) out[s.id] = `${s.metrics.totalTurns} ${JSON.stringify(s.metadata)}`;
-    cursor = page.next;
-  } while (cursor);
-  return out;
+  const { items, cut } = await allSessions(sessions, { maxPages: FINGERPRINT_PAGES });
+  // A partial fingerprint proves nothing about the Sessions it missed.
+  if (cut)
+    failures.push(`fingerprint: more than ${FINGERPRINT_PAGES} pages of Sessions, so not every one was compared`);
+  // `Object.fromEntries` turns [key, value] pairs into an object.
+  return Object.fromEntries(items.map((s) => [s.id, `${s.metrics.totalTurns} ${JSON.stringify(s.metadata)}`]));
 }
 
 function changed(before: Record<string, string>, after: Record<string, string>, allowed: string[]): string[] {
