@@ -2,6 +2,7 @@
 // chat's user messages are sent again, one Turn at a time, into a new inline
 // Experiment Session, and the Session's `replay` tag records how it ended.
 
+import { withReplay } from "@forge-lab/lib/experiment-tags";
 import type { Clock } from "../clock";
 import type { SessionsApi, Turn, TurnInputItem } from "./api";
 import { requiredActions } from "./project";
@@ -24,7 +25,7 @@ export function replayRunner(api: SessionsApi, clock: Clock) {
   // chains on it, or creating the next would cancel it (#21 6.2).
   return async function replay(newSessionId: string, tags: Record<string, string>, inputs: TurnInputItem[][]) {
     const markFailed = (reason: string) =>
-      api.updateSession(newSessionId, { metadata: { ...tags, replay: `failed:${reason}`.slice(0, 128) } });
+      api.updateSession(newSessionId, { metadata: withReplay(tags, { status: "failed", reason }) });
     try {
       let previous = "none";
       for (const [index, input] of inputs.entries()) {
@@ -44,7 +45,7 @@ export function replayRunner(api: SessionsApi, clock: Clock) {
         }
         previous = turn.id;
       }
-      await api.updateSession(newSessionId, { metadata: { ...tags, replay: "done" } });
+      await api.updateSession(newSessionId, { metadata: withReplay(tags, { status: "done" }) });
     } catch (error) {
       // Best effort: if TrueForge is unreachable the tag can't be written either.
       await markFailed(error instanceof Error ? error.message : String(error)).catch(() => undefined);

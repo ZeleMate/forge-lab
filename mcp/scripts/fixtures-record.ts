@@ -14,6 +14,7 @@
 //   iteration-limit  error (iteration_limit 1, in a fork tagged depth 1)
 // Writes mcp/fixtures-results/<timestamp>.json and exits 1 if a state differs.
 
+import { encodeExperimentTags } from "@forge-lab/lib/experiment-tags";
 import { readPin } from "@forge-lab/lib/snapshot";
 import {
   api,
@@ -85,7 +86,7 @@ turns["client-cancel"] = await settle(a, toCancel.id);
 // Session B: a fork of A tagged one level deeper, where one tool call is too many.
 const { data: b } = await api<{ id: string }>("POST", "/sessions", {
   agent: { spec: { ...base, config: { ...base.config, iteration_limit: 1 } } },
-  metadata: { experiment: EXPERIMENT, depth: "1", origin: `${a}:${next.id}` },
+  metadata: encodeExperimentTags({ experiment: EXPERIMENT, depth: 1, origin: { sessionId: a, turnId: next.id } }),
 });
 const limited = await createTurn(b.id, "Call source_status, then search_text for AgentThread, then answer.", "none");
 turns["iteration-limit"] = await settle(b.id, limited.id);

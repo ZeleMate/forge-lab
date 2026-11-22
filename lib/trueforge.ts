@@ -2,6 +2,7 @@
 // Scripts import what they need: `import { api, runTurn } from "@forge-lab/lib/trueforge"`.
 
 import { homedir } from "node:os";
+import { encodeExperimentTags } from "./experiment-tags";
 import { TRUEFORGE_ORIGIN } from "./ports";
 
 export const ORIGIN = TRUEFORGE_ORIGIN;
@@ -122,7 +123,7 @@ export async function upsertAgent(name: string, description: string, manifest: R
 export async function openExperimentSession(agent: string, experiment: string) {
   const { data } = await api<{ id: string }>("POST", "/sessions", {
     agent: { name: agent },
-    metadata: { experiment, depth: "0" },
+    metadata: encodeExperimentTags({ experiment, depth: 0 }),
   });
   return data.id;
 }
@@ -133,7 +134,7 @@ export async function openExperimentSession(agent: string, experiment: string) {
 export async function openInlineExperimentSession(spec: Record<string, unknown>, experiment: string) {
   const { data } = await api<{ id: string }>("POST", "/sessions", {
     agent: { spec },
-    metadata: { experiment, depth: "0" },
+    metadata: encodeExperimentTags({ experiment, depth: 0 }),
   });
   return data.id;
 }

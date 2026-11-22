@@ -19,6 +19,7 @@
 
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
+import { encodeExperimentTags } from "@forge-lab/lib/experiment-tags";
 import { HOST, PORTS } from "@forge-lab/lib/ports";
 import {
   allEvents,
@@ -81,7 +82,7 @@ const { data: chat } = await api<{ id: string }>("POST", "/sessions", {
 const c1 = await waitTurn(chat.id, (await createTurn(chat.id, `Reply with exactly this word: ${MARKER}`, "none")).id);
 const { data: deep } = await api<{ id: string }>("POST", "/sessions", {
   agent: { spec },
-  metadata: { experiment: EXPERIMENT, depth: "2" },
+  metadata: encodeExperimentTags({ experiment: EXPERIMENT, depth: 2 }),
 });
 const d1 = await waitTurn(deep.id, (await createTurn(deep.id, "Say hi in one word.", "none")).id);
 // A Turn waiting on an Approval and a depth-1 Session, from the last fixtures recording.
@@ -97,7 +98,7 @@ const running = await createTurn(target, SLOW_PROMPT, t1.id);
 const callerBusy = await createTurn(caller, SLOW_PROMPT, "none");
 const { data: nested } = await api<{ id: string }>("POST", "/sessions", {
   agent: { spec },
-  metadata: { experiment: EXPERIMENT, depth: "1" },
+  metadata: encodeExperimentTags({ experiment: EXPERIMENT, depth: 1 }),
 });
 const nestedBusy = await createTurn(nested.id, SLOW_PROMPT, "none");
 
