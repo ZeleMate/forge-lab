@@ -28,7 +28,7 @@ import {
   turnSummary,
 } from "./project";
 import { CHAT_READ_TOOLS, holdsChat, READ_ANNOTATIONS, type SessionsDeps, sessionId, sum } from "./shared";
-import { allEvents, waitForTurn } from "./turns";
+import { allEvents, EVENTS_PAGE_SIZE, waitForTurn } from "./turns";
 
 const STATS_EVENT_PAGES = 5;
 
@@ -239,14 +239,16 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
     model_calls: z.number().int(),
     tool_calls: z.number().int(),
     threads: z.number().int(),
+    // Present when the Turn has more events than session_stats reads: the
+    // figures above that come from events count only the first ones.
+    events_cut: z.boolean().optional(),
   });
 
   server.registerTool(
     "session_stats",
     {
       title: "Session stats",
-      description:
-        "Token, cost and timing figures for a Session's newest Turns, with model calls, tool calls and Subagent threads per Turn, and the latest context breakdown (harness, instructions, tools, messages). A Turn without recorded metrics (running, or cancelled for the next Turn) has tokens summed from its events and no cost: TrueForge prices a Turn only when it ends.",
+      description: `Token, cost and timing figures for a Session's newest Turns, with model calls, tool calls and Subagent threads per Turn, and the latest context breakdown (harness, instructions, tools, messages). A Turn without recorded metrics (running, or cancelled for the next Turn) has tokens summed from its events and no cost: TrueForge prices a Turn only when it ends. A Turn with more than ${STATS_EVENT_PAGES * EVENTS_PAGE_SIZE} events is counted from its first ${STATS_EVENT_PAGES * EVENTS_PAGE_SIZE} and marked events_cut.`,
       inputSchema: z.object({
         session_id: sessionId,
         last_turns: z.number().int().min(1).max(25).default(10),
@@ -275,6 +277,7 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
       );
       for (const [i, turn] of newest.entries()) {
         const events = eventsOf[i]?.items ?? [];
+        const cut = eventsOf[i]?.cut === true;
         const messages = events.filter((e) => e.type === "model.message");
         // `flatMap` maps and flattens one level, so per-message lists become one list.
         const usage = messages.flatMap((m) => (m.usage ? [m.usage] : []));
@@ -299,6 +302,7 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
           model_calls: messages.length,
           tool_calls: sum(messages.map((e) => e.toolCalls?.length ?? 0)),
           threads: events.filter((e) => e.type === "thread.created").length,
+          ...(cut ? { events_cut: true } : {}),
         });
       }
       return ok(

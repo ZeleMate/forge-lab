@@ -9,7 +9,7 @@ import type { Session, SessionEvent, SessionsApi, Turn } from "./api";
 // How often anything that waits on a Turn reads it again.
 export const POLL_MS = 2_000;
 
-const EVENTS_PAGE_SIZE = 100;
+export const EVENTS_PAGE_SIZE = 100;
 // The server's largest page of Sessions.
 const SESSIONS_PAGE_SIZE = 25;
 

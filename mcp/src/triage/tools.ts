@@ -11,7 +11,7 @@ import { fitList, guarded, listCut, maxChars, ok, refuse, SourceCitation } from 
 import type { SessionEvent, SessionsApi } from "../sessions/api";
 import { excerpt, SessionCitation, textOf } from "../sessions/project";
 import { holdsChat, isExperiment } from "../sessions/shared";
-import { allEvents } from "../sessions/turns";
+import { allEvents, EVENTS_PAGE_SIZE } from "../sessions/turns";
 import type { Snapshot } from "../source/snapshot";
 import type { Budget } from "./budget";
 import { type Candidate, candidateFor } from "./candidates";
@@ -33,6 +33,7 @@ export const MAX_EVENTS = 50;
 // check_events reads at most this many pages of 100 events while it looks for
 // matching ones, so a runaway Turn can't turn one call into endless reads.
 export const MAX_EVENT_PAGES = 20;
+const SEARCHED_EVENTS = MAX_EVENT_PAGES * EVENTS_PAGE_SIZE;
 // check_events runs one call per event; this many run at once.
 export const CONCURRENCY = 4;
 const EVENT_CHARS = 2_000;
@@ -241,7 +242,7 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     "check_events",
     {
       title: "Check events against predicates (costs money)",
-      description: `Asks a cheap judge, once per event, how likely each yes/no predicate is true of one Turn's events in an Experiment Session (never the user's chat or a replay of it). Phrase each predicate as a concrete action the event shows ("This event calls the tool exec", "The tool response reports an error"), never as a topic: the judge reads messages about approvals as approvals. Each event's type is always passed. At most ${MAX_EVENTS} events. Returns \`unscored\` with a reason when the daily budget is spent or no backend is set.`,
+      description: `Asks a cheap judge, once per event, how likely each yes/no predicate is true of one Turn's events in an Experiment Session (never the user's chat or a replay of it). Phrase each predicate as a concrete action the event shows ("This event calls the tool exec", "The tool response reports an error"), never as a topic: the judge reads messages about approvals as approvals. Each event's type is always passed. At most ${MAX_EVENTS} events, found in the Turn's first ${SEARCHED_EVENTS}; events_cut says the Turn had more. Returns \`unscored\` with a reason when the daily budget is spent or no backend is set.`,
       inputSchema: z.object({
         session_id: z.string().min(1),
         turn_id: z.string().min(1),
@@ -265,6 +266,9 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
         ),
         cost_usd: z.number(),
         budget: BudgetView,
+        // Present when the Turn has more events than check_events searches, so
+        // matches past the first ones were never seen.
+        events_cut: z.boolean().optional(),
         ...listCut,
       }),
       annotations: TRIAGE_ANNOTATIONS,
@@ -287,7 +291,7 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
         );
       // Page through the Turn until `limit` events match, so the type filter
       // sees past the first 100, up to MAX_EVENT_PAGES pages.
-      const { items: events } = await allEvents(deps.sessions, args.session_id, args.turn_id, {
+      const { items: events, cut } = await allEvents(deps.sessions, args.session_id, args.turn_id, {
         maxPages: MAX_EVENT_PAGES,
         match: (e) => !args.types.length || args.types.includes(e.type),
         until: args.limit,
@@ -317,12 +321,20 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
       });
       const firstFailure = results.find((r) => typeof r === "string");
       const allFailed = results.length > 0 && results.every((r) => typeof r === "string");
-      if (!events.length)
+      const cutField = cut ? { events_cut: true } : {};
+      if (!events.length) {
+        const where = cut ? `the first ${SEARCHED_EVENTS} events of this Turn` : "this Turn";
         return ok(
-          fitList(unscoredResult("observed", "no events of those types in this Turn"), "events", rows, args.max_chars),
+          fitList(
+            unscoredResult("observed", `no events of those types in ${where}`, cutField),
+            "events",
+            rows,
+            args.max_chars,
+          ),
         );
+      }
       if (allFailed && typeof firstFailure === "string")
-        return ok(fitList(unscoredResult("observed", firstFailure), "events", rows, args.max_chars));
+        return ok(fitList(unscoredResult("observed", firstFailure, cutField), "events", rows, args.max_chars));
       return ok(
         fitList(
           {
@@ -331,6 +343,7 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
             ...(decide ? { judged_by: decide.backend } : {}),
             cost_usd: costUsd,
             budget: budgetView(),
+            ...cutField,
           },
           "events",
           rows,
