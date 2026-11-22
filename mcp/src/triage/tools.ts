@@ -8,9 +8,9 @@
 import type { CallToolResult, McpServer, ToolAnnotations } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { fitList, guarded, listCut, maxChars, ok, refuse, SourceCitation } from "../result";
+import { classify, refusalFor } from "../sessions/access";
 import type { SessionEvent, SessionsApi } from "../sessions/api";
 import { excerpt, SessionCitation, textOf } from "../sessions/project";
-import { holdsChat, isExperiment } from "../sessions/shared";
 import { allEvents } from "../sessions/turns";
 import type { Snapshot } from "../source/snapshot";
 import type { Budget } from "./budget";
@@ -272,19 +272,11 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
     guarded(async (args): Promise<CallToolResult> => {
       const names = args.predicates.map((p) => p.name);
       if (new Set(names).size !== names.length) return refuse("two predicates share a name", "give each a unique name");
-      // Event text goes to an outside API, so only Experiment Sessions qualify (#57),
-      // and not a replay of the user's chat either.
+      // Event text goes to an outside API, so only Experiment Sessions without
+      // chat content qualify (#57); the access policy says which (access.ts).
       const session = await deps.sessions.getSession(args.session_id);
-      if (!isExperiment(session))
-        return refuse(
-          `Session ${session.id} is not an Experiment Session, and the user's chat isn't sent to the triage judge`,
-          "use list_events and read the events yourself",
-        );
-      if (await holdsChat(deps.sessions, session))
-        return refuse(
-          `Session ${session.id} replays the user's chat (origin ${session.metadata.origin}), and the user's chat isn't sent to the triage judge`,
-          "use list_events and read the events yourself",
-        );
+      const refused = refusalFor(await classify(deps.sessions, session), { action: "judge" });
+      if (refused) return refused;
       // Page through the Turn until `limit` events match, so the type filter
       // sees past the first 100, up to MAX_EVENT_PAGES pages.
       const { items: events } = await allEvents(deps.sessions, args.session_id, args.turn_id, {

@@ -193,7 +193,7 @@ describe("check_events", () => {
     const { client } = await withSessions(decide);
     const r = await call(client, "check_events", { session_id: "chat", turn_id: "c1", predicates });
     expect(r.isError).toBe(true);
-    expect(r.text).toMatch(/not an Experiment Session/);
+    expect(r.text).toMatch(/is the user.s chat, and its events aren.t sent to the triage judge/);
     expect(calls).toHaveLength(0);
   });
 

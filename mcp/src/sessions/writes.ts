@@ -1,16 +1,18 @@
 // The sessions server's three write tools (#8, amended by #9 and #24): fork,
-// re-run and cancel. Each is Approval-gated through its annotations, acts only
-// on Experiment Sessions, and runs the checks in checks.ts first.
+// re-run and cancel. Each is Approval-gated through its annotations, runs the
+// caller and Turn checks in checks.ts first, then asks the access policy
+// (access.ts) about the target, so it acts only on Experiment Sessions.
 
 import type { CallToolResult, McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { guarded, ok, refuse } from "../result";
+import { classify, refusalFor, replayTags } from "./access";
 import type { CreateTurnBody, Session, Turn, TurnInputItem } from "./api";
-import { checkDepth, checkInPlaceTarget, checkSourceTurn, checkTurnId, isRefusal, ownOrRefuse } from "./checks";
+import { checkSourceTurn, checkTurnId, isRefusal, ownOrRefuse } from "./checks";
 import type { FindOwn } from "./own";
 import { SessionCitation } from "./project";
 import { branchTo, replayRunner, userMessagesOf } from "./replay";
-import { DESTRUCTIVE_ANNOTATIONS, isExperiment, type SessionsDeps, sessionId, sum, WRITE_ANNOTATIONS } from "./shared";
+import { DESTRUCTIVE_ANNOTATIONS, type SessionsDeps, sessionId, sum, WRITE_ANNOTATIONS } from "./shared";
 import { applyConfigPatch, ConfigPatch } from "./spec";
 import { costOf, isUnfinished } from "./turns";
 
@@ -76,10 +78,16 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       if (isRefusal(loaded)) return loaded;
       const { own, session, turns, source } = loaded;
       const message: TurnInputItem = { type: "user.message", content: args.message };
+      const target = await classify(api, session);
 
-      if (isExperiment(session)) {
-        const target = checkInPlaceTarget(session, own, "fork in place", turns.some(isUnfinished));
-        if (target) return target;
+      // An Experiment Session, Replays included, is forked in place.
+      if (target.kind !== "chat") {
+        const refused = refusalFor(target, {
+          action: "fork in place",
+          caller: own,
+          running: turns.some(isUnfinished),
+        });
+        if (refused) return refused;
         return startInPlace(
           session,
           { input: [message], previousTurnId: source.id },
@@ -89,17 +97,8 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       }
 
       // The user's chat: replay into a new inline Experiment Session.
-      const deep = checkDepth(session);
-      if (deep) return deep;
-      // An undetected caller might be deeper than the Session it names, so it
-      // counts as depth 1, and its replays stop here.
-      const callerDepth = own.detected ? own.depth : Math.max(own.depth, 1);
-      const depth = callerDepth + 1;
-      if (depth >= 2)
-        return refuse(
-          `I'm running at depth ${callerDepth}${own.detected ? "" : " (assumed, since I couldn't confirm my Session)"}, so a new Experiment Session would be depth ${depth}; writes stop at depth 2`,
-          "fork from inside the user's chat or a depth-0 Session",
-        );
+      const refused = refusalFor(target, { action: "replay", caller: own });
+      if (refused) return refused;
       if (!args.experiment)
         return refuse(
           "forking the user's chat opens a new Experiment Session, which needs an experiment name",
@@ -122,12 +121,7 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       const spec = args.config_patch ? applyConfigPatch(base, args.config_patch) : { ok: true as const, spec: base };
       if (!spec.ok) return refuse(`config_patch doesn't fit the spec: ${spec.reason}`, "fix the patch's values");
 
-      const tags = {
-        experiment: args.experiment,
-        depth: String(depth),
-        origin: `${session.id}:${source.id}`,
-        replay: "running",
-      };
+      const tags = { ...replayTags(session.id, source.id, own, args.experiment), replay: "running" };
       const created = await api.createSession({ spec: spec.spec, metadata: tags });
       const inputs = [...replayed.map(userMessagesOf), [message]];
       spawn(replay(created.id, tags, inputs));
@@ -161,8 +155,9 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       const loaded = await loadSource(args.session_id, args.turn_id, args.caller_session_id);
       if (isRefusal(loaded)) return loaded;
       const { own, session, turns, source } = loaded;
-      const target = checkInPlaceTarget(session, own, "re-run", turns.some(isUnfinished));
-      if (target) return target;
+      const target = await classify(api, session);
+      const refused = refusalFor(target, { action: "re-run", caller: own, running: turns.some(isUnfinished) });
+      if (refused) return refused;
       const input = source.input ?? [];
       if (!input.length || input.some((i) => i.type !== "user.message"))
         return refuse(
@@ -193,8 +188,8 @@ export function registerWriteTools(server: McpServer, deps: SessionsDeps, findOw
       if (isRefusal(own)) return own;
       const session = await api.getSession(args.session_id);
       // A cancel only ever acts on a running Session.
-      const target = checkInPlaceTarget(session, own, "cancel", true);
-      if (target) return target;
+      const refused = refusalFor(await classify(api, session), { action: "cancel", caller: own, running: true });
+      if (refused) return refused;
       const tip = await api.tipTurnId(session.id);
       const tipTurn = tip ? await api.getTurn(session.id, tip) : undefined;
       if (tipTurn?.state.status !== "running")
