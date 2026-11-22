@@ -4,7 +4,7 @@
 import type { ToolAnnotations } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import type { Clock } from "../clock";
-import type { Session, SessionsApi, Turn } from "./api";
+import type { Session, SessionsApi } from "./api";
 
 // `spawn` runs work that outlives the tool call (a replay); tests pass one
 // that collects the promises so they can await them.
@@ -24,9 +24,6 @@ export const WRITE_ANNOTATIONS: ToolAnnotations = {
   openWorldHint: false,
 };
 export const DESTRUCTIVE_ANNOTATIONS: ToolAnnotations = { ...WRITE_ANNOTATIONS, destructiveHint: true };
-
-// How often anything that waits on a Turn reads it again.
-export const POLL_MS = 2_000;
 
 export const sessionId = z.string().min(1).describe("A Session id, as list_sessions returns it.");
 
@@ -49,9 +46,5 @@ export async function holdsChat(api: SessionsApi, s: Session): Promise<boolean> 
   const source = await api.getSession(sourceId).catch(() => undefined);
   return source === undefined || !isExperiment(source);
 }
-
-// Still going: running, or `paused` (which #24 never saw on the wire, since an
-// Approval wait shows as `done` with required actions, but the type allows it).
-export const isUnfinished = (t: Turn) => t.state.status === "running" || t.state.status === "paused";
 
 export const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);

@@ -21,7 +21,7 @@ One conversation with an Agent, made of Turns, that persists across reconnects.
 _Avoid_: chat, thread
 
 **Turn**:
-One user message and everything the Agent does in response, up to its final reply.
+One user message and everything the Agent does in response, up to its final reply. A Turn is **finished** once it stops running, however it ended: done, cancelled or failed. A finished Turn can still be waiting on an Approval.
 
 **Approval**:
 A human's allow or deny decision on a sensitive tool call. The Turn ends while it waits, and the next Turn carries the decision.

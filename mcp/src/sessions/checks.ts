@@ -6,8 +6,8 @@ import type { CallToolResult } from "@modelcontextprotocol/server";
 import { refuse } from "../result";
 import type { Session, Turn } from "./api";
 import { depthOf, type FindOwn, type OwnSession } from "./own";
-import { requiredActions } from "./project";
-import { isExperiment, isUnfinished } from "./shared";
+import { isExperiment } from "./shared";
+import { isUnfinished, requiredActions } from "./turns";
 
 // `v is CallToolResult` is a type predicate: where isRefusal returns true,
 // TypeScript narrows the value to a refusal.

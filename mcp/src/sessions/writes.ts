@@ -9,17 +9,10 @@ import type { CreateTurnBody, Session, Turn, TurnInputItem } from "./api";
 import { checkDepth, checkInPlaceTarget, checkSourceTurn, checkTurnId, isRefusal, ownOrRefuse } from "./checks";
 import type { FindOwn } from "./own";
 import { SessionCitation } from "./project";
-import { branchTo, costOf, replayRunner, userMessagesOf } from "./replay";
-import {
-  DESTRUCTIVE_ANNOTATIONS,
-  isExperiment,
-  isUnfinished,
-  type SessionsDeps,
-  sessionId,
-  sum,
-  WRITE_ANNOTATIONS,
-} from "./shared";
+import { branchTo, replayRunner, userMessagesOf } from "./replay";
+import { DESTRUCTIVE_ANNOTATIONS, isExperiment, type SessionsDeps, sessionId, sum, WRITE_ANNOTATIONS } from "./shared";
 import { applyConfigPatch, ConfigPatch } from "./spec";
+import { costOf, isUnfinished } from "./turns";
 
 export const MAX_REPLAY = 5;
 // A replay's cost estimate may be rough, but not hide most of the real cost.
