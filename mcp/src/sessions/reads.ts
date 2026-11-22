@@ -12,6 +12,7 @@
 import type { CallToolResult, McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { fitList, guarded, listCut, maxChars, ok, refuse } from "../result";
+import { classify, refusalFor } from "./access";
 import type { Session, SessionEvent, SessionsApi } from "./api";
 import type { FindOwn } from "./own";
 import {
@@ -27,37 +28,20 @@ import {
   textOf,
   turnSummary,
 } from "./project";
-import {
-  CHAT_READ_TOOLS,
-  holdsChat,
-  isUnfinished,
-  POLL_MS,
-  READ_ANNOTATIONS,
-  type SessionsDeps,
-  sessionId,
-  sum,
-} from "./shared";
+import { isUnfinished, POLL_MS, READ_ANNOTATIONS, type SessionsDeps, sessionId, sum } from "./shared";
 
 export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn: FindOwn): void {
   const { api, clock } = deps;
 
-  // A refusal when `session` is one of the user's chats other than the caller's own.
-  // Whether the model may read `session`'s messages without asking: an Experiment
-  // Session that doesn't replay a chat, or the caller's own Session. A replay counts
-  // as the chat, since fork_turn's Approval reads as a write, not as opening the chat.
-  async function readsFreely(session: Session): Promise<boolean> {
-    if (!(await holdsChat(api, session))) return true;
-    // No `caller_session_id` here: only a Session the scan found counts as the caller's.
-    const own = await findOwn();
-    return own?.detected === true && own.sessionId === session.id;
-  }
-
+  // A refusal unless the access policy lets the model read `session`'s messages
+  // without asking (access.ts).
   async function chatRefusal(session: Session): Promise<CallToolResult | undefined> {
-    if (await readsFreely(session)) return undefined;
-    return refuse(
-      `Session ${session.id} is the user's chat, and its messages are read only with the user's Approval`,
-      `${CHAT_READ_TOOLS.join(" or ")}, which ask the user first`,
-    );
+    const target = await classify(api, session);
+    // The caller only matters for a Session holding chat content, so the scan
+    // runs only then. No `caller_session_id` here: only a Session the scan found
+    // counts as the caller's.
+    const caller = target.holdsChat ? await findOwn() : undefined;
+    return refusalFor(target, { action: "read", caller });
   }
 
   server.registerTool(
@@ -340,7 +324,7 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
     guarded(async (args) => {
       // A chat is followed by status only: its input is cut to nothing, so waiting
       // on a fork's replay needs no Approval and shows none of the chat.
-      const inputChars = (await readsFreely(await api.getSession(args.session_id))) ? 500 : 0;
+      const inputChars = (await chatRefusal(await api.getSession(args.session_id))) ? 0 : 500;
       const started = clock.now();
       const deadline = started + args.timeout_s * 1000;
       let turn = await api.getTurn(args.session_id, args.turn_id);

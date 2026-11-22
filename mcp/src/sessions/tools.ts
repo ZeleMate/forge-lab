@@ -4,15 +4,18 @@
 // act only on Experiment Sessions (writes.ts). Every result is
 // labelled `observed` and cites `{session_id, turn_id, event_id}`.
 //
-// Write safety, in the order every write tool runs the checks (checks.ts):
+// Write safety, in the order every write tool runs the checks:
 // 1. the tool must know its own Session (auto-detected, or `caller_session_id`);
 // 2. every Turn is named by an explicit id, never `auto` or `none`;
 // 3. a source Turn must be finished and not waiting on an Approval (#24: the
 //    server would accept it);
-// 4. the target (`checkInPlaceTarget`): only Experiment Sessions are changed in
-//    place, never the caller's own, never at depth 2 or more, and never a
-//    running one when the caller is unverified. The user's chat is only ever
-//    read; a fork from it replays into a new Experiment Session (replay.ts).
+// 4. the target, which the access policy judges (access.ts): only Experiment
+//    Sessions are changed in place, never the caller's own, never at depth 2
+//    or more, and never a running one when the caller is unverified. The
+//    user's chat is only ever read; a fork from it replays into a new
+//    Experiment Session (replay.ts), and the caller's depth must allow that.
+// Steps 1 to 3 are in checks.ts. Which Sessions the reads and the triage judge
+// may see is the access policy's too.
 // Only after all of that does a mutating call go out.
 
 import type { McpServer } from "@modelcontextprotocol/server";

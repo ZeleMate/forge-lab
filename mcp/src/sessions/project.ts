@@ -3,6 +3,7 @@
 // `{session_id, turn_id, event_id}` citation.
 
 import { z } from "zod";
+import { isExperiment } from "./access";
 import type { Session, SessionEvent, Turn } from "./api";
 
 export const SessionCitation = z.object({
@@ -47,7 +48,7 @@ export function sessionSummary(s: Session): z.infer<typeof SessionSummary> {
     // A named Agent shows its name; an inline copy (every Experiment Session) shows "inline".
     agent: s.agent.type === "reference" ? (s.agent.name ?? s.agent.id) : "inline",
     metadata: s.metadata,
-    experiment: s.metadata.experiment !== undefined,
+    experiment: isExperiment(s),
     turns: s.metrics.totalTurns,
     cost_usd: s.metrics.totalCostInUsd ?? null,
     duration_ms: s.metrics.totalDurationMs,

@@ -3,6 +3,7 @@
 // `Mcp-Session-Id` in an `mcp.initialize` event. So the caller's Session is the
 // one with a running Turn whose `mcp.initialize` names this connection's id.
 
+import { depthOf } from "./access";
 import { type SessionsApi, TooManyTurnsError, type Turn } from "./api";
 
 // `detected`: found by the scan. Otherwise it came only from the tool's
@@ -16,14 +17,6 @@ const EVENTS_SCANNED = 10;
 // of the most-recently-updated list; 4 pages leave room for a long Turn while
 // other Sessions keep updating.
 const SESSION_PAGES = 4;
-
-export function depthOf(metadata: Record<string, string>): number {
-  // An untagged Session (the user's chat) is depth 0, like a script's root Experiment.
-  const raw = metadata.depth;
-  if (raw === undefined) return 0;
-  // A tag that isn't a small integer counts as too deep, so writes refuse it.
-  return /^\d$/.test(raw) ? Number(raw) : Number.POSITIVE_INFINITY;
-}
 
 const running = (turns: Turn[]) => turns.find((t) => t.state.status === "running")?.id;
 
