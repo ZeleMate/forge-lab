@@ -47,10 +47,17 @@ export function withReplay(metadata: Metadata, state: ReplayState): Metadata {
   return { ...metadata, replay: encodeReplay(state) };
 }
 
+// TrueForge's `previous_turn_id` placeholders ("a new root", "the tip"): values a
+// script may hold in a Turn-id variable, but never the id of a Turn.
+// A `Set` answers "is this one of them?" with `.has`, for any string.
+const TURN_PLACEHOLDERS = new Set(["none", "auto"]);
+const isPlaceholder = (turnId: string) => TURN_PLACEHOLDERS.has(turnId);
+
 function encodeOrigin({ sessionId, turnId }: Origin): string {
   for (const part of [sessionId, turnId])
     if (part === "" || part.includes(":"))
       throw new RangeError(`origin ids must be non-empty and free of ":", not ${JSON.stringify(part)}`);
+  if (isPlaceholder(turnId)) throw new RangeError(`origin must name a real Turn, not "${turnId}"`);
   return `${sessionId}:${turnId}`;
 }
 
@@ -116,6 +123,7 @@ const decodeOrigin: Decoder<Origin> = (raw) => {
   const parts = raw.split(":");
   const [sessionId, turnId] = parts;
   if (parts.length !== 2 || !sessionId || !turnId) return { problem: "origin must be <session>:<turn>" };
+  if (isPlaceholder(turnId)) return { problem: `origin names "${turnId}", not a Turn` };
   return { value: { sessionId, turnId } };
 };
 
