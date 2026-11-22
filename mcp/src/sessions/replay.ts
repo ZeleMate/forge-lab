@@ -4,22 +4,12 @@
 
 import type { Clock } from "../clock";
 import type { SessionsApi, Turn, TurnInputItem } from "./api";
-import { requiredActions } from "./project";
-import { isUnfinished, POLL_MS } from "./shared";
+import { isUnfinished, requiredActions, waitForTurn } from "./turns";
 
 // A replayed Turn may take a while on Opus; TrueForge itself stops a Turn at 600 s.
 const REPLAY_TURN_TIMEOUT_MS = 660_000;
 
 export function replayRunner(api: SessionsApi, clock: Clock) {
-  async function waitUntilDone(id: string, turnId: string): Promise<Turn> {
-    const deadline = clock.now() + REPLAY_TURN_TIMEOUT_MS;
-    for (;;) {
-      const turn = await api.getTurn(id, turnId);
-      if (!isUnfinished(turn) || clock.now() >= deadline) return turn;
-      await clock.sleep(POLL_MS);
-    }
-  }
-
   // Runs the replayed Turns one after another: each must finish before the next
   // chains on it, or creating the next would cancel it (#21 6.2).
   return async function replay(newSessionId: string, tags: Record<string, string>, inputs: TurnInputItem[][]) {
@@ -29,7 +19,7 @@ export function replayRunner(api: SessionsApi, clock: Clock) {
       let previous = "none";
       for (const [index, input] of inputs.entries()) {
         const created = await api.createTurn(newSessionId, { input, previousTurnId: previous });
-        const turn = await waitUntilDone(newSessionId, created.id);
+        const { turn } = await waitForTurn(api, clock, newSessionId, created.id, REPLAY_TURN_TIMEOUT_MS);
         const failed =
           turn.state.status !== "done"
             ? `turn ${index + 1} ended ${turn.state.status}`
@@ -65,8 +55,4 @@ export function branchTo(turns: Turn[], turnId: string): Turn[] {
 // original Turn's pending calls, which the replay doesn't have.
 export function userMessagesOf(t: Turn): TurnInputItem[] {
   return (t.input ?? []).filter((i) => i.type === "user.message");
-}
-
-export function costOf(t: Turn): number {
-  return ("metrics" in t.state && t.state.metrics?.totalCostInUsd) || 0;
 }

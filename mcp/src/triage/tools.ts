@@ -11,6 +11,7 @@ import { fitList, guarded, listCut, maxChars, ok, refuse, SourceCitation } from 
 import type { SessionEvent, SessionsApi } from "../sessions/api";
 import { excerpt, SessionCitation, textOf } from "../sessions/project";
 import { holdsChat, isExperiment } from "../sessions/shared";
+import { allEvents } from "../sessions/turns";
 import type { Snapshot } from "../source/snapshot";
 import type { Budget } from "./budget";
 import { type Candidate, candidateFor } from "./candidates";
@@ -286,19 +287,11 @@ export function registerTriageTools(server: McpServer, deps: TriageDeps): void {
         );
       // Page through the Turn until `limit` events match, so the type filter
       // sees past the first 100, up to MAX_EVENT_PAGES pages.
-      const matches = (e: SessionEvent) => !args.types.length || args.types.includes(e.type);
-      const events: SessionEvent[] = [];
-      let cursor: string | undefined;
-      for (let page = 0; page < MAX_EVENT_PAGES && events.length < args.limit; page++) {
-        const res = await deps.sessions.listTurnEvents(args.session_id, args.turn_id, {
-          limit: 100,
-          ...(cursor ? { cursor } : {}),
-        });
-        events.push(...res.items.filter(matches));
-        cursor = res.next;
-        if (!cursor) break;
-      }
-      events.splice(args.limit); // `splice(n)` cuts the array down to its first n items, in place
+      const { items: events } = await allEvents(deps.sessions, args.session_id, args.turn_id, {
+        maxPages: MAX_EVENT_PAGES,
+        match: (e) => !args.types.length || args.types.includes(e.type),
+        until: args.limit,
+      });
 
       // Every call is checked against the budget on its own, so the events
       // judged before the cap is reached keep their answers.
