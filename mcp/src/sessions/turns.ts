@@ -9,7 +9,7 @@ import type { Session, SessionEvent, SessionsApi, Turn } from "./api";
 // How often anything that waits on a Turn reads it again.
 export const POLL_MS = 2_000;
 
-const EVENTS_PAGE_SIZE = 100;
+export const EVENTS_PAGE_SIZE = 100;
 // The server's largest page of Sessions.
 const SESSIONS_PAGE_SIZE = 25;
 
@@ -46,6 +46,16 @@ export async function allEvents(
   return { items, cut: cursor !== undefined && !enough };
 }
 
+// Every Session, most recently updated first, at most `maxPages` pages of 25.
+export async function allSessions(api: SessionsApi, opts: { maxPages: number }): Promise<Capped<Session>> {
+  const items: Session[] = [];
+  const { cut } = await walkSessions(api, opts.maxPages, async (s) => {
+    items.push(s);
+    return false; // never stop early: every Session is wanted
+  });
+  return { items, cut };
+}
+
 // The first Session, most recently updated first, that `match` accepts, looking
 // at most `maxPages` pages of 25. It stops reading as soon as one matches.
 export async function findSession(
@@ -53,15 +63,26 @@ export async function findSession(
   match: (s: Session) => Promise<boolean>,
   opts: { maxPages: number },
 ): Promise<{ session: Session | undefined; cut: boolean }> {
+  const { stoppedAt, cut } = await walkSessions(api, opts.maxPages, match);
+  return { session: stoppedAt, cut };
+}
+
+// The one Sessions pager behind both: hands each Session to `visit`, in order
+// and one at a time (`visit` may read the server), and stops at the first one
+// it returns true for. `cut`: it stopped at the page cap with pages left.
+async function walkSessions(
+  api: SessionsApi,
+  maxPages: number,
+  visit: (s: Session) => Promise<boolean>,
+): Promise<{ stoppedAt: Session | undefined; cut: boolean }> {
   let cursor: string | undefined;
-  for (let page = 0; page < opts.maxPages; page++) {
+  for (let page = 0; page < maxPages; page++) {
     const res = await api.listSessions({ limit: SESSIONS_PAGE_SIZE, ...(cursor ? { cursor } : {}) });
-    // One at a time, in order: `match` may read the server, and the first hit ends the walk.
-    for (const session of res.items) if (await match(session)) return { session, cut: false };
+    for (const session of res.items) if (await visit(session)) return { stoppedAt: session, cut: false };
     cursor = res.next;
     if (!cursor) break;
   }
-  return { session: undefined, cut: cursor !== undefined };
+  return { stoppedAt: undefined, cut: cursor !== undefined };
 }
 
 // Reads the Turn every POLL_MS until it's finished or `timeoutMs` has passed

@@ -5,6 +5,7 @@ import type { SessionEvent, Turn } from "../src/sessions/api";
 import { ownSessionFinder } from "../src/sessions/own";
 import {
   allEvents,
+  allSessions,
   costOf,
   findSession,
   isRunning,
@@ -87,6 +88,24 @@ function manySessions(count: number) {
 }
 
 const sessionReads = (fake: FakeSessionsApi) => fake.calls.filter((c) => c.method === "listSessions").length;
+
+describe("allSessions", () => {
+  test("reads every page, newest first", async () => {
+    const fake = manySessions(60);
+    const r = await allSessions(fake, { maxPages: 4 });
+    expect(r.items).toHaveLength(60);
+    expect([r.items[0]?.id, r.items.at(-1)?.id]).toEqual(["s59", "s0"]);
+    expect(r.cut).toBe(false);
+    expect(sessionReads(fake)).toBe(3);
+  });
+
+  test("stops at maxPages and says the list was cut", async () => {
+    const fake = manySessions(60);
+    const r = await allSessions(fake, { maxPages: 2 });
+    expect(r.items).toHaveLength(50);
+    expect(r.cut).toBe(true);
+  });
+});
 
 describe("findSession", () => {
   test("finds a Session on a later page, and reads no page after it", async () => {

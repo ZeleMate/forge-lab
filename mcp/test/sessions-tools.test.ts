@@ -2,7 +2,7 @@
 // reads' projections, wait_turn on the fake clock, and what each write sends.
 import { beforeAll, describe, expect, test } from "bun:test";
 import { serialization } from "@truefoundry/trueforge-sdk";
-import { collectTurns, MAX_TURNS, TooManyTurnsError, type Turn } from "../src/sessions/api";
+import { collectTurns, MAX_TURNS, type SessionEvent, TooManyTurnsError, type Turn } from "../src/sessions/api";
 import { branchTo } from "../src/sessions/replay";
 import { applyConfigPatch, deepMerge } from "../src/sessions/spec";
 import type { Snapshot } from "../src/source/snapshot";
@@ -137,6 +137,18 @@ describe("reads", () => {
     const [running, done] = r.data.turns;
     expect(running).toMatchObject({ status: "running", metrics_from: "events" });
     expect(done).toMatchObject({ status: "done", metrics_from: "turn" });
+  });
+
+  test("session_stats says which Turn's figures stop at its first 500 events", async () => {
+    const { fake, client } = await setup();
+    // e2 gets 600 events in all (its `turn.created` plus 599 threads): 6 pages, one past the cap.
+    for (let i = 0; i < 599; i++)
+      fake.addEvent("e2", { type: "thread.created", id: `th-${i}`, createdAt: "x" } as SessionEvent);
+    const r = await call(client, "session_stats", { session_id: "exp" });
+    const [big, small] = r.data.turns;
+    expect(big).toMatchObject({ citation: { turn_id: "e2" }, threads: 499, events_cut: true });
+    expect(small.citation.turn_id).toBe("e1");
+    expect(small.events_cut).toBeUndefined();
   });
 });
 
