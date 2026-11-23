@@ -4,7 +4,7 @@
 
 import { withReplay } from "@forge-lab/lib/experiment-tags";
 import type { Clock } from "../clock";
-import type { SessionsApi, Turn, TurnInputItem } from "./api";
+import type { Metadata, SessionsApi, Turn, TurnInputItem } from "./api";
 import { isUnfinished, requiredActions, waitForTurn } from "./turns";
 
 // A replayed Turn may take a while on Opus; TrueForge itself stops a Turn at 600 s.
@@ -13,7 +13,7 @@ const REPLAY_TURN_TIMEOUT_MS = 660_000;
 export function replayRunner(api: SessionsApi, clock: Clock) {
   // Runs the replayed Turns one after another: each must finish before the next
   // chains on it, or creating the next would cancel it (#21 6.2).
-  return async function replay(newSessionId: string, tags: Record<string, string>, inputs: TurnInputItem[][]) {
+  return async function replay(newSessionId: string, tags: Metadata, inputs: TurnInputItem[][]) {
     const markFailed = (reason: string) =>
       api.updateSession(newSessionId, { metadata: withReplay(tags, { status: "failed", reason }) });
     try {

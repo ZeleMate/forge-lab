@@ -14,7 +14,7 @@ import type { Metadata, Session, SessionsApi } from "./api";
 import { CHAT_READ_TOOLS } from "./shared";
 
 // - chat: one of the user's Chat Sessions (untagged);
-// - replay: an Experiment Session forked from a chat, so it holds the chat's messages;
+// - replay: a Replay, an Experiment Session forked from a Chat Session, so it holds its messages;
 // - experiment: any other Experiment Session.
 export type SessionKind = "chat" | "replay" | "experiment";
 
@@ -53,9 +53,14 @@ export const isExperiment = (s: Session) => s.metadata.experiment !== undefined;
 // The tag codec (@forge-lab/lib/experiment-tags) parses; the policy picks the
 // fallbacks. `switch` on `kind` narrows the union, so `value` exists only when valid.
 export function depthOf(metadata: Metadata): number {
-  const depth = decodeExperimentTags(metadata).depth;
+  return depthFrom(decodeExperimentTags(metadata).depth);
+}
+
+// `ReturnType<typeof f>` names the type a function returns, so the decoded
+// field's type comes straight from the codec without a second import.
+function depthFrom(depth: ReturnType<typeof decodeExperimentTags>["depth"]): number {
   switch (depth.kind) {
-    // An untagged Session (the user's chat) is depth 0, like a script's root Experiment.
+    // An untagged Session (a Chat Session) is depth 0, like a script's root Experiment.
     case "absent":
       return 0;
     case "valid":
@@ -67,13 +72,15 @@ export function depthOf(metadata: Metadata): number {
 }
 
 export async function classify(api: SessionsApi, session: Session): Promise<Classified> {
-  const base = { id: session.id, depth: depthOf(session.metadata), depthTag: session.metadata.depth };
+  // Decode once: the depth and origin both come from this one reading.
+  const tags = decodeExperimentTags(session.metadata);
+  const base = { id: session.id, depth: depthFrom(tags.depth), depthTag: session.metadata.depth };
   const origin = session.metadata.origin;
   if (!isExperiment(session)) return { ...base, kind: "chat", origin, holdsChat: true };
   if (origin === undefined) return { ...base, kind: "experiment", origin, holdsChat: false };
-  // A replay of a chat, unless the origin names a readable Experiment Session.
-  // An origin that can't be read (malformed, or naming no Session) counts as a chat.
-  const parsed = decodeExperimentTags(session.metadata).origin;
+  // A Replay, unless the origin names a readable Experiment Session. An origin
+  // that can't be read (malformed, or naming no Session) counts as a Chat Session.
+  const parsed = tags.origin;
   // `.catch` turns a failed lookup into `undefined` instead of an exception.
   const source =
     parsed.kind === "valid" ? await api.getSession(parsed.value.sessionId).catch(() => undefined) : undefined;
@@ -92,7 +99,7 @@ export function replayTags(chatId: string, turnId: string, caller: Caller, exper
 }
 
 // A caller named only by `caller_session_id` might be deeper than the Session
-// it names, so it counts as depth 1, and its replays stop at MAX_DEPTH.
+// it names, so it counts as depth 1, and its Replays stop at MAX_DEPTH.
 const callerDepth = (caller: Caller) => (caller.detected ? caller.depth : Math.max(caller.depth, 1));
 
 // A refusal, or undefined when the ask is allowed.
@@ -110,7 +117,7 @@ export function refusalFor(s: Classified, ask: Ask): CallToolResult | undefined 
   }
 }
 
-// What a chat-holding Session is, said the same way by every refusal about its content.
+// What a Session holding a Chat Session's messages is, said the same way by every refusal about its content.
 const chatSubject = (s: Classified) =>
   s.kind === "replay"
     ? `Session ${s.id} replays the user's chat (origin ${s.origin})`
@@ -118,8 +125,8 @@ const chatSubject = (s: Classified) =>
 
 // Free reads: a Session without chat content, or the caller's own Session (it's
 // already in Cartographer's context), but only when the scan found it. A Replay
-// counts as the chat, since fork_turn's Approval reads as a write, not as
-// opening the chat.
+// counts as a Chat Session, since fork_turn's Approval reads as a write, not as
+// opening the Chat Session.
 function readRefusal(s: Classified, caller: Caller | undefined): CallToolResult | undefined {
   if (!s.holdsChat) return undefined;
   if (caller?.detected === true && caller.sessionId === s.id) return undefined;
@@ -129,7 +136,7 @@ function readRefusal(s: Classified, caller: Caller | undefined): CallToolResult 
   );
 }
 
-// Event text goes to an outside API, so only Experiment Sessions without chat
+// Event text goes to an outside API, so only Experiment Sessions without Chat Session
 // content qualify, whoever asks.
 function judgeRefusal(s: Classified): CallToolResult | undefined {
   if (!s.holdsChat) return undefined;
@@ -147,8 +154,8 @@ function depthRefusal(s: Classified): CallToolResult | undefined {
   );
 }
 
-// A replay never touches the chat: it opens a new Experiment Session one level
-// below the caller. So both the chat and that new Session must stay shallow.
+// A replay never touches the Chat Session: it opens a new Replay one level
+// below the caller. So both the Chat Session and that Replay must stay shallow.
 function replayRefusal(s: Classified, caller: Caller): CallToolResult | undefined {
   const deep = depthRefusal(s);
   if (deep) return deep;
