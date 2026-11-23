@@ -16,6 +16,9 @@ export function replayRunner(api: SessionsApi, clock: Clock) {
   return async function replay(newSessionId: string, tags: Metadata, inputs: TurnInputItem[][]) {
     const markFailed = (reason: string) =>
       api.updateSession(newSessionId, { metadata: withReplay(tags, { status: "failed", reason }) });
+    // Set once a Turn has failed, so an error while writing that down can't
+    // replace it as the reason in the tag.
+    let turnFailure: string | undefined;
     try {
       let previous = "none";
       for (const [index, input] of inputs.entries()) {
@@ -28,6 +31,7 @@ export function replayRunner(api: SessionsApi, clock: Clock) {
               ? `turn ${index + 1} wants an Approval`
               : undefined;
         if (failed) {
+          turnFailure = failed;
           // A Turn that timed out is still running; stop it so it isn't left unattended.
           if (isUnfinished(turn)) await api.cancel(newSessionId).catch(() => undefined);
           await markFailed(failed);
@@ -38,7 +42,10 @@ export function replayRunner(api: SessionsApi, clock: Clock) {
       await api.updateSession(newSessionId, { metadata: withReplay(tags, { status: "done" }) });
     } catch (error) {
       // Best effort: if TrueForge is unreachable the tag can't be written either.
-      await markFailed(error instanceof Error ? error.message : String(error)).catch(() => undefined);
+      // If a Turn had failed, writing its reason is what threw: try that again.
+      // `??` falls back only when the left side is undefined (or null).
+      const reason = turnFailure ?? (error instanceof Error ? error.message : String(error));
+      await markFailed(reason).catch(() => undefined);
       throw error;
     }
   };

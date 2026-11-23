@@ -129,4 +129,16 @@ describe("withReplay", () => {
     expect(replay).toBe(`failed:${"e".repeat(121)}`);
     expect(replay?.length).toBe(128);
   });
+
+  // "😀" is one code point but two UTF-16 units (a surrogate pair). "failed:"
+  // is 7 units, so after 120 more the first emoji straddles the 128-unit limit.
+  test("the cut never splits a character in two", () => {
+    const reason = `${"e".repeat(120)}😀😀`;
+    expect(withReplay(tags, { status: "failed", reason }).replay).toBe(`failed:${"e".repeat(120)}`);
+  });
+
+  test("a character that ends exactly at the limit is kept", () => {
+    const reason = `${"e".repeat(119)}😀😀`;
+    expect(withReplay(tags, { status: "failed", reason }).replay).toBe(`failed:${"e".repeat(119)}😀`);
+  });
 });
