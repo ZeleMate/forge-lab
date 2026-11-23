@@ -171,7 +171,7 @@ export class FakeSessionsApi implements SessionsApi {
       .filter((s) => !q.agentId || (s.agent.type === "reference" && s.agent.id === q.agentId))
       .filter((s) => Object.entries(q.metadata ?? {}).every(([k, v]) => s.metadata[k] === v))
       .reverse(); // newest first, as the server orders by updated_at desc
-    return { items: all.slice(0, q.limit) };
+    return pageOf(all, q);
   }
 
   async getSession(sessionId: string): Promise<Session> {
@@ -200,10 +200,7 @@ export class FakeSessionsApi implements SessionsApi {
     this.log("listTurnEvents", sessionId, turnId, q);
     const all = [...(this.events.get(turnId) ?? [])];
     if (q.order === "desc") all.reverse();
-    const start = q.cursor ? Number(q.cursor) : 0;
-    const items = all.slice(start, start + q.limit);
-    const next = start + q.limit < all.length ? String(start + q.limit) : undefined;
-    return { items, ...(next ? { next } : {}) };
+    return pageOf(all, q);
   }
 
   async tipTurnId(sessionId: string): Promise<string | undefined> {
@@ -257,6 +254,16 @@ export class FakeSessionsApi implements SessionsApi {
   async cancel(sessionId: string): Promise<void> {
     this.log("cancel", sessionId);
   }
+}
+
+// One page of `all`, the way the server pages: the cursor is opaque to callers
+// (here it's just the offset of the page's first item), and the last page has no `next`.
+// `<T>` makes it generic, so it pages Sessions and events alike.
+function pageOf<T>(all: T[], q: { limit: number; cursor?: string }): Page<T> {
+  const start = q.cursor ? Number(q.cursor) : 0;
+  const items = all.slice(start, start + q.limit);
+  const next = start + q.limit < all.length ? String(start + q.limit) : undefined;
+  return { items, ...(next ? { next } : {}) };
 }
 
 // What the SDK throws for a 404: an Error with a status code.

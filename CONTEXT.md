@@ -21,7 +21,7 @@ One conversation with an Agent, made of Turns, that persists across reconnects.
 _Avoid_: chat, thread
 
 **Turn**:
-One user message and everything the Agent does in response, up to its final reply.
+One user message and everything the Agent does in response, up to its final reply. A Turn is **finished** once it stops running, however it ended: done, cancelled or failed. A finished Turn can still be waiting on an Approval.
 
 **Approval**:
 A human's allow or deny decision on a sensitive tool call. The Turn ends while it waits, and the next Turn carries the decision.
@@ -38,7 +38,14 @@ A named, repeatable scenario that deliberately triggers one harness behaviour (e
 _Avoid_: test, demo
 
 **Experiment Session**:
-A Session tagged with `experiment` metadata, created for an Experiment. It's an inline Session carrying its own copy of Cartographer's spec, so an Experiment changes that copy and never the Cartographer Agent. It's the only kind of Session Cartographer's write tools (fork, re-run, cancel) may act on in place; the user's own chat Sessions are never tagged. Forking a chat Session replays its user messages into a new Experiment Session: the context is replayed, never copied.
+A Session tagged with `experiment` metadata, created for an Experiment. It's an inline Session carrying its own copy of Cartographer's spec, so an Experiment changes that copy and never the Cartographer Agent. It's the only kind of Session Cartographer's write tools (fork, re-run, cancel) may act on in place; the user's own chat Sessions are never tagged. Forking a chat Session replays its user messages into a new Experiment Session: the context is replayed, never copied. Its tags record its Experiment's name, its depth (how many forks it is from a root: a script's own Experiment Session and the user's chat are both depth 0), its origin (the Session and Turn it was forked from), and, while a fork replays a chat, whether the replay is running, done or failed.
+
+**Chat Session**:
+A Session the user holds with Cartographer, as opposed to an Experiment Session. It's never tagged. Its messages are the user's own, so Cartographer reads another one only with the user's Approval; the Session it's running in is already in its context.
+_Avoid_: conversation
+
+**Replay**:
+An Experiment Session made by forking a Chat Session: it holds that chat's user messages, so it's read and judged as if it were the chat. Its `origin` tag names the chat and Turn it was forked from. A fork of a Replay is a Replay too, since it holds the same messages; a fork of any other Experiment Session is not.
 
 **Harness Notes**:
 The user's own deep-dive notes on how TrueForge works inside, written while building on it. Not a comparison with other harnesses.

@@ -3,7 +3,9 @@
 // `{session_id, turn_id, event_id}` citation.
 
 import { z } from "zod";
+import { isExperiment } from "./access";
 import type { Session, SessionEvent, Turn } from "./api";
+import { recordedMetrics, requiredActions } from "./turns";
 
 export const SessionCitation = z.object({
   session_id: z.string(),
@@ -47,7 +49,7 @@ export function sessionSummary(s: Session): z.infer<typeof SessionSummary> {
     // A named Agent shows its name; an inline copy (every Experiment Session) shows "inline".
     agent: s.agent.type === "reference" ? (s.agent.name ?? s.agent.id) : "inline",
     metadata: s.metadata,
-    experiment: s.metadata.experiment !== undefined,
+    experiment: isExperiment(s),
     turns: s.metrics.totalTurns,
     cost_usd: s.metrics.totalCostInUsd ?? null,
     duration_ms: s.metrics.totalDurationMs,
@@ -67,7 +69,7 @@ export const Metrics = z.object({
 // A finished Turn's metrics in the tools' snake_case, or undefined while it
 // runs (and for a Turn cancelled for the next one, #24).
 export function metricsOf(t: Turn): z.infer<typeof Metrics> | undefined {
-  const m = "metrics" in t.state ? t.state.metrics : undefined;
+  const m = recordedMetrics(t);
   if (!m) return undefined;
   return {
     input_tokens: m.totalInputTokens,
@@ -92,10 +94,6 @@ export const TurnSummary = z.object({
   metrics: Metrics.optional(),
 });
 export type TurnSummary = z.infer<typeof TurnSummary>;
-
-export function requiredActions(turn: Turn): number {
-  return turn.state.status === "done" ? turn.state.requiredActions.length : 0;
-}
 
 export function turnSummary(t: Turn, inputChars: number): TurnSummary {
   const s = t.state;

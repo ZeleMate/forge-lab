@@ -188,12 +188,39 @@ describe("check_events", () => {
     expect(calls).toHaveLength(1);
   });
 
+  test("says when it stopped searching at 2,000 events, and doesn't claim the Turn has none", async () => {
+    const { decide, calls } = fakeDecide();
+    const fake = new FakeSessionsApi();
+    fake.addSession("exp", { metadata: { experiment: "x", depth: "0" }, inline: true });
+    fake.addTurn("exp", "e1");
+    for (let i = 0; i < 2_100; i++)
+      fake.addEvent("e1", { type: "thread.done", id: `done-${i}`, createdAt: "x" } as SessionEvent);
+    fake.addMcpInitialize("e1", "conn"); // past the cap, so it's never seen
+    const { client } = await connect(testDeps(source, { api: fake }, { decide }), "triage");
+    const r = await call(client, "check_events", {
+      session_id: "exp",
+      turn_id: "e1",
+      predicates,
+      types: ["mcp.initialize"],
+    });
+    expect(r.data).toMatchObject({ status: "unscored", events: [], events_cut: true });
+    expect(r.data.reason).toMatch(/first 2000 events/);
+    expect(calls).toHaveLength(0);
+  });
+
+  test("a Turn read to its end isn't marked cut", async () => {
+    const { decide } = fakeDecide();
+    const { client } = await withSessions(decide);
+    const r = await call(client, "check_events", { session_id: "exp", turn_id: "e1", predicates });
+    expect(r.data.events_cut).toBeUndefined();
+  });
+
   test("refuses the user's chat: its events never reach the judge", async () => {
     const { decide, calls } = fakeDecide();
     const { client } = await withSessions(decide);
     const r = await call(client, "check_events", { session_id: "chat", turn_id: "c1", predicates });
     expect(r.isError).toBe(true);
-    expect(r.text).toMatch(/not an Experiment Session/);
+    expect(r.text).toMatch(/is the user.s chat, and its events aren.t sent to the triage judge/);
     expect(calls).toHaveLength(0);
   });
 

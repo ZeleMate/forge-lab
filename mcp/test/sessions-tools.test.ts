@@ -2,7 +2,7 @@
 // reads' projections, wait_turn on the fake clock, and what each write sends.
 import { beforeAll, describe, expect, test } from "bun:test";
 import { serialization } from "@truefoundry/trueforge-sdk";
-import { collectTurns, MAX_TURNS, TooManyTurnsError, type Turn } from "../src/sessions/api";
+import { collectTurns, MAX_TURNS, type SessionEvent, TooManyTurnsError, type Turn } from "../src/sessions/api";
 import { branchTo } from "../src/sessions/replay";
 import { applyConfigPatch, deepMerge } from "../src/sessions/spec";
 import type { Snapshot } from "../src/source/snapshot";
@@ -138,6 +138,18 @@ describe("reads", () => {
     expect(running).toMatchObject({ status: "running", metrics_from: "events" });
     expect(done).toMatchObject({ status: "done", metrics_from: "turn" });
   });
+
+  test("session_stats says which Turn's figures stop at its first 500 events", async () => {
+    const { fake, client } = await setup();
+    // e2 gets 600 events in all (its `turn.created` plus 599 threads): 6 pages, one past the cap.
+    for (let i = 0; i < 599; i++)
+      fake.addEvent("e2", { type: "thread.created", id: `th-${i}`, createdAt: "x" } as SessionEvent);
+    const r = await call(client, "session_stats", { session_id: "exp" });
+    const [big, small] = r.data.turns;
+    expect(big).toMatchObject({ citation: { turn_id: "e2" }, threads: 499, events_cut: true });
+    expect(small.citation.turn_id).toBe("e1");
+    expect(small.events_cut).toBeUndefined();
+  });
 });
 
 describe("wait_turn", () => {
@@ -179,6 +191,24 @@ describe("writes", () => {
     ]);
   });
 
+  // A Replay holds the chat's messages but is an Experiment Session, so writes
+  // act on it in place, not by replaying it again. Finding that out reads the
+  // Session its `origin` names.
+  test("fork_turn and rerun_turn on a Replay act in place", async () => {
+    const { fake, client } = await setup();
+    fake.addSession("replay", { metadata: { experiment: "x", depth: "1", origin: "chat:c1" }, inline: true });
+    fake.addTurn("replay", "r1", { text: "how does compaction fire?" });
+    const forked = await call(client, "fork_turn", { session_id: "replay", from_turn_id: "r1", message: "and then?" });
+    expect(forked.data).toMatchObject({ mode: "in-place", context: "kept" });
+    const rerun = await call(client, "rerun_turn", { session_id: "replay", turn_id: "r1" });
+    expect(rerun.data).toMatchObject({ mode: "in-place", context: "kept" });
+    expect(fake.mutations().map((c) => [c.method, c.args[0]])).toEqual([
+      ["createTurn", "replay"],
+      ["createTurn", "replay"],
+    ]);
+    expect(fake.calls).toContainEqual({ method: "getSession", args: ["chat"] });
+  });
+
   test("fork_turn from the user's chat replays into a new tagged inline Session", async () => {
     const { fake, client, tasks } = await setup();
     const r = await call(client, "fork_turn", {
@@ -196,12 +226,10 @@ describe("writes", () => {
     const [created, ...rest] = fake.mutations();
     expect(created?.method).toBe("createSession");
     const body = created?.args[0] as { spec: typeof SPEC; metadata: Record<string, string> };
-    expect(body.metadata).toEqual({
-      experiment: "compaction-trigger",
-      depth: "1",
-      origin: "chat:c2",
-      replay: "running",
-    });
+    // JSON.stringify keeps key order, so this pins the tags' exact bytes on the wire.
+    expect(JSON.stringify(body.metadata)).toBe(
+      '{"experiment":"compaction-trigger","depth":"1","origin":"chat:c2","replay":"running"}',
+    );
     expect(body.spec.config?.iterationLimit).toBe(5);
     // The chat itself is never written to.
     expect(fake.mutations().some((c) => c.args[0] === "chat")).toBe(false);

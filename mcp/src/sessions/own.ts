@@ -3,7 +3,9 @@
 // `Mcp-Session-Id` in an `mcp.initialize` event. So the caller's Session is the
 // one with a running Turn whose `mcp.initialize` names this connection's id.
 
+import { depthOf } from "./access";
 import { type SessionsApi, TooManyTurnsError, type Turn } from "./api";
+import { findSession, isRunning } from "./turns";
 
 // `detected`: found by the scan. Otherwise it came only from the tool's
 // `caller_session_id`, which nothing confirms, so the write checks distrust it.
@@ -17,15 +19,7 @@ const EVENTS_SCANNED = 10;
 // other Sessions keep updating.
 const SESSION_PAGES = 4;
 
-export function depthOf(metadata: Record<string, string>): number {
-  // An untagged Session (the user's chat) is depth 0, like a script's root Experiment.
-  const raw = metadata.depth;
-  if (raw === undefined) return 0;
-  // A tag that isn't a small integer counts as too deep, so writes refuse it.
-  return /^\d$/.test(raw) ? Number(raw) : Number.POSITIVE_INFINITY;
-}
-
-const running = (turns: Turn[]) => turns.find((t) => t.state.status === "running")?.id;
+const running = (turns: Turn[]) => turns.find(isRunning)?.id;
 
 export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefined) {
   // The mapping never changes for a connection (one connection per Session),
@@ -36,14 +30,9 @@ export function ownSessionFinder(api: SessionsApi, mcpSessionId: string | undefi
 
   async function scan(): Promise<string | undefined> {
     if (!mcpSessionId) return undefined;
-    let cursor: string | undefined;
-    for (let page = 0; page < SESSION_PAGES; page++) {
-      const res = await api.listSessions({ limit: 25, ...(cursor ? { cursor } : {}) });
-      for (const session of res.items) if (await initializedHere(session.id)) return session.id;
-      cursor = res.next;
-      if (!cursor) break;
-    }
-    return undefined;
+    // A scan cut at SESSION_PAGES is a miss like any other: the next call scans again.
+    const { session } = await findSession(api, (s) => initializedHere(s.id), { maxPages: SESSION_PAGES });
+    return session?.id;
   }
 
   // Whether this Session is running a Turn and was connected to us.

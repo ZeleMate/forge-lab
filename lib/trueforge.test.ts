@@ -5,7 +5,13 @@ import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import { TRUEFORGE_ORIGIN } from "./ports";
-import { onSmokeModel, openInlineExperimentSession, SMOKE_MODEL, saveResults } from "./trueforge";
+import {
+  onSmokeModel,
+  openExperimentSession,
+  openInlineExperimentSession,
+  SMOKE_MODEL,
+  saveResults,
+} from "./trueforge";
 
 test("saveResults replaces the home folder, so a recorded path can't name the user", async () => {
   const dir = mkdtempSync(join(tmpdir(), "forge-lab-results-"));
@@ -36,6 +42,15 @@ test("openInlineExperimentSession posts the spec inline, tagged as an Experiment
     agent: { spec },
     metadata: { experiment: "smoke-mcp-source", depth: "0" },
   });
+});
+
+test("openExperimentSession names the Agent and sends the root tags byte for byte", async () => {
+  fetchSpy.mockResolvedValue(Response.json({ data: { id: "sess_2" } }, { status: 201 }));
+
+  expect(await openExperimentSession("cartographer", "smoke")).toBe("sess_2");
+  // The raw body, not a parsed copy, so a change in key order shows up too.
+  const [, init] = fetchSpy.mock.calls[0] ?? [];
+  expect(String(init?.body)).toBe('{"agent":{"name":"cartographer"},"metadata":{"experiment":"smoke","depth":"0"}}');
 });
 
 test("an HTTP error throws instead of returning an id", async () => {

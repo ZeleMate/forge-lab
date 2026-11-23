@@ -12,7 +12,8 @@
 import type { CallToolResult, McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { fitList, guarded, listCut, maxChars, ok, refuse } from "../result";
-import type { Session, SessionEvent, SessionsApi } from "./api";
+import { classify, refusalFor } from "./access";
+import type { Session } from "./api";
 import type { FindOwn } from "./own";
 import {
   EventView,
@@ -27,37 +28,23 @@ import {
   textOf,
   turnSummary,
 } from "./project";
-import {
-  CHAT_READ_TOOLS,
-  holdsChat,
-  isUnfinished,
-  POLL_MS,
-  READ_ANNOTATIONS,
-  type SessionsDeps,
-  sessionId,
-  sum,
-} from "./shared";
+import { READ_ANNOTATIONS, type SessionsDeps, sessionId, sum } from "./shared";
+import { allEvents, EVENTS_PAGE_SIZE, waitForTurn } from "./turns";
+
+const STATS_EVENT_PAGES = 5;
 
 export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn: FindOwn): void {
   const { api, clock } = deps;
 
-  // A refusal when `session` is one of the user's chats other than the caller's own.
-  // Whether the model may read `session`'s messages without asking: an Experiment
-  // Session that doesn't replay a chat, or the caller's own Session. A replay counts
-  // as the chat, since fork_turn's Approval reads as a write, not as opening the chat.
-  async function readsFreely(session: Session): Promise<boolean> {
-    if (!(await holdsChat(api, session))) return true;
-    // No `caller_session_id` here: only a Session the scan found counts as the caller's.
-    const own = await findOwn();
-    return own?.detected === true && own.sessionId === session.id;
-  }
-
+  // A refusal unless the access policy lets the model read `session`'s messages
+  // without asking (access.ts).
   async function chatRefusal(session: Session): Promise<CallToolResult | undefined> {
-    if (await readsFreely(session)) return undefined;
-    return refuse(
-      `Session ${session.id} is the user's chat, and its messages are read only with the user's Approval`,
-      `${CHAT_READ_TOOLS.join(" or ")}, which ask the user first`,
-    );
+    const target = await classify(api, session);
+    // The caller only matters for a Session holding chat content, so the scan
+    // runs only then. No `caller_session_id` here: only a Session the scan found
+    // counts as the caller's.
+    const caller = target.holdsChat ? await findOwn() : undefined;
+    return refusalFor(target, { action: "read", caller });
   }
 
   server.registerTool(
@@ -245,14 +232,16 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
     model_calls: z.number().int(),
     tool_calls: z.number().int(),
     threads: z.number().int(),
+    // Present when the Turn has more events than session_stats reads: the
+    // figures above that come from events count only the first ones.
+    events_cut: z.boolean().optional(),
   });
 
   server.registerTool(
     "session_stats",
     {
       title: "Session stats",
-      description:
-        "Token, cost and timing figures for a Session's newest Turns, with model calls, tool calls and Subagent threads per Turn, and the latest context breakdown (harness, instructions, tools, messages). A Turn without recorded metrics (running, or cancelled for the next Turn) has tokens summed from its events and no cost: TrueForge prices a Turn only when it ends.",
+      description: `Token, cost and timing figures for a Session's newest Turns, with model calls, tool calls and Subagent threads per Turn, and the latest context breakdown (harness, instructions, tools, messages). A Turn without recorded metrics (running, or cancelled for the next Turn) has tokens summed from its events and no cost: TrueForge prices a Turn only when it ends. A Turn with more than ${STATS_EVENT_PAGES * EVENTS_PAGE_SIZE} events is counted from its first ${STATS_EVENT_PAGES * EVENTS_PAGE_SIZE} and marked events_cut.`,
       inputSchema: z.object({
         session_id: sessionId,
         last_turns: z.number().int().min(1).max(25).default(10),
@@ -274,9 +263,14 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
       const newest = turns.slice(-args.last_turns).reverse();
       // The reads run in parallel; `Promise.all` keeps the results in the
       // input's order, so the loop below still walks newest first.
-      const eventsOf = await Promise.all(newest.map((t) => allEvents(api, args.session_id, t.id)));
+      // A Turn's figures come from at most 5 pages of its events: up to 25 Turns
+      // are read at once, so a bigger cap would multiply into hundreds of requests.
+      const eventsOf = await Promise.all(
+        newest.map((t) => allEvents(api, args.session_id, t.id, { maxPages: STATS_EVENT_PAGES })),
+      );
       for (const [i, turn] of newest.entries()) {
-        const events = eventsOf[i] ?? [];
+        const events = eventsOf[i]?.items ?? [];
+        const cut = eventsOf[i]?.cut === true;
         const messages = events.filter((e) => e.type === "model.message");
         // `flatMap` maps and flattens one level, so per-message lists become one list.
         const usage = messages.flatMap((m) => (m.usage ? [m.usage] : []));
@@ -301,6 +295,7 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
           model_calls: messages.length,
           tool_calls: sum(messages.map((e) => e.toolCalls?.length ?? 0)),
           threads: events.filter((e) => e.type === "thread.created").length,
+          ...(cut ? { events_cut: true } : {}),
         });
       }
       return ok(
@@ -340,39 +335,14 @@ export function registerReadTools(server: McpServer, deps: SessionsDeps, findOwn
     guarded(async (args) => {
       // A chat is followed by status only: its input is cut to nothing, so waiting
       // on a fork's replay needs no Approval and shows none of the chat.
-      const inputChars = (await readsFreely(await api.getSession(args.session_id))) ? 500 : 0;
-      const started = clock.now();
-      const deadline = started + args.timeout_s * 1000;
-      let turn = await api.getTurn(args.session_id, args.turn_id);
-      while (isUnfinished(turn) && clock.now() < deadline) {
-        await clock.sleep(Math.min(POLL_MS, deadline - clock.now()));
-        turn = await api.getTurn(args.session_id, args.turn_id);
-      }
+      const inputChars = (await chatRefusal(await api.getSession(args.session_id))) ? 0 : 500;
+      const waited = await waitForTurn(api, clock, args.session_id, args.turn_id, args.timeout_s * 1000);
       return ok({
         provenance: "observed" as const,
-        still_running: isUnfinished(turn),
-        waited_ms: clock.now() - started,
-        turn: turnSummary(turn, inputChars),
+        still_running: !waited.finished,
+        waited_ms: waited.waitedMs,
+        turn: turnSummary(waited.turn, inputChars),
       });
     }),
   );
-}
-
-const EVENT_PAGES = 5;
-const EVENTS_PAGE_SIZE = 100;
-
-// Every event of a Turn, at most EVENT_PAGES pages of EVENTS_PAGE_SIZE.
-async function allEvents(api: SessionsApi, sessionId: string, turnId: string): Promise<SessionEvent[]> {
-  const out: SessionEvent[] = [];
-  let cursor: string | undefined;
-  for (let page = 0; page < EVENT_PAGES; page++) {
-    const res = await api.listTurnEvents(sessionId, turnId, {
-      limit: EVENTS_PAGE_SIZE,
-      ...(cursor ? { cursor } : {}),
-    });
-    out.push(...res.items);
-    cursor = res.next;
-    if (!cursor) break;
-  }
-  return out;
 }

@@ -19,6 +19,7 @@
 
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
+import { encodeExperimentTags } from "@forge-lab/lib/experiment-tags";
 import { HOST, PORTS } from "@forge-lab/lib/ports";
 import {
   allEvents,
@@ -37,6 +38,7 @@ import {
 } from "@forge-lab/lib/trueforge";
 import { Client, StreamableHTTPClientTransport } from "@modelcontextprotocol/client";
 import { sdkSessionsApi } from "../src/sessions/api";
+import { allSessions } from "../src/sessions/turns";
 
 const EXPERIMENT = "approvals-check";
 // The stand-in chat says this word, so any tool response that carries it has read the chat.
@@ -53,16 +55,18 @@ const spec = onSmokeModel(agent.manifest);
 
 const sessions = sdkSessionsApi(ORIGIN);
 
+// The fingerprint must cover every Session; this cap (5,000 Sessions) only
+// stops a runaway list from making the check run forever.
+const FINGERPRINT_PAGES = 200;
+
 // Every Session's Turn count and tags, to prove what a phase didn't touch.
 async function fingerprint(): Promise<Record<string, string>> {
-  const out: Record<string, string> = {};
-  let cursor: string | undefined;
-  do {
-    const page = await sessions.listSessions({ limit: 25, ...(cursor ? { cursor } : {}) });
-    for (const s of page.items) out[s.id] = `${s.metrics.totalTurns} ${JSON.stringify(s.metadata)}`;
-    cursor = page.next;
-  } while (cursor);
-  return out;
+  const { items, cut } = await allSessions(sessions, { maxPages: FINGERPRINT_PAGES });
+  // A partial fingerprint proves nothing about the Sessions it missed.
+  if (cut)
+    failures.push(`fingerprint: more than ${FINGERPRINT_PAGES} pages of Sessions, so not every one was compared`);
+  // `Object.fromEntries` turns [key, value] pairs into an object.
+  return Object.fromEntries(items.map((s) => [s.id, `${s.metrics.totalTurns} ${JSON.stringify(s.metadata)}`]));
 }
 
 function changed(before: Record<string, string>, after: Record<string, string>, allowed: string[]): string[] {
@@ -81,7 +85,7 @@ const { data: chat } = await api<{ id: string }>("POST", "/sessions", {
 const c1 = await waitTurn(chat.id, (await createTurn(chat.id, `Reply with exactly this word: ${MARKER}`, "none")).id);
 const { data: deep } = await api<{ id: string }>("POST", "/sessions", {
   agent: { spec },
-  metadata: { experiment: EXPERIMENT, depth: "2" },
+  metadata: encodeExperimentTags({ experiment: EXPERIMENT, depth: 2 }),
 });
 const d1 = await waitTurn(deep.id, (await createTurn(deep.id, "Say hi in one word.", "none")).id);
 // A Turn waiting on an Approval and a depth-1 Session, from the last fixtures recording.
@@ -97,7 +101,7 @@ const running = await createTurn(target, SLOW_PROMPT, t1.id);
 const callerBusy = await createTurn(caller, SLOW_PROMPT, "none");
 const { data: nested } = await api<{ id: string }>("POST", "/sessions", {
   agent: { spec },
-  metadata: { experiment: EXPERIMENT, depth: "1" },
+  metadata: encodeExperimentTags({ experiment: EXPERIMENT, depth: 1 }),
 });
 const nestedBusy = await createTurn(nested.id, SLOW_PROMPT, "none");
 
