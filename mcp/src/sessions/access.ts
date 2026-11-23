@@ -4,8 +4,8 @@
 // predicates, so the kinds, the tag parsing, the check order and the refusal
 // texts live in one place.
 //
-// Two steps: `classify` reads what the Session is (one lookup for an Experiment
-// Session with an `origin`), then `refusalFor` answers one ask, without I/O.
+// Two steps: `classify` reads what the Session is (a lookup per fork on an
+// Experiment Session's `origin` chain), then `refusalFor` answers one ask, without I/O.
 
 import { decodeExperimentTags, encodeExperimentTags } from "@forge-lab/lib/experiment-tags";
 import type { CallToolResult } from "@modelcontextprotocol/server";
@@ -14,7 +14,8 @@ import type { Metadata, Session, SessionsApi } from "./api";
 import { CHAT_READ_TOOLS } from "./shared";
 
 // - chat: one of the user's Chat Sessions (untagged);
-// - replay: a Replay, an Experiment Session forked from a Chat Session, so it holds its messages;
+// - replay: a Replay, an Experiment Session forked from a Chat Session (or from
+//   a Replay), so it holds that chat's messages;
 // - experiment: any other Experiment Session.
 export type SessionKind = "chat" | "replay" | "experiment";
 
@@ -47,6 +48,9 @@ export type Ask =
 
 // Writes stop here: no Experiment Session at this depth or deeper is written to or made.
 const MAX_DEPTH = 2;
+// How many forks back `classify` follows an origin chain. Depth tags stop at 9,
+// so a longer chain is a loop or a forgery, and it counts as holding a Chat Session.
+const MAX_ORIGIN_HOPS = 10;
 
 export const isExperiment = (s: Session) => s.metadata.experiment !== undefined;
 
@@ -72,20 +76,33 @@ function depthFrom(depth: ReturnType<typeof decodeExperimentTags>["depth"]): num
 }
 
 export async function classify(api: SessionsApi, session: Session): Promise<Classified> {
-  // Decode once: the depth and origin both come from this one reading.
   const tags = decodeExperimentTags(session.metadata);
   const base = { id: session.id, depth: depthFrom(tags.depth), depthTag: session.metadata.depth };
   const origin = session.metadata.origin;
   if (!isExperiment(session)) return { ...base, kind: "chat", origin, holdsChat: true };
   if (origin === undefined) return { ...base, kind: "experiment", origin, holdsChat: false };
-  // A Replay, unless the origin names a readable Experiment Session. An origin
-  // that can't be read (malformed, or naming no Session) counts as a Chat Session.
-  const parsed = tags.origin;
-  // `.catch` turns a failed lookup into `undefined` instead of an exception.
-  const source =
-    parsed.kind === "valid" ? await api.getSession(parsed.value.sessionId).catch(() => undefined) : undefined;
-  const replay = source === undefined || !isExperiment(source);
+  const replay = await reachesChat(api, session);
   return { ...base, kind: replay ? "replay" : "experiment", origin, holdsChat: replay };
+}
+
+// Whether an Experiment Session's origin chain leads back to a Chat Session: a
+// fork of a Replay holds the chat's messages as much as the Replay does. The
+// chain ends clean only at an Experiment Session without an origin. A link that
+// can't be read (a malformed origin, a Session that's gone, a chain too long)
+// counts as reaching a Chat Session, so the policy fails closed.
+async function reachesChat(api: SessionsApi, session: Session): Promise<boolean> {
+  let current = session;
+  for (let hop = 0; hop < MAX_ORIGIN_HOPS; hop++) {
+    if (!isExperiment(current)) return true;
+    const origin = decodeExperimentTags(current.metadata).origin;
+    if (origin.kind === "absent") return false;
+    if (origin.kind === "malformed") return true;
+    // `.catch` turns a failed lookup into `undefined` instead of an exception.
+    const source = await api.getSession(origin.value.sessionId).catch(() => undefined);
+    if (source === undefined) return true;
+    current = source;
+  }
+  return true;
 }
 
 // The tags of a new Experiment Session replayed from `chatId` at `turnId`: one
@@ -111,9 +128,16 @@ export function refusalFor(s: Classified, ask: Ask): CallToolResult | undefined 
       return judgeRefusal(s);
     case "replay":
       return replayRefusal(s, ask.caller);
-    default:
-      // After the cases above, TypeScript has narrowed `ask` to the in-place writes.
+    case "fork in place":
+    case "re-run":
+    case "cancel":
       return inPlaceRefusal(s, ask.action, ask.caller, ask.running);
+    default: {
+      // Every action is handled above, so TypeScript narrows `ask` to `never`
+      // here. A new action without a case makes this assignment a type error.
+      const unhandled: never = ask;
+      throw new Error(`no access rule for ${JSON.stringify(unhandled)}`);
+    }
   }
 }
 
@@ -146,18 +170,17 @@ function judgeRefusal(s: Classified): CallToolResult | undefined {
   );
 }
 
-function depthRefusal(s: Classified): CallToolResult | undefined {
+// `hint` differs by ask: an in-place write needs a shallower target, a replay a
+// shallower Session to fork from.
+function depthRefusal(s: Classified, hint: string): CallToolResult | undefined {
   if (s.depth < MAX_DEPTH) return undefined;
-  return refuse(
-    `Session ${s.id} is at depth ${s.depthTag}; writes stop at depth ${MAX_DEPTH}`,
-    "work in a shallower Experiment Session",
-  );
+  return refuse(`Session ${s.id} is at depth ${s.depthTag}; writes stop at depth ${MAX_DEPTH}`, hint);
 }
 
 // A replay never touches the Chat Session: it opens a new Replay one level
 // below the caller. So both the Chat Session and that Replay must stay shallow.
 function replayRefusal(s: Classified, caller: Caller): CallToolResult | undefined {
-  const deep = depthRefusal(s);
+  const deep = depthRefusal(s, `fork from a Session at depth 0 or ${MAX_DEPTH - 1}`);
   if (deep) return deep;
   const from = callerDepth(caller);
   const depth = from + 1;
@@ -194,7 +217,7 @@ function inPlaceRefusal(
         : `a ${action} in my own Session would move its tip off this Turn`,
       cancel ? "the user can stop it in the UI" : "use another Experiment Session",
     );
-  const deep = depthRefusal(s);
+  const deep = depthRefusal(s, "work in a shallower Experiment Session");
   if (deep) return deep;
   if (!running) return undefined;
   // A caller named only by `caller_session_id` might really be any running
