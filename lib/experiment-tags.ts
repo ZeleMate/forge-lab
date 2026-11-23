@@ -69,8 +69,22 @@ function encodeReplay(state: ReplayState): string {
     case "done":
       return state.status;
     case "failed":
-      return `failed:${state.reason}`.slice(0, REPLAY_TAG_MAX);
+      return cutToUnits(`failed:${state.reason}`, REPLAY_TAG_MAX);
   }
+}
+
+// The longest start of `text` that fits in `max` UTF-16 units without
+// splitting a character: an emoji is two units (a surrogate pair), and a cut
+// between them would leave half of it behind.
+function cutToUnits(text: string, max: number): string {
+  if (text.length <= max) return text;
+  // `for...of` walks a string by code point, so a pair arrives as one string of length 2.
+  let cut = 0;
+  for (const char of text) {
+    if (cut + char.length > max) break;
+    cut += char.length;
+  }
+  return text.slice(0, cut);
 }
 
 // ---------- reading ----------
