@@ -29,6 +29,12 @@ beforeAll(async () => {
   fake.addSession("fork", { metadata: { experiment: "x", depth: "1", origin: "exp:e1" }, inline: true });
   // Names a readable Experiment Session before its extra colon, but the codec reads it as malformed.
   fake.addSession("bad-origin", { metadata: { experiment: "x", depth: "1", origin: "exp:e1:extra" }, inline: true });
+  // Origin chains: a fork of a Replay still holds the chat; a fork of a fork of
+  // an Experiment Session doesn't; a loop never reaches a root, so it counts as a chat.
+  fake.addSession("replay-fork", { metadata: { experiment: "x", depth: "2", origin: "replay:r1" }, inline: true });
+  fake.addSession("fork-fork", { metadata: { experiment: "x", depth: "2", origin: "fork:f1" }, inline: true });
+  fake.addSession("loop-a", { metadata: { experiment: "x", depth: "1", origin: "loop-b:t1" }, inline: true });
+  fake.addSession("loop-b", { metadata: { experiment: "x", depth: "1", origin: "loop-a:t1" }, inline: true });
   for (const id of [
     "chat",
     "deep-chat",
@@ -40,6 +46,9 @@ beforeAll(async () => {
     "blank-origin",
     "fork",
     "bad-origin",
+    "replay-fork",
+    "fork-fork",
+    "loop-a",
   ])
     classes.set(id, await classify(fake, await fake.getSession(id)));
 });
@@ -50,7 +59,8 @@ const of = (id: string): Classified => {
   return c;
 };
 
-// The caller is another Session unless a row says otherwise.
+// The caller is another Session unless a row says otherwise. `Partial<Caller>`
+// is Caller with every field optional, so a row overrides only what it names.
 const OTHER: Caller = { sessionId: "own", depth: 0, detected: true };
 const UNVERIFIED: Caller = { sessionId: "own", depth: 0, detected: false };
 const AS = (sessionId: string, more: Partial<Caller> = {}): Caller => ({
@@ -69,6 +79,9 @@ describe("classify", () => {
     ["orphan", "replay", true], // an origin that names no readable Session counts as a chat
     ["blank-origin", "replay", true],
     ["bad-origin", "replay", true], // a malformed origin isn't looked up, so it counts as a chat
+    ["replay-fork", "replay", true], // the origin chain reaches a Chat Session two forks back
+    ["fork-fork", "experiment", false],
+    ["loop-a", "replay", true],
   ])("%s is a %s Session (holds chat content: %p)", (id, kind, holdsChat) => {
     expect(of(id)).toMatchObject({ id, kind, holdsChat });
   });
@@ -78,7 +91,7 @@ describe("classify", () => {
     expect(of("chat")).toMatchObject({ depth: 0, origin: undefined });
   });
 
-  test("a chat or an untagged Experiment Session is never looked up again", async () => {
+  test("a Chat Session, or an Experiment Session without an origin, is never looked up again", async () => {
     const before = fake.calls.length;
     await classify(fake, await fake.getSession("chat"));
     await classify(fake, await fake.getSession("exp"));
@@ -189,7 +202,7 @@ const table: Row[] = [
   [
     "deep-chat",
     { action: "replay", caller: OTHER },
-    /^refused: Session deep-chat is at depth 2; writes stop at depth 2/,
+    /^refused: Session deep-chat is at depth 2; writes stop at depth 2\. Try: fork from a Session at depth 0 or 1$/,
   ],
   [
     "chat",

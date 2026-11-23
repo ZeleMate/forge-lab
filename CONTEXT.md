@@ -45,7 +45,7 @@ A Session the user holds with Cartographer, as opposed to an Experiment Session.
 _Avoid_: conversation
 
 **Replay**:
-An Experiment Session made by forking a Chat Session: it holds that chat's user messages, so it's read and judged as if it were the chat. Its `origin` tag names the chat and Turn it was forked from. A fork of an Experiment Session is not a Replay.
+An Experiment Session made by forking a Chat Session: it holds that chat's user messages, so it's read and judged as if it were the chat. Its `origin` tag names the chat and Turn it was forked from. A fork of a Replay is a Replay too, since it holds the same messages; a fork of any other Experiment Session is not.
 
 **Harness Notes**:
 The user's own deep-dive notes on how TrueForge works inside, written while building on it. Not a comparison with other harnesses.
