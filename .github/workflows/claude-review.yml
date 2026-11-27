@@ -133,7 +133,7 @@ jobs:
           ls .review/issues
       # Never fails on findings: the skill's smell findings are judgement calls.
       - id: review
-        uses: anthropics/claude-code-action@4d75e5f390ee76b2e09c1980ecc99ff3a2e088c8 # v1.0.275
+        uses: anthropics/claude-code-action@c84e279f859e2591391e95bd309286eb111c345f # v1.0.284
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
@@ -186,7 +186,7 @@ jobs:
           git log --format='%h %s%n%n%b' "$BASE"..HEAD > .review/pr-log.txt
       # Replaces anthropics/claude-code-security-review, which takes only an API key.
       - id: review
-        uses: anthropics/claude-code-action@4d75e5f390ee76b2e09c1980ecc99ff3a2e088c8 # v1.0.275
+        uses: anthropics/claude-code-action@c84e279f859e2591391e95bd309286eb111c345f # v1.0.284
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
