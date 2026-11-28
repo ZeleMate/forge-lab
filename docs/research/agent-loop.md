@@ -51,7 +51,7 @@ Per iteration, in order:
 
 1. **Cancel check**, then **iteration check**. If `iterations >= iterationLimit`, the loop emits an error event ("You have reached iteration limit of N, please request again") and stops. The counter increments on LLM calls only.
 2. **preLLM processors** (capabilities). Compaction runs here. They may emit `agent.context.overwrite`, which replaces the persisted context.
-3. **LLM call**, streamed through the Vercel AI SDK adapter (`core/llm/VercelAILLM.ts`). The loop first emits an empty `model.message` shell, then `model.message.delta` events, then the assembled `model.message`.
+3. **LLM call**, streamed through the Vercel AI SDK adapter (`core/llm/VercelAILLM.ts`). The loop first emits an empty `model.message` shell, then `model.message.delta` events, then the assembled `model.message`. *(Corrected by Experiment 1 `turn-anatomy`, 2026-11-28, on 0.184.2: the stream carries only the shell and the deltas. The assembled message goes into the context, and the events list rebuilds a `model.message` from it. See `experiments/turn-anatomy-results/`.)*
 4. **No tool calls** means the thread is done. `finish_reason: length` is treated as an error.
 5. **Tool calls**: `executeToolCalls` runs **all calls from one assistant message concurrently** (`Promise.all` in `core/mcp/executeToolCalls.ts`). Unknown tool names and thrown errors become an error tool result, so the model sees them and can recover. Each tool call gets a result message, always, because the provider API rejects dangling calls.
 6. **toolResponse processors** rewrite results (large-response offloading), then **postToolCall processors** run.
