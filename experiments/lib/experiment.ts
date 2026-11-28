@@ -2,7 +2,8 @@
 // (`metadata.experiment` set) on a copy of the registered Cartographer, drives
 // Turns over the SSE stream, answers Approval pauses from the decision list in
 // `<name>.expected.md`, then marks each expectation met or not and writes
-// `<name>-results/<model>/observed.json`.
+// `<name>-results/<model>/observed.json`. Each run replaces that file: the
+// committed record is the latest run, and git history keeps the earlier ones.
 //
 //   bun run --filter @forge-lab/experiments <name> -- --model glm-5-3-flash
 //
@@ -52,6 +53,14 @@ const TurnStateSchema = z.looseObject({
   metrics: z.record(z.string(), z.number()).optional(),
 });
 const TurnSchema = z.looseObject({ id: z.string(), state: TurnStateSchema });
+// A page of a list endpoint: TrueForge's `{ data, pagination }` envelope.
+const EventsPageSchema = z.looseObject({
+  data: z.array(WireEventSchema),
+  pagination: z.looseObject({ next_page_token: z.string().nullish() }).optional(),
+});
+
+// The longest one streamed Turn may take, past TrueForge's own 600 s execution timeout.
+const STREAM_TIMEOUT_MS = 660_000;
 export type TurnState = z.infer<typeof TurnStateSchema>;
 
 // ---------- what a Turn leaves behind ----------
@@ -113,8 +122,13 @@ export async function runExperiment<O>(def: ExperimentDefinition<O>): Promise<vo
   const agent = await findAgent("cartographer");
   if (!agent) fail("no cartographer Agent; `bun run dev` applies it");
 
+  // The model is set explicitly, so a run is on the model its folder names even
+  // if the registered Agent has been moved to another one.
+  const registered = structuredClone(agent.manifest) as WireSpec;
   const spec: WireSpec =
-    model === "opus-5-5" ? (structuredClone(agent.manifest) as WireSpec) : onSmokeModel(agent.manifest);
+    model === "opus-5-5"
+      ? { ...registered, model: { ...registered.model, name: "openrouter/opus-5-5" } }
+      : onSmokeModel(agent.manifest);
   const sessions: string[] = [];
   const approvals: ApprovalRecord[] = [];
 
@@ -126,8 +140,12 @@ export async function runExperiment<O>(def: ExperimentDefinition<O>): Promise<vo
       sessions.push(id);
       return id;
     },
-    turn: (sessionId, content, previousTurnId) =>
-      runToEnd(sessionId, content, previousTurnId, expected.approvals, approvals),
+    turn: (sessionId, content, previousTurnId) => {
+      // Only the Experiment Sessions this run opened: never the user's own chats.
+      if (!sessions.includes(sessionId))
+        throw new Error(`${sessionId} wasn't opened by this Experiment; use ctx.openSession`);
+      return runToEnd(sessionId, content, previousTurnId, expected.approvals, approvals);
+    },
   };
 
   const startedAt = new Date();
@@ -268,6 +286,8 @@ async function streamTurn(sessionId: string, input: unknown[], previousTurnId: s
     method: "POST",
     headers: { "content-type": "application/json", accept: "text/event-stream" },
     body: JSON.stringify({ input, stream: true, ...(previousTurnId ? { previous_turn_id: previousTurnId } : {}) }),
+    // Aborts the request, and the stream reading after it, if the server never closes it.
+    signal: AbortSignal.timeout(STREAM_TIMEOUT_MS),
   });
   if (!res.ok || !res.body) throw new Error(`POST turns -> HTTP ${res.status}: ${(await res.text()).slice(0, 500)}`);
 
@@ -297,8 +317,10 @@ async function persistedEvents(sessionId: string, turnId: string): Promise<WireE
   let token: string | null | undefined;
   do {
     const q = new URLSearchParams({ limit: "100", ...(token ? { page_token: token } : {}) });
-    const page = await api<unknown[]>("GET", `/sessions/${sessionId}/turns/${turnId}/events?${q}`);
-    out.push(...page.data.map((e) => WireEventSchema.parse(e)));
+    const page = EventsPageSchema.parse(
+      await api<unknown>("GET", `/sessions/${sessionId}/turns/${turnId}/events?${q}`),
+    );
+    out.push(...page.data);
     token = page.pagination?.next_page_token;
   } while (token);
   return out;

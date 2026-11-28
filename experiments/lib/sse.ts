@@ -13,10 +13,13 @@ export type SseMessage = {
 // and whatever is left over: a message can arrive split across network chunks,
 // so the tail waits for the next chunk.
 export function parseSse(buffer: string): { messages: SseMessage[]; rest: string } {
+  // A trailing \r may be the first half of a \r\n split across chunks, so it
+  // waits for the next chunk rather than counting as a line end on its own.
+  const held = buffer.endsWith("\r") ? "\r" : "";
   // The SSE format allows \r\n, \r or \n line ends; normalise to \n first.
-  const text = buffer.replace(/\r\n?/g, "\n");
+  const text = (held ? buffer.slice(0, -1) : buffer).replace(/\r\n?/g, "\n");
   const blocks = text.split("\n\n");
-  const rest = blocks.pop() ?? ""; // the last block has no blank line after it yet
+  const rest = (blocks.pop() ?? "") + held; // the last block has no blank line after it yet
   const messages: SseMessage[] = [];
   for (const block of blocks) {
     let id: string | undefined;

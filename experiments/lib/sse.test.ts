@@ -14,6 +14,15 @@ describe("parseSse", () => {
   });
 });
 
+describe("parseSse across chunks", () => {
+  test("a \\r\\n split between chunks is one line end, not a blank line", () => {
+    const first = parseSse("id: 1\r");
+    expect(first.messages).toEqual([]);
+    const second = parseSse(`${first.rest}\ndata: x\r\n\r\n`);
+    expect(second.messages).toEqual([{ id: "1", event: undefined, data: "x" }]);
+  });
+});
+
 describe("readSse", () => {
   test("reassembles messages and characters split across chunks", async () => {
     const bytes = new TextEncoder().encode('id: 1\ndata: "é"\n\nid: 2\ndata: "z"');
