@@ -40,6 +40,13 @@
         "vite": "8.3.6",
       },
     },
+    "experiments": {
+      "name": "@forge-lab/experiments",
+      "dependencies": {
+        "@forge-lab/lib": "workspace:*",
+        "zod": "4.6.7",
+      },
+    },
     "harness": {
       "name": "@forge-lab/harness",
       "dependencies": {
@@ -200,6 +207,8 @@
     "@forge-lab/agents": ["@forge-lab/agents@workspace:agents"],
 
     "@forge-lab/app": ["@forge-lab/app@workspace:app"],
+
+    "@forge-lab/experiments": ["@forge-lab/experiments@workspace:experiments"],
 
     "@forge-lab/harness": ["@forge-lab/harness@workspace:harness"],
 

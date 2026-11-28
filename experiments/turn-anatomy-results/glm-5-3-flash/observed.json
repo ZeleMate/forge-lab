@@ -1,0 +1,2042 @@
+{
+  "experiment": "turn-anatomy",
+  "model": "openrouter/glm-5-3-flash",
+  "trueforge": "0.184.2",
+  "snapshot": "235518c23fc10371a88ee28de6f34df007147730",
+  "startedAt": "2026-11-28T06:37:39.539Z",
+  "durationMs": 4107,
+  "sessions": [
+    "01m8gdzbapb1ezbpdt6cs6jhqm"
+  ],
+  "approvals": [],
+  "verdicts": {
+    "E1": {
+      "verdict": "met",
+      "observed": [
+        "turn.created",
+        "mcp.initialize",
+        "model.message",
+        "tool.response",
+        "tool.response",
+        "model.message",
+        "turn.done"
+      ]
+    },
+    "E2": {
+      "verdict": "met",
+      "observed": {
+        "count": 1,
+        "servers": [
+          "source"
+        ]
+      }
+    },
+    "E3": {
+      "verdict": "met",
+      "observed": [
+        {
+          "count": 152,
+          "first": 1,
+          "last": 152
+        }
+      ]
+    },
+    "E4": {
+      "verdict": "met",
+      "observed": {
+        "streamedDeltas": 145,
+        "persistedDeltas": 0
+      }
+    },
+    "E5": {
+      "verdict": "met",
+      "observed": {
+        "missing": [],
+        "inOrder": true
+      }
+    },
+    "E6": {
+      "verdict": "not met",
+      "observed": {
+        "stream": {
+          "01m8gdzbcmxerzzy6tdfw1y9kp": 1,
+          "01m8gdzdzb4x1aft0v97x0c9cq": 1
+        },
+        "persisted": {
+          "01m8gdzbcmxerzzy6tdfw1y9kp": 1,
+          "01m8gdzdzb4x1aft0v97x0c9cq": 1
+        }
+      }
+    },
+    "E7": {
+      "verdict": "met",
+      "observed": {
+        "input_tokens": 5256,
+        "breakdown": {
+          "harness": 3483,
+          "skills": 0,
+          "instructions": 1439,
+          "tool_definitions": 507,
+          "messages": 0
+        },
+        "range": [
+          4500,
+          5800
+        ]
+      }
+    },
+    "E8": {
+      "verdict": "n/a",
+      "observed": "not checked on glm-5-3-flash"
+    },
+    "E9": {
+      "verdict": "n/a",
+      "observed": {
+        "reasoningDeltas": 104,
+        "persistedWithReasoning": 2
+      }
+    },
+    "E10": {
+      "verdict": "met",
+      "observed": {
+        "turns": 1,
+        "status": "done",
+        "wallMs": 4083
+      }
+    }
+  },
+  "observed": {
+    "main": [
+      {
+        "turnId": "01m8gdzbavpfr2z2rjr53rftdb",
+        "state": {
+          "status": "done",
+          "required_actions": [],
+          "metrics": {
+            "total_input_tokens": 10908,
+            "total_output_tokens": 252,
+            "total_tokens": 11160,
+            "total_cache_read_tokens": 0,
+            "total_reasoning_tokens": 120
+          },
+          "output": {
+            "reasoning_content": "Two matches, both in the same file. The definition is at line 112. Answer in two sentences with citations.",
+            "content": "The Source Snapshot is TrueForge **v0.184.2** (sha `235518c`). `VALID_TRANSITIONS` is defined in `packages/trueforge-core/src/core/runtime/AgentThread.ts:112@235518c` as a `Record<AgentThreadState, AgentThreadState[]>` mapping allowed state changes, and it's the only place it's defined — the sole other match is its use in the same file at line 122, where a transition is rejected if `!VALID_TRANSITIONS[from].includes(to)`.",
+            "type": "model.message",
+            "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+            "created_at": "2026-11-28T06:37:43.622Z",
+            "thread_id": "main",
+            "finish_reason": "stop",
+            "usage": {
+              "input_tokens": 5652,
+              "output_tokens": 139,
+              "cache_read_tokens": 0,
+              "input_tokens_breakdown": {
+                "harness": 3483,
+                "skills": 0,
+                "instructions": 1439,
+                "tool_definitions": 507,
+                "messages": 223
+              }
+            },
+            "model": {
+              "name": "openrouter/glm-5-3-flash",
+              "params": {
+                "max_tokens": 16384,
+                "parallel_tool_calls": true
+              }
+            }
+          },
+          "completed_at": "2026-11-28T06:37:43.624Z"
+        },
+        "wallMs": 4083,
+        "streamed": [
+          {
+            "seq": 1,
+            "atMs": 22,
+            "event": {
+              "type": "turn.created",
+              "id": "01m8gdzbb612nnf20keytmdae9",
+              "turn_id": "01m8gdzbavpfr2z2rjr53rftdb",
+              "previous_turn_id": null,
+              "input": [
+                {
+                  "type": "user.message",
+                  "content": "Use source_status to get the Source Snapshot's version, then search_text for VALID_TRANSITIONS, and tell me in two sentences which file defines it."
+                }
+              ],
+              "state": {
+                "status": "running"
+              },
+              "created_at": "2026-11-28T06:37:39.555Z",
+              "thread_id": null
+            }
+          },
+          {
+            "seq": 2,
+            "atMs": 74,
+            "event": {
+              "type": "mcp.initialize",
+              "id": "01m8gdzbckgwzhkgm13hmnbvxd",
+              "created_at": "2026-11-28T06:37:39.603Z",
+              "thread_id": "main",
+              "mcp_servers": [
+                {
+                  "name": "source",
+                  "id": "source",
+                  "session_id": "c9c1f182-a5ca-43d9-a547-782f1c0f94a3",
+                  "transport_type": "streamable-http"
+                }
+              ]
+            }
+          },
+          {
+            "seq": 3,
+            "atMs": 74,
+            "event": {
+              "type": "model.message",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "thread_id": "main",
+              "created_at": "2026-11-28T06:37:39.604Z",
+              "model": {
+                "name": "openrouter/glm-5-3-flash",
+                "params": {
+                  "max_tokens": 16384,
+                  "parallel_tool_calls": true
+                }
+              }
+            }
+          },
+          {
+            "seq": 4,
+            "atMs": 1794,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "The",
+              "thread_id": "main",
+              "created_at": "2026-11-28T06:37:41.339Z"
+            }
+          },
+          {
+            "seq": 5,
+            "atMs": 1794,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " user",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 6,
+            "atMs": 1794,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " wants",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 7,
+            "atMs": 1794,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " me",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 8,
+            "atMs": 1801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " to",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 9,
+            "atMs": 1801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ":",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 10,
+            "atMs": 1801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " ",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 11,
+            "atMs": 1841,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "1",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 12,
+            "atMs": 1841,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ")",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 13,
+            "atMs": 1841,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " call",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 14,
+            "atMs": 1841,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " source",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 15,
+            "atMs": 1841,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "_status",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 16,
+            "atMs": 1841,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " to",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 17,
+            "atMs": 1842,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " get",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 18,
+            "atMs": 1842,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " the",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 19,
+            "atMs": 1879,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " version",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 20,
+            "atMs": 1879,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ",",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 21,
+            "atMs": 1879,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " ",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 22,
+            "atMs": 1879,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "2",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 23,
+            "atMs": 1879,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ")",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 24,
+            "atMs": 1879,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " search",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 25,
+            "atMs": 1879,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "_text",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 26,
+            "atMs": 1880,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " for",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 27,
+            "atMs": 1919,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " VALID",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 28,
+            "atMs": 1920,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "_TRANS",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 29,
+            "atMs": 1920,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "ITIONS",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 30,
+            "atMs": 1920,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ",",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 31,
+            "atMs": 1920,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " ",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 32,
+            "atMs": 1920,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "3",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 33,
+            "atMs": 1920,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ")",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 34,
+            "atMs": 1920,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " answer",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 35,
+            "atMs": 1955,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " in",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 36,
+            "atMs": 1955,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " two",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 37,
+            "atMs": 1956,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " sentences",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 38,
+            "atMs": 1956,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " which",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 39,
+            "atMs": 1956,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " file",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 40,
+            "atMs": 1956,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " defines",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 41,
+            "atMs": 1956,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " it",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 42,
+            "atMs": 1992,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ".",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 43,
+            "atMs": 1994,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " Let",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 44,
+            "atMs": 1995,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " me",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 45,
+            "atMs": 1995,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " do",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 46,
+            "atMs": 1995,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " both",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 47,
+            "atMs": 2031,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " calls",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 48,
+            "atMs": 2032,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " —",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 49,
+            "atMs": 2032,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " source",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 50,
+            "atMs": 2032,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "_status",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 51,
+            "atMs": 2032,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " first",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 52,
+            "atMs": 2069,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " (",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 53,
+            "atMs": 2070,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "the",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 54,
+            "atMs": 2070,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " instructions",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 55,
+            "atMs": 2070,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " say",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 56,
+            "atMs": 2085,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " call",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 57,
+            "atMs": 2085,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " it",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 58,
+            "atMs": 2085,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " first",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 59,
+            "atMs": 2085,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "),",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 60,
+            "atMs": 2085,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " but",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 61,
+            "atMs": 2123,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " these",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 62,
+            "atMs": 2123,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " two",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 63,
+            "atMs": 2123,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " calls",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 64,
+            "atMs": 2124,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " are",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 65,
+            "atMs": 2124,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " independent",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 66,
+            "atMs": 2162,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ",",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 67,
+            "atMs": 2162,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " so",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 68,
+            "atMs": 2162,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " I",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 69,
+            "atMs": 2162,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " can",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 70,
+            "atMs": 2162,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " make",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 71,
+            "atMs": 2162,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " them",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 72,
+            "atMs": 2182,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " in",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 73,
+            "atMs": 2182,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " the",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 74,
+            "atMs": 2182,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " same",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 75,
+            "atMs": 2182,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " block",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 76,
+            "atMs": 2183,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ".",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 77,
+            "atMs": 2183,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " Actually",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 78,
+            "atMs": 2216,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " the",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 79,
+            "atMs": 2216,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " user",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 80,
+            "atMs": 2216,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " asked",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 81,
+            "atMs": 2216,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " for",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 82,
+            "atMs": 2217,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " source",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 83,
+            "atMs": 2257,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "_status",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 84,
+            "atMs": 2258,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " first",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 85,
+            "atMs": 2258,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " then",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 86,
+            "atMs": 2258,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " search",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 87,
+            "atMs": 2258,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ".",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 88,
+            "atMs": 2291,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " They",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 89,
+            "atMs": 2291,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": "'re",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 90,
+            "atMs": 2291,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " independent",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 91,
+            "atMs": 2291,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " calls",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 92,
+            "atMs": 2292,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ",",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 93,
+            "atMs": 2332,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " so",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 94,
+            "atMs": 2333,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " I",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 95,
+            "atMs": 2333,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " can",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 96,
+            "atMs": 2333,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " batch",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 97,
+            "atMs": 2333,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": " them",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 98,
+            "atMs": 2333,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "reasoning_content": ".",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 99,
+            "atMs": 2367,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 0,
+                  "id": "chatcmpl-tool-9527b55164d862c0",
+                  "type": "function",
+                  "function": {
+                    "name": "source_status",
+                    "arguments": ""
+                  },
+                  "tool_info": {
+                    "type": "mcp",
+                    "name": "source_status",
+                    "server_id": "source",
+                    "server_name": "source"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 100,
+            "atMs": 2368,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 0,
+                  "function": {
+                    "arguments": "{}"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 101,
+            "atMs": 2384,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "id": "chatcmpl-tool-aa6cad38216875a8",
+                  "type": "function",
+                  "function": {
+                    "name": "search_text",
+                    "arguments": ""
+                  },
+                  "tool_info": {
+                    "type": "mcp",
+                    "name": "search_text",
+                    "server_id": "source",
+                    "server_name": "source"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 102,
+            "atMs": 2385,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": ""
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 103,
+            "atMs": 2386,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": "{\"pattern\": \""
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 104,
+            "atMs": 2386,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": "VALID"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 105,
+            "atMs": 2423,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": "_TRANS"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 106,
+            "atMs": 2423,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": "ITIONS"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 107,
+            "atMs": 2424,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": "\"}"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 108,
+            "atMs": 2460,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+              "thread_id": "main",
+              "finish_reason": "tool_calls",
+              "usage": {
+                "input_tokens": 5256,
+                "output_tokens": 113,
+                "cache_read_tokens": 0,
+                "input_tokens_breakdown": {
+                  "harness": 3483,
+                  "skills": 0,
+                  "instructions": 1439,
+                  "tool_definitions": 507,
+                  "messages": 0
+                }
+              }
+            }
+          },
+          {
+            "seq": 109,
+            "atMs": 2709,
+            "event": {
+              "type": "tool.response",
+              "id": "01m8gdzdzas08nx2azqfkn0pzh",
+              "tool_call_id": "chatcmpl-tool-9527b55164d862c0",
+              "content": "{\"provenance\":\"source\",\"version\":\"0.184.2\",\"sha\":\"235518c23fc10371a88ee28de6f34df007147730\",\"tag_sha\":\"0117d640c87d3cb94f3753a94d3ab7f8c1642163\",\"fetched_at\":\"2026-11-14T18:32:19.435Z\",\"indexed_packages\":[\"packages/trueforge\",\"packages/trueforge-core\"],\"files_indexed\":490,\"note\":\"search_text and read_file cover the whole tree; find_declaration, find_references and type_of cover only the indexed packages' src/. Third-party types are unresolved (no node_modules), so they read as `any`.\"}",
+              "created_at": "2026-11-28T06:37:42.021Z",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 110,
+            "atMs": 2709,
+            "event": {
+              "type": "tool.response",
+              "id": "01m8gdzdzas08nx2azqfkn0pzj",
+              "tool_call_id": "chatcmpl-tool-aa6cad38216875a8",
+              "content": "{\"provenance\":\"source\",\"limit_reached\":false,\"matches\":[{\"citation\":{\"path\":\"packages/trueforge-core/src/core/runtime/AgentThread.ts\",\"line\":112,\"sha\":\"235518c\"},\"text\":\"const VALID_TRANSITIONS: Record<AgentThreadState, AgentThreadState[]> = {\"},{\"citation\":{\"path\":\"packages/trueforge-core/src/core/runtime/AgentThread.ts\",\"line\":122,\"sha\":\"235518c\"},\"text\":\"  if (!VALID_TRANSITIONS[from].includes(to)) {\"}],\"truncated\":false,\"omitted\":0}",
+              "created_at": "2026-11-28T06:37:42.250Z",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 111,
+            "atMs": 2709,
+            "event": {
+              "type": "model.message",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "thread_id": "main",
+              "created_at": "2026-11-28T06:37:42.251Z",
+              "model": {
+                "name": "openrouter/glm-5-3-flash",
+                "params": {
+                  "max_tokens": 16384,
+                  "parallel_tool_calls": true
+                }
+              }
+            }
+          },
+          {
+            "seq": 112,
+            "atMs": 3602,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": "Two",
+              "thread_id": "main",
+              "created_at": "2026-11-28T06:37:43.147Z"
+            }
+          },
+          {
+            "seq": 113,
+            "atMs": 3686,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": " matches",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 114,
+            "atMs": 3728,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": ",",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 115,
+            "atMs": 3728,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": " both in the same file",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 116,
+            "atMs": 3728,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": ". The definition",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 117,
+            "atMs": 3728,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": " is at line",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 118,
+            "atMs": 3761,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": " 112. Answer",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 119,
+            "atMs": 3761,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": " in two sentences with",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 120,
+            "atMs": 3761,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "reasoning_content": " citations.",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 121,
+            "atMs": 3762,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "The Source",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 122,
+            "atMs": 3844,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " Snapshot is TrueForge **",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 123,
+            "atMs": 3844,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "v0.184.2** (",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 124,
+            "atMs": 3844,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "sha `235518c`).",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 125,
+            "atMs": 3844,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " `VALID_TRANSITIONS` is defined in",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 126,
+            "atMs": 3844,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " `packages/trueforge-core/src/core",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 127,
+            "atMs": 3844,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "/runtime/AgentThread.ts:",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 128,
+            "atMs": 3876,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "112@",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 129,
+            "atMs": 3877,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "235518c` as",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 130,
+            "atMs": 3877,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " a `Record",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 131,
+            "atMs": 3877,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "<AgentThreadState, AgentThreadState",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 132,
+            "atMs": 3918,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "[]>` mapping allowed",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 133,
+            "atMs": 3919,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " state",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 134,
+            "atMs": 3919,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " changes",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 135,
+            "atMs": 3957,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": ", and it's the",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 136,
+            "atMs": 3957,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " only place",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 137,
+            "atMs": 3957,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " it's defined — the sole",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 138,
+            "atMs": 3958,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " other match is",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 139,
+            "atMs": 3958,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " its use",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 140,
+            "atMs": 4003,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " in",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 141,
+            "atMs": 4003,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " the same",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 142,
+            "atMs": 4004,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " file",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 143,
+            "atMs": 4004,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " at line",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 144,
+            "atMs": 4004,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " 122,",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 145,
+            "atMs": 4040,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " where a",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 146,
+            "atMs": 4041,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " transition is rejected if",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 147,
+            "atMs": 4041,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": " `",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 148,
+            "atMs": 4061,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "!",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 149,
+            "atMs": 4069,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "VALID_TRANSITIONS[from].includes",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 150,
+            "atMs": 4069,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "content": "(to)`.",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 151,
+            "atMs": 4077,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+              "thread_id": "main",
+              "finish_reason": "stop",
+              "usage": {
+                "input_tokens": 5652,
+                "output_tokens": 139,
+                "cache_read_tokens": 0,
+                "input_tokens_breakdown": {
+                  "harness": 3483,
+                  "skills": 0,
+                  "instructions": 1439,
+                  "tool_definitions": 507,
+                  "messages": 223
+                }
+              }
+            }
+          },
+          {
+            "seq": 152,
+            "atMs": 4083,
+            "event": {
+              "type": "turn.done",
+              "id": "01m8gdzfa9wfa6gy2q20pmy3ab",
+              "created_at": "2026-11-28T06:37:43.624Z",
+              "state": {
+                "status": "done",
+                "output": {
+                  "reasoning_content": "Two matches, both in the same file. The definition is at line 112. Answer in two sentences with citations.",
+                  "content": "The Source Snapshot is TrueForge **v0.184.2** (sha `235518c`). `VALID_TRANSITIONS` is defined in `packages/trueforge-core/src/core/runtime/AgentThread.ts:112@235518c` as a `Record<AgentThreadState, AgentThreadState[]>` mapping allowed state changes, and it's the only place it's defined — the sole other match is its use in the same file at line 122, where a transition is rejected if `!VALID_TRANSITIONS[from].includes(to)`.",
+                  "type": "model.message",
+                  "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+                  "created_at": "2026-11-28T06:37:43.622Z",
+                  "thread_id": "main",
+                  "finish_reason": "stop",
+                  "usage": {
+                    "input_tokens": 5652,
+                    "output_tokens": 139,
+                    "cache_read_tokens": 0,
+                    "input_tokens_breakdown": {
+                      "harness": 3483,
+                      "skills": 0,
+                      "instructions": 1439,
+                      "tool_definitions": 507,
+                      "messages": 223
+                    }
+                  },
+                  "model": {
+                    "name": "openrouter/glm-5-3-flash",
+                    "params": {
+                      "max_tokens": 16384,
+                      "parallel_tool_calls": true
+                    }
+                  }
+                },
+                "required_actions": [],
+                "completed_at": "2026-11-28T06:37:43.624Z",
+                "metrics": {
+                  "total_input_tokens": 10908,
+                  "total_output_tokens": 252,
+                  "total_tokens": 11160,
+                  "total_cache_read_tokens": 0,
+                  "total_reasoning_tokens": 120
+                }
+              },
+              "thread_id": null
+            }
+          }
+        ],
+        "persisted": [
+          {
+            "type": "turn.created",
+            "id": "01m8gdzbb612nnf20keytmdae9",
+            "turn_id": "01m8gdzbavpfr2z2rjr53rftdb",
+            "previous_turn_id": null,
+            "input": [
+              {
+                "type": "user.message",
+                "content": "Use source_status to get the Source Snapshot's version, then search_text for VALID_TRANSITIONS, and tell me in two sentences which file defines it."
+              }
+            ],
+            "state": {
+              "status": "running"
+            },
+            "created_at": "2026-11-28T06:37:39.555Z",
+            "thread_id": null
+          },
+          {
+            "type": "mcp.initialize",
+            "id": "01m8gdzbckgwzhkgm13hmnbvxd",
+            "created_at": "2026-11-28T06:37:39.603Z",
+            "thread_id": "main",
+            "mcp_servers": [
+              {
+                "name": "source",
+                "id": "source",
+                "session_id": "c9c1f182-a5ca-43d9-a547-782f1c0f94a3",
+                "transport_type": "streamable-http"
+              }
+            ]
+          },
+          {
+            "type": "model.message",
+            "id": "01m8gdzbcmxerzzy6tdfw1y9kp",
+            "reasoning_content": "The user wants me to: 1) call source_status to get the version, 2) search_text for VALID_TRANSITIONS, 3) answer in two sentences which file defines it. Let me do both calls — source_status first (the instructions say call it first), but these two calls are independent, so I can make them in the same block. Actually the user asked for source_status first then search. They're independent calls, so I can batch them.",
+            "tool_calls": [
+              {
+                "id": "chatcmpl-tool-9527b55164d862c0",
+                "type": "function",
+                "function": {
+                  "name": "source_status",
+                  "arguments": "{}"
+                },
+                "tool_info": {
+                  "type": "mcp",
+                  "name": "source_status",
+                  "server_id": "source",
+                  "server_name": "source"
+                }
+              },
+              {
+                "id": "chatcmpl-tool-aa6cad38216875a8",
+                "type": "function",
+                "function": {
+                  "name": "search_text",
+                  "arguments": "{\"pattern\": \"VALID_TRANSITIONS\"}"
+                },
+                "tool_info": {
+                  "type": "mcp",
+                  "name": "search_text",
+                  "server_id": "source",
+                  "server_name": "source"
+                }
+              }
+            ],
+            "created_at": "2026-11-28T06:37:42.006Z",
+            "thread_id": "main",
+            "finish_reason": "tool_calls",
+            "usage": {
+              "input_tokens": 5256,
+              "output_tokens": 113,
+              "cache_read_tokens": 0,
+              "input_tokens_breakdown": {
+                "harness": 3483,
+                "skills": 0,
+                "instructions": 1439,
+                "tool_definitions": 507,
+                "messages": 0
+              }
+            },
+            "model": {
+              "name": "openrouter/glm-5-3-flash",
+              "params": {
+                "max_tokens": 16384,
+                "parallel_tool_calls": true
+              }
+            }
+          },
+          {
+            "type": "tool.response",
+            "id": "01m8gdzdzas08nx2azqfkn0pzh",
+            "tool_call_id": "chatcmpl-tool-9527b55164d862c0",
+            "content": "{\"provenance\":\"source\",\"version\":\"0.184.2\",\"sha\":\"235518c23fc10371a88ee28de6f34df007147730\",\"tag_sha\":\"0117d640c87d3cb94f3753a94d3ab7f8c1642163\",\"fetched_at\":\"2026-11-14T18:32:19.435Z\",\"indexed_packages\":[\"packages/trueforge\",\"packages/trueforge-core\"],\"files_indexed\":490,\"note\":\"search_text and read_file cover the whole tree; find_declaration, find_references and type_of cover only the indexed packages' src/. Third-party types are unresolved (no node_modules), so they read as `any`.\"}",
+            "created_at": "2026-11-28T06:37:42.021Z",
+            "thread_id": "main"
+          },
+          {
+            "type": "tool.response",
+            "id": "01m8gdzdzas08nx2azqfkn0pzj",
+            "tool_call_id": "chatcmpl-tool-aa6cad38216875a8",
+            "content": "{\"provenance\":\"source\",\"limit_reached\":false,\"matches\":[{\"citation\":{\"path\":\"packages/trueforge-core/src/core/runtime/AgentThread.ts\",\"line\":112,\"sha\":\"235518c\"},\"text\":\"const VALID_TRANSITIONS: Record<AgentThreadState, AgentThreadState[]> = {\"},{\"citation\":{\"path\":\"packages/trueforge-core/src/core/runtime/AgentThread.ts\",\"line\":122,\"sha\":\"235518c\"},\"text\":\"  if (!VALID_TRANSITIONS[from].includes(to)) {\"}],\"truncated\":false,\"omitted\":0}",
+            "created_at": "2026-11-28T06:37:42.250Z",
+            "thread_id": "main"
+          },
+          {
+            "type": "model.message",
+            "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+            "reasoning_content": "Two matches, both in the same file. The definition is at line 112. Answer in two sentences with citations.",
+            "content": "The Source Snapshot is TrueForge **v0.184.2** (sha `235518c`). `VALID_TRANSITIONS` is defined in `packages/trueforge-core/src/core/runtime/AgentThread.ts:112@235518c` as a `Record<AgentThreadState, AgentThreadState[]>` mapping allowed state changes, and it's the only place it's defined — the sole other match is its use in the same file at line 122, where a transition is rejected if `!VALID_TRANSITIONS[from].includes(to)`.",
+            "created_at": "2026-11-28T06:37:43.622Z",
+            "thread_id": "main",
+            "finish_reason": "stop",
+            "usage": {
+              "input_tokens": 5652,
+              "output_tokens": 139,
+              "cache_read_tokens": 0,
+              "input_tokens_breakdown": {
+                "harness": 3483,
+                "skills": 0,
+                "instructions": 1439,
+                "tool_definitions": 507,
+                "messages": 223
+              }
+            },
+            "model": {
+              "name": "openrouter/glm-5-3-flash",
+              "params": {
+                "max_tokens": 16384,
+                "parallel_tool_calls": true
+              }
+            }
+          },
+          {
+            "type": "turn.done",
+            "id": "01m8gdzfa9wfa6gy2q20pmy3ab",
+            "created_at": "2026-11-28T06:37:43.624Z",
+            "state": {
+              "status": "done",
+              "output": {
+                "reasoning_content": "Two matches, both in the same file. The definition is at line 112. Answer in two sentences with citations.",
+                "content": "The Source Snapshot is TrueForge **v0.184.2** (sha `235518c`). `VALID_TRANSITIONS` is defined in `packages/trueforge-core/src/core/runtime/AgentThread.ts:112@235518c` as a `Record<AgentThreadState, AgentThreadState[]>` mapping allowed state changes, and it's the only place it's defined — the sole other match is its use in the same file at line 122, where a transition is rejected if `!VALID_TRANSITIONS[from].includes(to)`.",
+                "type": "model.message",
+                "id": "01m8gdzdzb4x1aft0v97x0c9cq",
+                "created_at": "2026-11-28T06:37:43.622Z",
+                "thread_id": "main",
+                "finish_reason": "stop",
+                "usage": {
+                  "input_tokens": 5652,
+                  "output_tokens": 139,
+                  "cache_read_tokens": 0,
+                  "input_tokens_breakdown": {
+                    "harness": 3483,
+                    "skills": 0,
+                    "instructions": 1439,
+                    "tool_definitions": 507,
+                    "messages": 223
+                  }
+                },
+                "model": {
+                  "name": "openrouter/glm-5-3-flash",
+                  "params": {
+                    "max_tokens": 16384,
+                    "parallel_tool_calls": true
+                  }
+                }
+              },
+              "required_actions": [],
+              "completed_at": "2026-11-28T06:37:43.624Z",
+              "metrics": {
+                "total_input_tokens": 10908,
+                "total_output_tokens": 252,
+                "total_tokens": 11160,
+                "total_cache_read_tokens": 0,
+                "total_reasoning_tokens": 120
+              }
+            },
+            "thread_id": null
+          }
+        ]
+      }
+    ]
+  }
+}

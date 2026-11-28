@@ -1,0 +1,2164 @@
+{
+  "experiment": "turn-anatomy",
+  "model": "openrouter/opus-5-5",
+  "trueforge": "0.184.2",
+  "snapshot": "235518c23fc10371a88ee28de6f34df007147730",
+  "startedAt": "2026-11-28T06:37:54.198Z",
+  "durationMs": 11327,
+  "sessions": [
+    "01m8gdzsmpq80k2ywp1htah5qm",
+    "01m8ge019b8qj0by9v3548wmg3",
+    "01m8ge02n9458kbga6wck7gfnc"
+  ],
+  "approvals": [],
+  "verdicts": {
+    "E1": {
+      "verdict": "met",
+      "observed": [
+        "turn.created",
+        "mcp.initialize",
+        "model.message",
+        "tool.response",
+        "tool.response",
+        "model.message",
+        "turn.done"
+      ]
+    },
+    "E2": {
+      "verdict": "met",
+      "observed": {
+        "count": 1,
+        "servers": [
+          "source"
+        ]
+      }
+    },
+    "E3": {
+      "verdict": "met",
+      "observed": [
+        {
+          "count": 93,
+          "first": 1,
+          "last": 93
+        }
+      ]
+    },
+    "E4": {
+      "verdict": "met",
+      "observed": {
+        "streamedDeltas": 86,
+        "persistedDeltas": 0
+      }
+    },
+    "E5": {
+      "verdict": "met",
+      "observed": {
+        "missing": [],
+        "inOrder": true
+      }
+    },
+    "E6": {
+      "verdict": "not met",
+      "observed": {
+        "stream": {
+          "01m8gdzsn5te0gezg1qz1a7vhb": 1,
+          "01m8gdzw92zvwcam2ym2781v9v": 1
+        },
+        "persisted": {
+          "01m8gdzsn5te0gezg1qz1a7vhb": 1,
+          "01m8gdzw92zvwcam2ym2781v9v": 1
+        }
+      }
+    },
+    "E7": {
+      "verdict": "not met",
+      "observed": {
+        "input_tokens": 8195,
+        "breakdown": {
+          "harness": 3483,
+          "skills": 0,
+          "instructions": 1439,
+          "tool_definitions": 507,
+          "messages": 2766
+        },
+        "range": [
+          4500,
+          7500
+        ]
+      }
+    },
+    "E8": {
+      "verdict": "met",
+      "observed": {
+        "medium": 164,
+        "low": 0,
+        "high": 32
+      }
+    },
+    "E9": {
+      "verdict": "met",
+      "observed": {
+        "reasoningDeltas": 24,
+        "persistedWithReasoning": 2
+      }
+    },
+    "E10": {
+      "verdict": "met",
+      "observed": {
+        "turns": 1,
+        "status": "done",
+        "wallMs": 7817
+      }
+    }
+  },
+  "observed": {
+    "main": [
+      {
+        "turnId": "01m8gdzsmr7qt0emp2et18gfh1",
+        "state": {
+          "status": "done",
+          "required_actions": [],
+          "metrics": {
+            "total_input_tokens": 16953,
+            "total_output_tokens": 556,
+            "total_tokens": 17509,
+            "total_cache_read_tokens": 0,
+            "total_reasoning_tokens": 164
+          },
+          "output": {
+            "reasoning_content": "I'm keeping the two-sentence format the user asked for, and I'll add a brief note that the tag's commit differs from the snapshot's sha.\n\n",
+            "content": "The Source Snapshot is TrueForge 0.184.2 at commit `235518c` (`source`: source_status). `VALID_TRANSITIONS` is defined in `packages/trueforge-core/src/core/runtime/AgentThread.ts:112@235518c` as a `Record<AgentThreadState, AgentThreadState[]>`, and the same file reads it at line 122 (`if (!VALID_TRANSITIONS[from].includes(to))`) to reject state transitions that aren't allowed (`source`: `AgentThread.ts:112@235518c`, `AgentThread.ts:122@235518c`).\n\nOne thing to note: source_status also lists a `tag_sha` of `0117d64`, which doesn't match the snapshot SHA. So the snapshot is probably not the exact commit tagged 0.184.2 (`inferred`: the two SHAs are different). Cite `235518c` in your notes.",
+            "type": "model.message",
+            "id": "01m8gdzw92zvwcam2ym2781v9v",
+            "created_at": "2026-11-28T06:38:02.013Z",
+            "thread_id": "main",
+            "finish_reason": "stop",
+            "usage": {
+              "input_tokens": 8758,
+              "output_tokens": 423,
+              "cache_read_tokens": 0,
+              "input_tokens_breakdown": {
+                "harness": 3483,
+                "skills": 0,
+                "instructions": 1439,
+                "tool_definitions": 507,
+                "messages": 3329
+              }
+            },
+            "model": {
+              "name": "openrouter/opus-5-5",
+              "params": {
+                "max_tokens": 16384,
+                "parallel_tool_calls": true,
+                "reasoning_effort": "medium"
+              }
+            }
+          },
+          "completed_at": "2026-11-28T06:38:02.015Z"
+        },
+        "wallMs": 7817,
+        "streamed": [
+          {
+            "seq": 1,
+            "atMs": 5,
+            "event": {
+              "type": "turn.created",
+              "id": "01m8gdzsmv26tp72dfbexy4d55",
+              "turn_id": "01m8gdzsmr7qt0emp2et18gfh1",
+              "previous_turn_id": null,
+              "input": [
+                {
+                  "type": "user.message",
+                  "content": "Use source_status to get the Source Snapshot's version, then search_text for VALID_TRANSITIONS, and tell me in two sentences which file defines it."
+                }
+              ],
+              "state": {
+                "status": "running"
+              },
+              "created_at": "2026-11-28T06:37:54.201Z",
+              "thread_id": null
+            }
+          },
+          {
+            "seq": 2,
+            "atMs": 15,
+            "event": {
+              "type": "mcp.initialize",
+              "id": "01m8gdzsn4mv14h0ebsnmjfwqq",
+              "created_at": "2026-11-28T06:37:54.212Z",
+              "thread_id": "main",
+              "mcp_servers": [
+                {
+                  "name": "source",
+                  "id": "source",
+                  "session_id": "744fa100-21e5-4432-b7eb-c35c12040e52",
+                  "transport_type": "streamable-http"
+                }
+              ]
+            }
+          },
+          {
+            "seq": 3,
+            "atMs": 15,
+            "event": {
+              "type": "model.message",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "thread_id": "main",
+              "created_at": "2026-11-28T06:37:54.213Z",
+              "model": {
+                "name": "openrouter/opus-5-5",
+                "params": {
+                  "max_tokens": 16384,
+                  "parallel_tool_calls": true,
+                  "reasoning_effort": "medium"
+                }
+              }
+            }
+          },
+          {
+            "seq": 4,
+            "atMs": 2387,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": "I'm checking which source",
+              "thread_id": "main",
+              "created_at": "2026-11-28T06:37:56.587Z"
+            }
+          },
+          {
+            "seq": 5,
+            "atMs": 2387,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": " tools are direct",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 6,
+            "atMs": 2387,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": "ly available, and",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 7,
+            "atMs": 2388,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": " since",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 8,
+            "atMs": 2388,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": " the",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 9,
+            "atMs": 2388,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": " search doesn't depend on",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 10,
+            "atMs": 2392,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": " the status check",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 11,
+            "atMs": 2392,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": ", I'll call both at",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 12,
+            "atMs": 2392,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": " once.",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 13,
+            "atMs": 2392,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "reasoning_content": "\n\n",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 14,
+            "atMs": 2393,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "tool_calls": [
+                {
+                  "index": 0,
+                  "id": "toolu_01W2NWRWKs73AqSeEUZRCAZ8",
+                  "type": "function",
+                  "function": {
+                    "name": "source_status",
+                    "arguments": ""
+                  },
+                  "tool_info": {
+                    "type": "mcp",
+                    "name": "source_status",
+                    "server_id": "source",
+                    "server_name": "source"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 15,
+            "atMs": 2393,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "tool_calls": [
+                {
+                  "index": 0,
+                  "function": {
+                    "arguments": ""
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 16,
+            "atMs": 2393,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "tool_calls": [
+                {
+                  "index": 0,
+                  "function": {
+                    "arguments": "{}"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 17,
+            "atMs": 2393,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "id": "toolu_019xMAvmuSeCGJqRbPdMcJ6U",
+                  "type": "function",
+                  "function": {
+                    "name": "search_text",
+                    "arguments": ""
+                  },
+                  "tool_info": {
+                    "type": "mcp",
+                    "name": "search_text",
+                    "server_id": "source",
+                    "server_name": "source"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 18,
+            "atMs": 2393,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": ""
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 19,
+            "atMs": 2393,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": "{\"pattern\": \"VALID_TR"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 20,
+            "atMs": 2393,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": "ANSITIONS"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 21,
+            "atMs": 2400,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "tool_calls": [
+                {
+                  "index": 1,
+                  "function": {
+                    "arguments": "\"}"
+                  }
+                }
+              ],
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 22,
+            "atMs": 2405,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+              "thread_id": "main",
+              "finish_reason": "tool_calls",
+              "usage": {
+                "input_tokens": 8195,
+                "output_tokens": 133,
+                "cache_read_tokens": 0,
+                "input_tokens_breakdown": {
+                  "harness": 3483,
+                  "skills": 0,
+                  "instructions": 1439,
+                  "tool_definitions": 507,
+                  "messages": 2766
+                }
+              }
+            }
+          },
+          {
+            "seq": 23,
+            "atMs": 2699,
+            "event": {
+              "type": "tool.response",
+              "id": "01m8gdzw919cah2m877me5zkca",
+              "tool_call_id": "toolu_01W2NWRWKs73AqSeEUZRCAZ8",
+              "content": "{\"provenance\":\"source\",\"version\":\"0.184.2\",\"sha\":\"235518c23fc10371a88ee28de6f34df007147730\",\"tag_sha\":\"0117d640c87d3cb94f3753a94d3ab7f8c1642163\",\"fetched_at\":\"2026-11-14T18:32:19.435Z\",\"indexed_packages\":[\"packages/trueforge\",\"packages/trueforge-core\"],\"files_indexed\":490,\"note\":\"search_text and read_file cover the whole tree; find_declaration, find_references and type_of cover only the indexed packages' src/. Third-party types are unresolved (no node_modules), so they read as `any`.\"}",
+              "created_at": "2026-11-28T06:37:56.611Z",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 24,
+            "atMs": 2699,
+            "event": {
+              "type": "tool.response",
+              "id": "01m8gdzw919cah2m877me5zkcb",
+              "tool_call_id": "toolu_019xMAvmuSeCGJqRbPdMcJ6U",
+              "content": "{\"provenance\":\"source\",\"limit_reached\":false,\"matches\":[{\"citation\":{\"path\":\"packages/trueforge-core/src/core/runtime/AgentThread.ts\",\"line\":112,\"sha\":\"235518c\"},\"text\":\"const VALID_TRANSITIONS: Record<AgentThreadState, AgentThreadState[]> = {\"},{\"citation\":{\"path\":\"packages/trueforge-core/src/core/runtime/AgentThread.ts\",\"line\":122,\"sha\":\"235518c\"},\"text\":\"  if (!VALID_TRANSITIONS[from].includes(to)) {\"}],\"truncated\":false,\"omitted\":0}",
+              "created_at": "2026-11-28T06:37:56.897Z",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 25,
+            "atMs": 2699,
+            "event": {
+              "type": "model.message",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "thread_id": "main",
+              "created_at": "2026-11-28T06:37:56.898Z",
+              "model": {
+                "name": "openrouter/opus-5-5",
+                "params": {
+                  "max_tokens": 16384,
+                  "parallel_tool_calls": true,
+                  "reasoning_effort": "medium"
+                }
+              }
+            }
+          },
+          {
+            "seq": 26,
+            "atMs": 5798,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": "I",
+              "thread_id": "main",
+              "created_at": "2026-11-28T06:37:59.998Z"
+            }
+          },
+          {
+            "seq": 27,
+            "atMs": 5799,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": "'m keeping the two-",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 28,
+            "atMs": 5799,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": "sentence format",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 29,
+            "atMs": 5799,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": " the",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 30,
+            "atMs": 5799,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": " user asked for,",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 31,
+            "atMs": 5799,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": " and I'll",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 32,
+            "atMs": 5800,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": " add",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 33,
+            "atMs": 5800,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": " a brief note that",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 34,
+            "atMs": 5800,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": " the t",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 35,
+            "atMs": 5801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": "ag's",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 36,
+            "atMs": 5801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": " commit differs from the snap",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 37,
+            "atMs": 5801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": "shot's",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 38,
+            "atMs": 5801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": " sha.",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 39,
+            "atMs": 5802,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "reasoning_content": "\n\n",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 40,
+            "atMs": 7799,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "The Source Snapsh",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 41,
+            "atMs": 7799,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ot is T",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 42,
+            "atMs": 7800,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "rueForge ",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 43,
+            "atMs": 7801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "0.184.2 at comm",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 44,
+            "atMs": 7801,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "it `",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 45,
+            "atMs": 7802,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "235518c` (`source`",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 46,
+            "atMs": 7802,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": ":",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 47,
+            "atMs": 7803,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " source_status). `VALID",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 48,
+            "atMs": 7803,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "_TRANSITION",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 49,
+            "atMs": 7803,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "S` is defined in `pack",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 50,
+            "atMs": 7803,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ages/trueforge-core",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 51,
+            "atMs": 7803,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "/src/core/runtime",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 52,
+            "atMs": 7803,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "/AgentThread.",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 53,
+            "atMs": 7803,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ts:",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 54,
+            "atMs": 7804,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "112@235518c` as",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 55,
+            "atMs": 7804,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " a `Record<Agent",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 56,
+            "atMs": 7804,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ThreadState, Agent",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 57,
+            "atMs": 7804,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ThreadState[]>`",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 58,
+            "atMs": 7805,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": ", and the same file re",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 59,
+            "atMs": 7805,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ads it at",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 60,
+            "atMs": 7805,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " line 122 (`if",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 61,
+            "atMs": 7805,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " (!VALID_TR",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 62,
+            "atMs": 7805,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ANSITIONS[from",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 63,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "].includes(to))`)",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 64,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " to re",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 65,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ject state",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 66,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " trans",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 67,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "itions that aren't allow",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 68,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ed (`source`: `A",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 69,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "gentThread.ts:",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 70,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "112",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 71,
+            "atMs": 7806,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "@235518c`, `A",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 72,
+            "atMs": 7807,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "gentThread.ts:",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 73,
+            "atMs": 7807,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "122@235518c`).",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 74,
+            "atMs": 7807,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "\n\nOne thing to note",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 75,
+            "atMs": 7807,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": ":",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 76,
+            "atMs": 7807,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " source_status also lists a `",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 77,
+            "atMs": 7807,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "tag_sha` of `",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 78,
+            "atMs": 7807,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "0117d64`,",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 79,
+            "atMs": 7808,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " which do",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 80,
+            "atMs": 7808,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "esn't match the snapsh",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 81,
+            "atMs": 7808,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ot S",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 82,
+            "atMs": 7808,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "HA. So the snapsh",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 83,
+            "atMs": 7808,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "ot is probably not",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 84,
+            "atMs": 7808,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " the exact commit tagged",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 85,
+            "atMs": 7808,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " ",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 86,
+            "atMs": 7808,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "0.184.2 (`",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 87,
+            "atMs": 7811,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "inferred`: the two",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 88,
+            "atMs": 7811,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " SHAs are",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 89,
+            "atMs": 7812,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " different). Cite `",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 90,
+            "atMs": 7812,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": "235518c` in",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 91,
+            "atMs": 7812,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "content": " your notes.",
+              "thread_id": "main"
+            }
+          },
+          {
+            "seq": 92,
+            "atMs": 7813,
+            "event": {
+              "type": "model.message.delta",
+              "id": "01m8gdzw92zvwcam2ym2781v9v",
+              "thread_id": "main",
+              "finish_reason": "stop",
+              "usage": {
+                "input_tokens": 8758,
+                "output_tokens": 423,
+                "cache_read_tokens": 0,
+                "input_tokens_breakdown": {
+                  "harness": 3483,
+                  "skills": 0,
+                  "instructions": 1439,
+                  "tool_definitions": 507,
+                  "messages": 3329
+                }
+              }
+            }
+          },
+          {
+            "seq": 93,
+            "atMs": 7817,
+            "event": {
+              "type": "turn.done",
+              "id": "01m8ge018zb8ak66f0tbbrpzcd",
+              "created_at": "2026-11-28T06:38:02.015Z",
+              "state": {
+                "status": "done",
+                "output": {
+                  "reasoning_content": "I'm keeping the two-sentence format the user asked for, and I'll add a brief note that the tag's commit differs from the snapshot's sha.\n\n",
+                  "content": "The Source Snapshot is TrueForge 0.184.2 at commit `235518c` (`source`: source_status). `VALID_TRANSITIONS` is defined in `packages/trueforge-core/src/core/runtime/AgentThread.ts:112@235518c` as a `Record<AgentThreadState, AgentThreadState[]>`, and the same file reads it at line 122 (`if (!VALID_TRANSITIONS[from].includes(to))`) to reject state transitions that aren't allowed (`source`: `AgentThread.ts:112@235518c`, `AgentThread.ts:122@235518c`).\n\nOne thing to note: source_status also lists a `tag_sha` of `0117d64`, which doesn't match the snapshot SHA. So the snapshot is probably not the exact commit tagged 0.184.2 (`inferred`: the two SHAs are different). Cite `235518c` in your notes.",
+                  "type": "model.message",
+                  "id": "01m8gdzw92zvwcam2ym2781v9v",
+                  "created_at": "2026-11-28T06:38:02.013Z",
+                  "thread_id": "main",
+                  "finish_reason": "stop",
+                  "usage": {
+                    "input_tokens": 8758,
+                    "output_tokens": 423,
+                    "cache_read_tokens": 0,
+                    "input_tokens_breakdown": {
+                      "harness": 3483,
+                      "skills": 0,
+                      "instructions": 1439,
+                      "tool_definitions": 507,
+                      "messages": 3329
+                    }
+                  },
+                  "model": {
+                    "name": "openrouter/opus-5-5",
+                    "params": {
+                      "max_tokens": 16384,
+                      "parallel_tool_calls": true,
+                      "reasoning_effort": "medium"
+                    }
+                  }
+                },
+                "required_actions": [],
+                "completed_at": "2026-11-28T06:38:02.015Z",
+                "metrics": {
+                  "total_input_tokens": 16953,
+                  "total_output_tokens": 556,
+                  "total_tokens": 17509,
+                  "total_cache_read_tokens": 0,
+                  "total_reasoning_tokens": 164
+                }
+              },
+              "thread_id": null
+            }
+          }
+        ],
+        "persisted": [
+          {
+            "type": "turn.created",
+            "id": "01m8gdzsmv26tp72dfbexy4d55",
+            "turn_id": "01m8gdzsmr7qt0emp2et18gfh1",
+            "previous_turn_id": null,
+            "input": [
+              {
+                "type": "user.message",
+                "content": "Use source_status to get the Source Snapshot's version, then search_text for VALID_TRANSITIONS, and tell me in two sentences which file defines it."
+              }
+            ],
+            "state": {
+              "status": "running"
+            },
+            "created_at": "2026-11-28T06:37:54.201Z",
+            "thread_id": null
+          },
+          {
+            "type": "mcp.initialize",
+            "id": "01m8gdzsn4mv14h0ebsnmjfwqq",
+            "created_at": "2026-11-28T06:37:54.212Z",
+            "thread_id": "main",
+            "mcp_servers": [
+              {
+                "name": "source",
+                "id": "source",
+                "session_id": "744fa100-21e5-4432-b7eb-c35c12040e52",
+                "transport_type": "streamable-http"
+              }
+            ]
+          },
+          {
+            "type": "model.message",
+            "id": "01m8gdzsn5te0gezg1qz1a7vhb",
+            "reasoning_content": "I'm checking which source tools are directly available, and since the search doesn't depend on the status check, I'll call both at once.\n\n",
+            "tool_calls": [
+              {
+                "id": "toolu_01W2NWRWKs73AqSeEUZRCAZ8",
+                "type": "function",
+                "function": {
+                  "name": "source_status",
+                  "arguments": "{}"
+                },
+                "tool_info": {
+                  "type": "mcp",
+                  "name": "source_status",
+                  "server_id": "source",
+                  "server_name": "source"
+                }
+              },
+              {
+                "id": "toolu_019xMAvmuSeCGJqRbPdMcJ6U",
+                "type": "function",
+                "function": {
+                  "name": "search_text",
+                  "arguments": "{\"pattern\": \"VALID_TRANSITIONS\"}"
+                },
+                "tool_info": {
+                  "type": "mcp",
+                  "name": "search_text",
+                  "server_id": "source",
+                  "server_name": "source"
+                }
+              }
+            ],
+            "created_at": "2026-11-28T06:37:56.605Z",
+            "thread_id": "main",
+            "finish_reason": "tool_calls",
+            "usage": {
+              "input_tokens": 8195,
+              "output_tokens": 133,
+              "cache_read_tokens": 0,
+              "input_tokens_breakdown": {
+                "harness": 3483,
+                "skills": 0,
+                "instructions": 1439,
+                "tool_definitions": 507,
+                "messages": 2766
+              }
+            },
+            "model": {
+              "name": "openrouter/opus-5-5",
+              "params": {
+                "max_tokens": 16384,
+                "parallel_tool_calls": true,
+                "reasoning_effort": "medium"
+              }
+            }
+          },
+          {
+            "type": "tool.response",
+            "id": "01m8gdzw919cah2m877me5zkca",
+            "tool_call_id": "toolu_01W2NWRWKs73AqSeEUZRCAZ8",
+            "content": "{\"provenance\":\"source\",\"version\":\"0.184.2\",\"sha\":\"235518c23fc10371a88ee28de6f34df007147730\",\"tag_sha\":\"0117d640c87d3cb94f3753a94d3ab7f8c1642163\",\"fetched_at\":\"2026-11-14T18:32:19.435Z\",\"indexed_packages\":[\"packages/trueforge\",\"packages/trueforge-core\"],\"files_indexed\":490,\"note\":\"search_text and read_file cover the whole tree; find_declaration, find_references and type_of cover only the indexed packages' src/. Third-party types are unresolved (no node_modules), so they read as `any`.\"}",
+            "created_at": "2026-11-28T06:37:56.611Z",
+            "thread_id": "main"
+          },
+          {
+            "type": "tool.response",
+            "id": "01m8gdzw919cah2m877me5zkcb",
+            "tool_call_id": "toolu_019xMAvmuSeCGJqRbPdMcJ6U",
+            "content": "{\"provenance\":\"source\",\"limit_reached\":false,\"matches\":[{\"citation\":{\"path\":\"packages/trueforge-core/src/core/runtime/AgentThread.ts\",\"line\":112,\"sha\":\"235518c\"},\"text\":\"const VALID_TRANSITIONS: Record<AgentThreadState, AgentThreadState[]> = {\"},{\"citation\":{\"path\":\"packages/trueforge-core/src/core/runtime/AgentThread.ts\",\"line\":122,\"sha\":\"235518c\"},\"text\":\"  if (!VALID_TRANSITIONS[from].includes(to)) {\"}],\"truncated\":false,\"omitted\":0}",
+            "created_at": "2026-11-28T06:37:56.897Z",
+            "thread_id": "main"
+          },
+          {
+            "type": "model.message",
+            "id": "01m8gdzw92zvwcam2ym2781v9v",
+            "reasoning_content": "I'm keeping the two-sentence format the user asked for, and I'll add a brief note that the tag's commit differs from the snapshot's sha.\n\n",
+            "content": "The Source Snapshot is TrueForge 0.184.2 at commit `235518c` (`source`: source_status). `VALID_TRANSITIONS` is defined in `packages/trueforge-core/src/core/runtime/AgentThread.ts:112@235518c` as a `Record<AgentThreadState, AgentThreadState[]>`, and the same file reads it at line 122 (`if (!VALID_TRANSITIONS[from].includes(to))`) to reject state transitions that aren't allowed (`source`: `AgentThread.ts:112@235518c`, `AgentThread.ts:122@235518c`).\n\nOne thing to note: source_status also lists a `tag_sha` of `0117d64`, which doesn't match the snapshot SHA. So the snapshot is probably not the exact commit tagged 0.184.2 (`inferred`: the two SHAs are different). Cite `235518c` in your notes.",
+            "created_at": "2026-11-28T06:38:02.013Z",
+            "thread_id": "main",
+            "finish_reason": "stop",
+            "usage": {
+              "input_tokens": 8758,
+              "output_tokens": 423,
+              "cache_read_tokens": 0,
+              "input_tokens_breakdown": {
+                "harness": 3483,
+                "skills": 0,
+                "instructions": 1439,
+                "tool_definitions": 507,
+                "messages": 3329
+              }
+            },
+            "model": {
+              "name": "openrouter/opus-5-5",
+              "params": {
+                "max_tokens": 16384,
+                "parallel_tool_calls": true,
+                "reasoning_effort": "medium"
+              }
+            }
+          },
+          {
+            "type": "turn.done",
+            "id": "01m8ge018zb8ak66f0tbbrpzcd",
+            "created_at": "2026-11-28T06:38:02.015Z",
+            "state": {
+              "status": "done",
+              "output": {
+                "reasoning_content": "I'm keeping the two-sentence format the user asked for, and I'll add a brief note that the tag's commit differs from the snapshot's sha.\n\n",
+                "content": "The Source Snapshot is TrueForge 0.184.2 at commit `235518c` (`source`: source_status). `VALID_TRANSITIONS` is defined in `packages/trueforge-core/src/core/runtime/AgentThread.ts:112@235518c` as a `Record<AgentThreadState, AgentThreadState[]>`, and the same file reads it at line 122 (`if (!VALID_TRANSITIONS[from].includes(to))`) to reject state transitions that aren't allowed (`source`: `AgentThread.ts:112@235518c`, `AgentThread.ts:122@235518c`).\n\nOne thing to note: source_status also lists a `tag_sha` of `0117d64`, which doesn't match the snapshot SHA. So the snapshot is probably not the exact commit tagged 0.184.2 (`inferred`: the two SHAs are different). Cite `235518c` in your notes.",
+                "type": "model.message",
+                "id": "01m8gdzw92zvwcam2ym2781v9v",
+                "created_at": "2026-11-28T06:38:02.013Z",
+                "thread_id": "main",
+                "finish_reason": "stop",
+                "usage": {
+                  "input_tokens": 8758,
+                  "output_tokens": 423,
+                  "cache_read_tokens": 0,
+                  "input_tokens_breakdown": {
+                    "harness": 3483,
+                    "skills": 0,
+                    "instructions": 1439,
+                    "tool_definitions": 507,
+                    "messages": 3329
+                  }
+                },
+                "model": {
+                  "name": "openrouter/opus-5-5",
+                  "params": {
+                    "max_tokens": 16384,
+                    "parallel_tool_calls": true,
+                    "reasoning_effort": "medium"
+                  }
+                }
+              },
+              "required_actions": [],
+              "completed_at": "2026-11-28T06:38:02.015Z",
+              "metrics": {
+                "total_input_tokens": 16953,
+                "total_output_tokens": 556,
+                "total_tokens": 17509,
+                "total_cache_read_tokens": 0,
+                "total_reasoning_tokens": 164
+              }
+            },
+            "thread_id": null
+          }
+        ]
+      }
+    ],
+    "controls": {
+      "low": [
+        {
+          "turnId": "01m8ge019e57z6vkjzxy5q3fy5",
+          "state": {
+            "status": "done",
+            "required_actions": [],
+            "metrics": {
+              "total_input_tokens": 8186,
+              "total_output_tokens": 3,
+              "total_tokens": 8189,
+              "total_cache_read_tokens": 0,
+              "total_reasoning_tokens": 0
+            },
+            "output": {
+              "content": "34",
+              "type": "model.message",
+              "id": "01m8ge01a1gev8c8fh66c46hm5",
+              "created_at": "2026-11-28T06:38:03.424Z",
+              "thread_id": "main",
+              "finish_reason": "stop",
+              "usage": {
+                "input_tokens": 8186,
+                "output_tokens": 3,
+                "cache_read_tokens": 0,
+                "input_tokens_breakdown": {
+                  "harness": 3483,
+                  "skills": 0,
+                  "instructions": 1439,
+                  "tool_definitions": 507,
+                  "messages": 2757
+                }
+              },
+              "model": {
+                "name": "openrouter/opus-5-5",
+                "params": {
+                  "max_tokens": 16384,
+                  "parallel_tool_calls": true,
+                  "reasoning_effort": "low"
+                }
+              }
+            },
+            "completed_at": "2026-11-28T06:38:03.426Z"
+          },
+          "wallMs": 1398,
+          "streamed": [
+            {
+              "seq": 1,
+              "atMs": 6,
+              "event": {
+                "type": "turn.created",
+                "id": "01m8ge019h2rm9j321z6526xjc",
+                "turn_id": "01m8ge019e57z6vkjzxy5q3fy5",
+                "previous_turn_id": null,
+                "input": [
+                  {
+                    "type": "user.message",
+                    "content": "Without using any tools: in how many ways can 8 be written as an ordered sum of 1s and 2s? Reply with the number only."
+                  }
+                ],
+                "state": {
+                  "status": "running"
+                },
+                "created_at": "2026-11-28T06:38:02.032Z",
+                "thread_id": null
+              }
+            },
+            {
+              "seq": 2,
+              "atMs": 22,
+              "event": {
+                "type": "mcp.initialize",
+                "id": "01m8ge01a0s61bwxgvfknhttcx",
+                "created_at": "2026-11-28T06:38:02.048Z",
+                "thread_id": "main",
+                "mcp_servers": [
+                  {
+                    "name": "source",
+                    "id": "source",
+                    "session_id": "d6017314-ae5b-4072-b137-cd39f92b1c16",
+                    "transport_type": "streamable-http"
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 3,
+              "atMs": 22,
+              "event": {
+                "type": "model.message",
+                "id": "01m8ge01a1gev8c8fh66c46hm5",
+                "thread_id": "main",
+                "created_at": "2026-11-28T06:38:02.049Z",
+                "model": {
+                  "name": "openrouter/opus-5-5",
+                  "params": {
+                    "max_tokens": 16384,
+                    "parallel_tool_calls": true,
+                    "reasoning_effort": "low"
+                  }
+                }
+              }
+            },
+            {
+              "seq": 4,
+              "atMs": 1320,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge01a1gev8c8fh66c46hm5",
+                "content": "34",
+                "thread_id": "main",
+                "created_at": "2026-11-28T06:38:03.348Z"
+              }
+            },
+            {
+              "seq": 5,
+              "atMs": 1395,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge01a1gev8c8fh66c46hm5",
+                "thread_id": "main",
+                "finish_reason": "stop",
+                "usage": {
+                  "input_tokens": 8186,
+                  "output_tokens": 3,
+                  "cache_read_tokens": 0,
+                  "input_tokens_breakdown": {
+                    "harness": 3483,
+                    "skills": 0,
+                    "instructions": 1439,
+                    "tool_definitions": 507,
+                    "messages": 2757
+                  }
+                }
+              }
+            },
+            {
+              "seq": 6,
+              "atMs": 1398,
+              "event": {
+                "type": "turn.done",
+                "id": "01m8ge02n26ydf81vbeaxa8gz8",
+                "created_at": "2026-11-28T06:38:03.426Z",
+                "state": {
+                  "status": "done",
+                  "output": {
+                    "content": "34",
+                    "type": "model.message",
+                    "id": "01m8ge01a1gev8c8fh66c46hm5",
+                    "created_at": "2026-11-28T06:38:03.424Z",
+                    "thread_id": "main",
+                    "finish_reason": "stop",
+                    "usage": {
+                      "input_tokens": 8186,
+                      "output_tokens": 3,
+                      "cache_read_tokens": 0,
+                      "input_tokens_breakdown": {
+                        "harness": 3483,
+                        "skills": 0,
+                        "instructions": 1439,
+                        "tool_definitions": 507,
+                        "messages": 2757
+                      }
+                    },
+                    "model": {
+                      "name": "openrouter/opus-5-5",
+                      "params": {
+                        "max_tokens": 16384,
+                        "parallel_tool_calls": true,
+                        "reasoning_effort": "low"
+                      }
+                    }
+                  },
+                  "required_actions": [],
+                  "completed_at": "2026-11-28T06:38:03.426Z",
+                  "metrics": {
+                    "total_input_tokens": 8186,
+                    "total_output_tokens": 3,
+                    "total_tokens": 8189,
+                    "total_cache_read_tokens": 0,
+                    "total_reasoning_tokens": 0
+                  }
+                },
+                "thread_id": null
+              }
+            }
+          ],
+          "persisted": [
+            {
+              "type": "turn.created",
+              "id": "01m8ge019h2rm9j321z6526xjc",
+              "turn_id": "01m8ge019e57z6vkjzxy5q3fy5",
+              "previous_turn_id": null,
+              "input": [
+                {
+                  "type": "user.message",
+                  "content": "Without using any tools: in how many ways can 8 be written as an ordered sum of 1s and 2s? Reply with the number only."
+                }
+              ],
+              "state": {
+                "status": "running"
+              },
+              "created_at": "2026-11-28T06:38:02.032Z",
+              "thread_id": null
+            },
+            {
+              "type": "mcp.initialize",
+              "id": "01m8ge01a0s61bwxgvfknhttcx",
+              "created_at": "2026-11-28T06:38:02.048Z",
+              "thread_id": "main",
+              "mcp_servers": [
+                {
+                  "name": "source",
+                  "id": "source",
+                  "session_id": "d6017314-ae5b-4072-b137-cd39f92b1c16",
+                  "transport_type": "streamable-http"
+                }
+              ]
+            },
+            {
+              "type": "model.message",
+              "id": "01m8ge01a1gev8c8fh66c46hm5",
+              "content": "34",
+              "created_at": "2026-11-28T06:38:03.424Z",
+              "thread_id": "main",
+              "finish_reason": "stop",
+              "usage": {
+                "input_tokens": 8186,
+                "output_tokens": 3,
+                "cache_read_tokens": 0,
+                "input_tokens_breakdown": {
+                  "harness": 3483,
+                  "skills": 0,
+                  "instructions": 1439,
+                  "tool_definitions": 507,
+                  "messages": 2757
+                }
+              },
+              "model": {
+                "name": "openrouter/opus-5-5",
+                "params": {
+                  "max_tokens": 16384,
+                  "parallel_tool_calls": true,
+                  "reasoning_effort": "low"
+                }
+              }
+            },
+            {
+              "type": "turn.done",
+              "id": "01m8ge02n26ydf81vbeaxa8gz8",
+              "created_at": "2026-11-28T06:38:03.426Z",
+              "state": {
+                "status": "done",
+                "output": {
+                  "content": "34",
+                  "type": "model.message",
+                  "id": "01m8ge01a1gev8c8fh66c46hm5",
+                  "created_at": "2026-11-28T06:38:03.424Z",
+                  "thread_id": "main",
+                  "finish_reason": "stop",
+                  "usage": {
+                    "input_tokens": 8186,
+                    "output_tokens": 3,
+                    "cache_read_tokens": 0,
+                    "input_tokens_breakdown": {
+                      "harness": 3483,
+                      "skills": 0,
+                      "instructions": 1439,
+                      "tool_definitions": 507,
+                      "messages": 2757
+                    }
+                  },
+                  "model": {
+                    "name": "openrouter/opus-5-5",
+                    "params": {
+                      "max_tokens": 16384,
+                      "parallel_tool_calls": true,
+                      "reasoning_effort": "low"
+                    }
+                  }
+                },
+                "required_actions": [],
+                "completed_at": "2026-11-28T06:38:03.426Z",
+                "metrics": {
+                  "total_input_tokens": 8186,
+                  "total_output_tokens": 3,
+                  "total_tokens": 8189,
+                  "total_cache_read_tokens": 0,
+                  "total_reasoning_tokens": 0
+                }
+              },
+              "thread_id": null
+            }
+          ]
+        }
+      ],
+      "high": [
+        {
+          "turnId": "01m8ge02nc0csdnep5se2y44yd",
+          "state": {
+            "status": "done",
+            "required_actions": [],
+            "metrics": {
+              "total_input_tokens": 8186,
+              "total_output_tokens": 35,
+              "total_tokens": 8221,
+              "total_cache_read_tokens": 0,
+              "total_reasoning_tokens": 32
+            },
+            "output": {
+              "reasoning_content": "I'm counting the ways to tile a length-8 strip with 1s and 2s, which follows the Fibonacci pattern, so it comes out to F(9) = 34.\n\n",
+              "content": "34",
+              "type": "model.message",
+              "id": "01m8ge02nzrpzaq3kx8d2j326n",
+              "created_at": "2026-11-28T06:38:05.514Z",
+              "thread_id": "main",
+              "finish_reason": "stop",
+              "usage": {
+                "input_tokens": 8186,
+                "output_tokens": 35,
+                "cache_read_tokens": 0,
+                "input_tokens_breakdown": {
+                  "harness": 3483,
+                  "skills": 0,
+                  "instructions": 1439,
+                  "tool_definitions": 507,
+                  "messages": 2757
+                }
+              },
+              "model": {
+                "name": "openrouter/opus-5-5",
+                "params": {
+                  "max_tokens": 16384,
+                  "parallel_tool_calls": true,
+                  "reasoning_effort": "high"
+                }
+              }
+            },
+            "completed_at": "2026-11-28T06:38:05.515Z"
+          },
+          "wallMs": 2083,
+          "streamed": [
+            {
+              "seq": 1,
+              "atMs": 7,
+              "event": {
+                "type": "turn.created",
+                "id": "01m8ge02ngpnq15787ynpmw5tv",
+                "turn_id": "01m8ge02nc0csdnep5se2y44yd",
+                "previous_turn_id": null,
+                "input": [
+                  {
+                    "type": "user.message",
+                    "content": "Without using any tools: in how many ways can 8 be written as an ordered sum of 1s and 2s? Reply with the number only."
+                  }
+                ],
+                "state": {
+                  "status": "running"
+                },
+                "created_at": "2026-11-28T06:38:03.438Z",
+                "thread_id": null
+              }
+            },
+            {
+              "seq": 2,
+              "atMs": 21,
+              "event": {
+                "type": "mcp.initialize",
+                "id": "01m8ge02nygw0ab049k28g4xsm",
+                "created_at": "2026-11-28T06:38:03.454Z",
+                "thread_id": "main",
+                "mcp_servers": [
+                  {
+                    "name": "source",
+                    "id": "source",
+                    "session_id": "d3b95d89-fb78-4644-ac26-702a2871cd67",
+                    "transport_type": "streamable-http"
+                  }
+                ]
+              }
+            },
+            {
+              "seq": 3,
+              "atMs": 21,
+              "event": {
+                "type": "model.message",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "thread_id": "main",
+                "created_at": "2026-11-28T06:38:03.455Z",
+                "model": {
+                  "name": "openrouter/opus-5-5",
+                  "params": {
+                    "max_tokens": 16384,
+                    "parallel_tool_calls": true,
+                    "reasoning_effort": "high"
+                  }
+                }
+              }
+            },
+            {
+              "seq": 4,
+              "atMs": 2072,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": "I'm counting the",
+                "thread_id": "main",
+                "created_at": "2026-11-28T06:38:05.506Z"
+              }
+            },
+            {
+              "seq": 5,
+              "atMs": 2072,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": " ways to tile a",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 6,
+              "atMs": 2072,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": " length-8 str",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 7,
+              "atMs": 2072,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": "ip with 1s and 2",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 8,
+              "atMs": 2073,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": "s, which foll",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 9,
+              "atMs": 2073,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": "ows the Fibonacci",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 10,
+              "atMs": 2073,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": " p",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 11,
+              "atMs": 2074,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": "attern, so it com",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 12,
+              "atMs": 2074,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": "es out to F",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 13,
+              "atMs": 2074,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": "(9) = 34.",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 14,
+              "atMs": 2074,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "reasoning_content": "\n\n",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 15,
+              "atMs": 2075,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "content": "34",
+                "thread_id": "main"
+              }
+            },
+            {
+              "seq": 16,
+              "atMs": 2078,
+              "event": {
+                "type": "model.message.delta",
+                "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                "thread_id": "main",
+                "finish_reason": "stop",
+                "usage": {
+                  "input_tokens": 8186,
+                  "output_tokens": 35,
+                  "cache_read_tokens": 0,
+                  "input_tokens_breakdown": {
+                    "harness": 3483,
+                    "skills": 0,
+                    "instructions": 1439,
+                    "tool_definitions": 507,
+                    "messages": 2757
+                  }
+                }
+              }
+            },
+            {
+              "seq": 17,
+              "atMs": 2083,
+              "event": {
+                "type": "turn.done",
+                "id": "01m8ge04pb604n9qq98z8mzmjk",
+                "created_at": "2026-11-28T06:38:05.515Z",
+                "state": {
+                  "status": "done",
+                  "output": {
+                    "reasoning_content": "I'm counting the ways to tile a length-8 strip with 1s and 2s, which follows the Fibonacci pattern, so it comes out to F(9) = 34.\n\n",
+                    "content": "34",
+                    "type": "model.message",
+                    "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                    "created_at": "2026-11-28T06:38:05.514Z",
+                    "thread_id": "main",
+                    "finish_reason": "stop",
+                    "usage": {
+                      "input_tokens": 8186,
+                      "output_tokens": 35,
+                      "cache_read_tokens": 0,
+                      "input_tokens_breakdown": {
+                        "harness": 3483,
+                        "skills": 0,
+                        "instructions": 1439,
+                        "tool_definitions": 507,
+                        "messages": 2757
+                      }
+                    },
+                    "model": {
+                      "name": "openrouter/opus-5-5",
+                      "params": {
+                        "max_tokens": 16384,
+                        "parallel_tool_calls": true,
+                        "reasoning_effort": "high"
+                      }
+                    }
+                  },
+                  "required_actions": [],
+                  "completed_at": "2026-11-28T06:38:05.515Z",
+                  "metrics": {
+                    "total_input_tokens": 8186,
+                    "total_output_tokens": 35,
+                    "total_tokens": 8221,
+                    "total_cache_read_tokens": 0,
+                    "total_reasoning_tokens": 32
+                  }
+                },
+                "thread_id": null
+              }
+            }
+          ],
+          "persisted": [
+            {
+              "type": "turn.created",
+              "id": "01m8ge02ngpnq15787ynpmw5tv",
+              "turn_id": "01m8ge02nc0csdnep5se2y44yd",
+              "previous_turn_id": null,
+              "input": [
+                {
+                  "type": "user.message",
+                  "content": "Without using any tools: in how many ways can 8 be written as an ordered sum of 1s and 2s? Reply with the number only."
+                }
+              ],
+              "state": {
+                "status": "running"
+              },
+              "created_at": "2026-11-28T06:38:03.438Z",
+              "thread_id": null
+            },
+            {
+              "type": "mcp.initialize",
+              "id": "01m8ge02nygw0ab049k28g4xsm",
+              "created_at": "2026-11-28T06:38:03.454Z",
+              "thread_id": "main",
+              "mcp_servers": [
+                {
+                  "name": "source",
+                  "id": "source",
+                  "session_id": "d3b95d89-fb78-4644-ac26-702a2871cd67",
+                  "transport_type": "streamable-http"
+                }
+              ]
+            },
+            {
+              "type": "model.message",
+              "id": "01m8ge02nzrpzaq3kx8d2j326n",
+              "reasoning_content": "I'm counting the ways to tile a length-8 strip with 1s and 2s, which follows the Fibonacci pattern, so it comes out to F(9) = 34.\n\n",
+              "content": "34",
+              "created_at": "2026-11-28T06:38:05.514Z",
+              "thread_id": "main",
+              "finish_reason": "stop",
+              "usage": {
+                "input_tokens": 8186,
+                "output_tokens": 35,
+                "cache_read_tokens": 0,
+                "input_tokens_breakdown": {
+                  "harness": 3483,
+                  "skills": 0,
+                  "instructions": 1439,
+                  "tool_definitions": 507,
+                  "messages": 2757
+                }
+              },
+              "model": {
+                "name": "openrouter/opus-5-5",
+                "params": {
+                  "max_tokens": 16384,
+                  "parallel_tool_calls": true,
+                  "reasoning_effort": "high"
+                }
+              }
+            },
+            {
+              "type": "turn.done",
+              "id": "01m8ge04pb604n9qq98z8mzmjk",
+              "created_at": "2026-11-28T06:38:05.515Z",
+              "state": {
+                "status": "done",
+                "output": {
+                  "reasoning_content": "I'm counting the ways to tile a length-8 strip with 1s and 2s, which follows the Fibonacci pattern, so it comes out to F(9) = 34.\n\n",
+                  "content": "34",
+                  "type": "model.message",
+                  "id": "01m8ge02nzrpzaq3kx8d2j326n",
+                  "created_at": "2026-11-28T06:38:05.514Z",
+                  "thread_id": "main",
+                  "finish_reason": "stop",
+                  "usage": {
+                    "input_tokens": 8186,
+                    "output_tokens": 35,
+                    "cache_read_tokens": 0,
+                    "input_tokens_breakdown": {
+                      "harness": 3483,
+                      "skills": 0,
+                      "instructions": 1439,
+                      "tool_definitions": 507,
+                      "messages": 2757
+                    }
+                  },
+                  "model": {
+                    "name": "openrouter/opus-5-5",
+                    "params": {
+                      "max_tokens": 16384,
+                      "parallel_tool_calls": true,
+                      "reasoning_effort": "high"
+                    }
+                  }
+                },
+                "required_actions": [],
+                "completed_at": "2026-11-28T06:38:05.515Z",
+                "metrics": {
+                  "total_input_tokens": 8186,
+                  "total_output_tokens": 35,
+                  "total_tokens": 8221,
+                  "total_cache_read_tokens": 0,
+                  "total_reasoning_tokens": 32
+                }
+              },
+              "thread_id": null
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
