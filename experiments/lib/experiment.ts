@@ -53,6 +53,9 @@ const TurnStateSchema = z.looseObject({
   metrics: z.record(z.string(), z.number()).optional(),
 });
 const TurnSchema = z.looseObject({ id: z.string(), state: TurnStateSchema });
+// The first event of every Turn's stream. The wire is snake_case (`turn_id`), on
+// the stream as over REST; the SDK's camelCase is the SDK's own conversion.
+const TurnCreatedSchema = z.looseObject({ type: z.literal("turn.created"), turn_id: z.string() });
 // A page of a list endpoint: TrueForge's `{ data, pagination }` envelope.
 const EventsPageSchema = z.looseObject({
   data: z.array(WireEventSchema),
@@ -298,9 +301,10 @@ async function streamTurn(sessionId: string, input: unknown[], previousTurnId: s
   });
   const wallMs = Date.now() - started;
 
-  const created = streamed.find((s) => s.event.type === "turn.created")?.event;
-  const turnId = created?.turn_id ?? created?.turnId;
-  if (typeof turnId !== "string") throw new Error("the stream carried no turn.created with a turn id");
+  // A wire change (a renamed key) fails here, loudly, rather than being guessed around.
+  const created = TurnCreatedSchema.safeParse(streamed.find((s) => s.event.type === "turn.created")?.event);
+  if (!created.success) throw new Error(`the stream's turn.created has no turn_id: ${created.error.message}`);
+  const turnId = created.data.turn_id;
   const turn = TurnSchema.parse((await api<unknown>("GET", `/sessions/${sessionId}/turns/${turnId}`)).data);
   return {
     turnId,

@@ -109,7 +109,7 @@ await runExperiment<Observed>({
       const deltas = streamed(main).filter((e) => e.type === "model.message.delta" && str(e.reasoning_content) !== "");
       const messages = persisted(main).filter((e) => e.type === "model.message" && str(e.reasoning_content) !== "");
       const observed = { reasoningDeltas: deltas.length, persistedWithReasoning: messages.length };
-      if (model !== "opus-5-5") return { verdict: "n/a", observed };
+      if (model !== "opus-5-5") return na(model, observed);
       return verdict(deltas.length > 0 && messages.length > 0, observed);
     },
     E10: ({ main }) => {
@@ -182,6 +182,8 @@ function num(value: unknown): number {
 function verdict(ok: boolean, observed: unknown): Verdict {
   return { verdict: ok ? "met" : "not met", observed };
 }
-function na(model: ExperimentModel): Verdict {
-  return { verdict: "n/a", observed: `not checked on ${model}` };
+// An expectation that doesn't apply to this model. What was seen is still
+// recorded when there is something to record.
+function na(model: ExperimentModel, observed: unknown = `not checked on ${model}`): Verdict {
+  return { verdict: "n/a", observed };
 }
