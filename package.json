@@ -27,11 +27,11 @@
   "dependencies": {
     "@forge-lab/agents": "workspace:*",
     "@forge-lab/lib": "workspace:*",
-    "@truefoundry/trueforge-sdk": "0.184.1"
+    "@truefoundry/trueforge-sdk": "0.185.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.6",
-    "@types/bun": "1.4.4",
+    "@biomejs/biome": "2.6.8",
+    "@types/bun": "1.4.5",
     "typescript": "7.0.2"
   },
   "//overrides": "@assistant-ui/store and tap match TrueForge's own pnpm-lock.yaml: newer versions make TrueForgeUI loop forever on mount. app/src/overrides.test.ts fails if a TrueForge bump moves them.",
