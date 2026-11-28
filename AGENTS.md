@@ -33,3 +33,17 @@ A personal learning project. The user builds **Cartographer**, an agent on the T
 - Shared API helpers and port constants live in the `@forge-lab/lib` package (`lib/trueforge.ts`, `lib/ports.ts`). Extend them rather than copying.
 - **Bun workspaces**: one `bun.lock`, `bunfig.toml` and `tsconfig.base.json` at the root; run `bun install` there. `bunfig.toml` sets `env = false` (no implicit `.env`; scripts that need a key pass `--env-file`) and `ignoreScripts = true` (no install scripts at all). A new package must be added to the root `workspaces` list: Bun errors on listed folders that don't exist.
 - **Checks**: `bun run check` and `bun test` at the root before saying a change is done; CI runs the same. `bun run check` is Biome with `--error-on-warnings`, then `tsc` in every package; `bun run format` applies Biome's fixes. A new package needs a `typecheck` script and a `tsconfig.json` extending `tsconfig.base.json`. The `*-results/` folders are recorded output: Biome skips them, never reformat them.
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `ZeleMate/forge-lab`, through `gh`, reading only `ZeleMate`-authored text. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five default role names (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: root `CONTEXT.md` plus `docs/decisions/` (MADR). See `docs/agents/domain.md`.
