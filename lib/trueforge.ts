@@ -239,7 +239,12 @@ export function summarise(turn: Turn & { wallMs?: number }, events: Event[]) {
 // (`import.meta.dir` is the folder of the file that writes it, so it names the caller's own).
 export async function saveResults(dir: string, results: unknown) {
   const file = `${dir}/${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
-  // Results get committed, and sandbox paths in them contain the home folder and so the username.
-  await Bun.write(file, JSON.stringify(results, null, 2).replaceAll(homedir(), "/Users/<user>"));
+  await Bun.write(file, recordJson(results));
   return file;
+}
+
+// Results as committed JSON. Results get committed, and sandbox paths in them
+// contain the home folder and so the username, which this replaces.
+export function recordJson(results: unknown): string {
+  return JSON.stringify(results, null, 2).replaceAll(homedir(), "/Users/<user>");
 }

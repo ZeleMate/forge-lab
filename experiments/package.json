@@ -1,0 +1,14 @@
+{
+  "name": "@forge-lab/experiments",
+  "private": true,
+  "description": "The Experiment catalogue (#12): one Bun script per Experiment, its expectations written before running, and its observed record in <name>-results/. Needs `bun run dev`. TypeScript source, no build step.",
+  "type": "module",
+  "scripts": {
+    "turn-anatomy": "bun turn-anatomy.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@forge-lab/lib": "workspace:*",
+    "zod": "4.6.7"
+  }
+}
