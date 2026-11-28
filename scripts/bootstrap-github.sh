@@ -1,42 +1,278 @@
 #!/usr/bin/env bash
-# Create the GitHub repo (if needed) and apply the template's settings. Idempotent: safe to re-run.
+# Create the GitHub repo (if needed) and apply this repo's GitHub settings, or check them for drift.
 #
-#   ./scripts/bootstrap-github.sh --dry-run   # print what would happen
-#   ./scripts/bootstrap-github.sh             # do it
+#   ./scripts/bootstrap-github.sh --dry-run             # print what would happen
+#   ./scripts/bootstrap-github.sh                       # do it (idempotent: safe to re-run)
+#   ./scripts/bootstrap-github.sh --check [owner/repo]  # read-only: report drift, exit 1 if any
 #
-# Needs: gh (authenticated as ZeleMate or an org admin), git.
-# The private-repo, plan and first-commit branches can't run for forge-lab; they stay so that
-# `copier update` merges cleanly with the template.
+# What to set is in .github/settings-requirements.json and .github/secret-requirements.json, both
+# written by the repo template (ADR 0003 and ADR 0005 there). This script only applies or checks them;
+# the repo-github-setup audit runs --check.
+# Needs: gh (authenticated as ZeleMate or an org admin), git, jq.
 set -euo pipefail
 
 OWNER="ZeleMate"
 REPO="forge-lab"
 VISIBILITY="public"
-PLAN="free"
-PUBLISHES="no"
 DESCRIPTION="Learning repo: Cartographer, an agent on the TrueForge harness (TS + Bun)"
-FULL="$OWNER/$REPO"
+ANSWERS=".copier-answers.yml"
+SETTINGS=.github/settings-requirements.json
+SECRETS=.github/secret-requirements.json
 
-DRY_RUN=0
-[[ "${1:-}" = "--dry-run" ]] && DRY_RUN=1
+MODE=apply
+case "${1:-}" in
+  "") ;;
+  --dry-run) MODE=dry-run ;;
+  --check) MODE=check ;;
+  *) echo "usage: $0 [--dry-run | --check [owner/repo]]" >&2; exit 2 ;;
+esac
+FULL="$OWNER/$REPO"
+if [ "$MODE" = check ] && [ -n "${2:-}" ]; then FULL=$2; fi
 
 cd "$(dirname "$0")/.."
+command -v jq >/dev/null || { echo "Needs jq (brew install jq, or apt-get install jq)."; exit 2; }
+[ -f "$SETTINGS" ] || { echo "No $SETTINGS: run copier update to get it."; exit 2; }
+if [ "$MODE" != dry-run ]; then
+  gh auth status >/dev/null 2>&1 || { echo "Run 'gh auth login' first."; exit 2; }
+fi
 
-say()  { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
-warn() { printf '\033[33m  ! %s\033[0m\n' "$*"; }
-ok()   { printf '\033[32m  ✓ %s\033[0m\n' "$*"; }
+drift=0
+say()     { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
+ok()      { printf '\033[32m  ✓ %s\033[0m\n' "$*"; }
+warn()    { printf '\033[33m  ! %s\033[0m\n' "$*"; }
+unknown() { printf '\033[33m  ? %s\033[0m\n' "$*"; }
+# A requirement that isn't met: drift for the check, a warning for bootstrap.
+unmet()   { if [ "$MODE" = check ]; then printf '\033[31m  DRIFT %s\033[0m\n' "$*"; drift=1; else warn "$*"; fi; }
 
-# Run a command, or print it in dry-run mode. Failures are reported, not fatal,
-# because some endpoints depend on plan or visibility.
+# Run a command, or print it in dry-run mode. Failures are reported, not fatal.
 run() {
-  if [[ "$DRY_RUN" = 1 ]]; then printf '  [dry-run] %s\n' "$*"; return 0; fi
+  if [ "$MODE" = dry-run ]; then printf '  [dry-run] %s\n' "$*"; return 0; fi
   if out=$("$@" 2>&1); then ok "$*"; else warn "failed: $*"; printf '    %s\n' "$out" | head -5; fi
 }
 
-api() { run gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "$@"; }
+# ------------------------------------------------------------------ the GitHub port
+# The only two functions that call the GitHub API for settings and secrets. The template's tests put
+# a fake gh on PATH that serves recorded API responses; dry-run mode stands in for writes.
+CACHE=$(mktemp -d)
+trap 'rm -rf "$CACHE"' EXIT
+GH_BODY=null
+GH_STATUS=unreadable
+# gh_read <endpoint>: sets GH_BODY to GitHub's answer (null when empty), and GH_STATUS to ok,
+# missing (HTTP 404) or unreadable (anything else: permissions, plan, network). Answers are cached.
+gh_read() {
+  local c err
+  c="$CACHE/$(printf '%s' "$1" | tr '/?&=' '____')"
+  if [ -f "$c.status" ]; then GH_STATUS=$(cat "$c.status"); GH_BODY=$(cat "$c.body"); return 0; fi
+  GH_BODY=null; GH_STATUS=unreadable
+  if [ "$MODE" != dry-run ]; then
+    err="$c.err"
+    if GH_BODY=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "$1" 2>"$err"); then
+      GH_STATUS=ok; [ -n "$GH_BODY" ] || GH_BODY=null
+    else
+      GH_BODY=null
+      if grep -q '(HTTP 404)' "$err"; then GH_STATUS=missing; fi
+    fi
+  fi
+  printf '%s' "$GH_STATUS" >"$c.status"; printf '%s' "$GH_BODY" >"$c.body"
+}
+# gh_write <method> <endpoint> [json body] [label for the body]: makes the change, or prints it in
+# dry-run mode. Failures are reported, not fatal, because some endpoints depend on plan or visibility.
+gh_write() {
+  local out args
+  if [ "$MODE" = dry-run ]; then
+    printf '  [dry-run] gh api -X %s %s%s\n' "$1" "$2" "${3:+ --input ${4:-$3}}"; return 0
+  fi
+  args=(-H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -X "$1" "$2")
+  if [ -n "${3:-}" ]; then args+=(--input -); fi
+  if out=$(gh api "${args[@]}" 2>&1 <<<"${3:-}"); then ok "$1 $2"; else warn "failed: $1 $2"; printf '    %s\n' "$out" | head -5; fi
+}
 
-if [[ "$DRY_RUN" = 0 ]]; then
-  gh auth status >/dev/null 2>&1 || { echo "Run 'gh auth login' first."; exit 1; }
+# ------------------------------------------------------------------ reading the requirements
+# covers($w): GitHub's answer has everything in $w. Objects: every key in $w, recursively. Arrays:
+# every element of $w is covered by some element. Anything else: equal. misses lists what isn't.
+JQ_LIB='
+def path_join($p; $k): if $p == "" then $k else "\($p).\($k)" end;
+def show: if type == "string" then . else tojson end;
+def covers($w):
+  if ($w | type) == "object" then
+    type == "object" and (. as $g | all($w | to_entries[]; . as $e | $g | has($e.key) and (.[$e.key] | covers($e.value))))
+  elif ($w | type) == "array" then
+    type == "array" and (. as $g | all($w[]; . as $x | any($g[]; covers($x))))
+  else . == $w end;
+def misses($w; $p):
+  if ($w | type) == "object" then
+    if type != "object" then "unknown\t\($p): not in GitHub'"'"'s answer"
+    else . as $g | $w | to_entries[] | . as $e
+      | if ($g | has($e.key)) then ($g[$e.key] | misses($e.value; path_join($p; $e.key)))
+        else "unknown\t\(path_join($p; $e.key)): not in GitHub'"'"'s answer" end
+    end
+  elif ($w | type) == "array" then
+    if type != "array" then "drift\t\($p) = \(show) (want \($w | show))"
+    else . as $g | $w[] | . as $x | select(any($g[]; covers($x)) | not) | "drift\t\($p) lacks \($x | show)" end
+  elif . == $w then empty
+  else "drift\t\($p) = \(show) (want \($w | show))" end;
+'
+covers() { jq -e --argjson w "$2" "$JQ_LIB covers(\$w)" <<<"$1" >/dev/null 2>&1; }
+# field <entry> <name>: the field as text (strings bare, anything else as JSON), empty when absent.
+field() { jq -r --arg f "$2" '.[$f] // empty | if type == "string" then . else tojson end' <<<"$1"; }
+body_of() { # what bootstrap sends, compact JSON, or empty
+  local f
+  f=$(field "$1" body_file)
+  if [ -n "$f" ]; then jq -c . "$f"; else field "$1" body; fi
+}
+expect_of() { # what the check compares: expect, else the body, else nothing ({})
+  local x
+  x=$(field "$1" expect)
+  [ -n "$x" ] || x=$(body_of "$1")
+  [ -n "$x" ] || x='{}'
+  printf '%s' "$x"
+}
+# item_id <collection endpoint> <key>: the id of the collection item matching key, or empty.
+# It runs in $(...), so callers gh_read the collection first to see GH_STATUS (the read is cached).
+item_id() {
+  gh_read "$1"
+  [ "$GH_STATUS" = ok ] || return 0
+  jq -r --argjson k "$2" "$JQ_LIB"'(if type == "array" then . else [.[] | arrays] | add // [] end)
+    | map(select(covers($k))) | .[0].id // empty' <<<"$GH_BODY" 2>/dev/null || true
+}
+
+apply_entry() {
+  local e=$1 name ep method reason body key id
+  name=$(field "$e" name); ep=$(field "$e" endpoint); method=$(field "$e" method); reason=$(field "$e" unavailable)
+  if [ -n "$reason" ]; then say "$name"; warn "Skipped: $reason"; return 0; fi
+  if [ -z "$ep" ] || [ -z "$method" ]; then return 0; fi # manual steps and check-only entries
+  ep=${ep//\{repo\}/$FULL}
+  say "$name"
+  body=$(body_of "$e"); key=$(field "$e" key)
+  if [ -n "$key" ]; then
+    id=$(item_id "$ep" "$key")
+    if [ -n "$id" ]; then
+      gh_read "$ep/$id"
+      if [ "$GH_STATUS" = ok ] && covers "$GH_BODY" "$body"; then ok "already set"; else gh_write PUT "$ep/$id" "$body" "$(field "$e" body_file)"; fi
+      return 0
+    fi
+  fi
+  gh_write "$method" "$ep" "$body" "$(field "$e" body_file)"
+}
+
+check_entry() {
+  local e=$1 name ep reason when wep wexp key id kind text
+  name=$(field "$e" name); ep=$(field "$e" endpoint); reason=$(field "$e" unavailable)
+  if [ -n "$reason" ]; then say "$name"; unknown "unavailable: $reason"; return 0; fi
+  if [ -z "$ep" ]; then say "$name"; unknown "the API can't show this: confirm by hand"; return 0; fi
+  ep=${ep//\{repo\}/$FULL}
+  when=$(field "$e" when)
+  if [ -n "$when" ]; then
+    while IFS=$'\t' read -r -u 4 wep wexp; do
+      wep=${wep//\{repo\}/$FULL}
+      gh_read "$wep"
+      if [ "$GH_STATUS" != ok ]; then say "$name"; unknown "could not read $wep"; return 0; fi
+      covers "$GH_BODY" "$wexp" || return 0
+    done 4< <(jq -r 'to_entries[] | [.key, (.value | tojson)] | @tsv' <<<"$when")
+  fi
+  say "$name"
+  key=$(field "$e" key)
+  if [ -n "$key" ]; then
+    gh_read "$ep"
+    id=$(item_id "$ep" "$key")
+    case "$GH_STATUS" in
+      ok) if [ -z "$id" ]; then unmet "missing: no item matching $key in $ep"; return 0; fi ;;
+      missing) unmet "missing: $ep (HTTP 404)"; return 0 ;;
+      *) unknown "could not read $ep (permissions or plan)"; return 0 ;;
+    esac
+    ep="$ep/$id"
+  fi
+  gh_read "$ep"
+  case "$GH_STATUS" in
+    missing) unmet "missing: $ep (HTTP 404)"; return 0 ;;
+    unreadable) unknown "could not read $ep (permissions or plan)"; return 0 ;;
+  esac
+  while IFS=$'\t' read -r -u 4 kind text; do
+    case "$kind" in
+      ok) ok "${text:-enabled}" ;;
+      drift) unmet "$text" ;;
+      *) unknown "$text" ;;
+    esac
+  done 4< <(jq -r --argjson w "$(expect_of "$e")" "$JQ_LIB"'
+    if ($w | length) == 0 then "ok\t"
+    elif type != "object" then "unknown\tGitHub'"'"'s answer has no fields"
+    else . as $g | $w | to_entries[] | . as $e | [$g | misses({($e.key): $e.value}; "")]
+      | if length > 0 then .[]
+        else "ok\t\($e.key)" + ($g[$e.key] | if type == "object" or type == "array" then "" else " = \(tostring)" end) end
+    end' <<<"$GH_BODY")
+}
+
+# ------------------------------------------------------------------ secrets
+# TPL_PRIVATE: true, false or unknown: is the template repo (_src_path in the answers file) private?
+TPL="" TPL_PRIVATE=""
+template_private() {
+  [ -z "$TPL_PRIVATE" ] || return 0
+  TPL=$(sed -n 's/^_src_path: *//p' "$ANSWERS" 2>/dev/null | head -n 1 \
+    | sed -E -e "s/^['\"]//" -e "s/['\"]\$//" -e 's#^gh:##' -e 's#^(https://|git@)github\.com[:/]##' -e 's#\.git$##')
+  TPL_PRIVATE=unknown
+  if printf '%s' "$TPL" | grep -Eq '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$'; then
+    gh_read "repos/$TPL"
+    # Not `.private // empty`: jq's // treats false as missing.
+    case "$(jq -r '.private | tostring' <<<"$GH_BODY" 2>/dev/null)" in true) TPL_PRIVATE=true ;; false) TPL_PRIVATE=false ;; esac
+  fi
+}
+
+# The Actions secrets in the secret requirements, each set or not needed. Names only, never values.
+secrets_step() {
+  local names name used_by waiver cond if_missing wf note
+  say "Secrets the workflows need"
+  if [ ! -f "$SECRETS" ]; then unknown "no $SECRETS: run copier update to get it"; return 0; fi
+  if [ "$MODE" = dry-run ]; then
+    jq -r '.secrets[] | select(.store == "actions") | "  [dry-run] check that \(.name) is set"' "$SECRETS"; return 0
+  fi
+  gh_read "repos/$FULL/actions/secrets?per_page=100"
+  if [ "$GH_STATUS" != ok ]; then unknown "cannot list secrets (needs admin)"; return 0; fi
+  names=$(jq -r '.secrets[].name' <<<"$GH_BODY")
+  # One line per secret; "-" for an absent field, because read collapses empty tab-separated fields.
+  # fd 3, so nothing in the loop can read the list.
+  while IFS=$'\t' read -r -u 3 name used_by waiver cond if_missing; do
+    note=""
+    # A secret is needed only while the file that reads it is in the repo (a repo may delete a workflow).
+    if [ "$used_by" != - ] && [ ! -e "$used_by" ]; then ok "$name is not needed: $used_by isn't in this repo"; continue; fi
+    case "$waiver" in
+      -) ;;
+      workflow_disabled=*)
+        wf=${waiver#workflow_disabled=}
+        gh_read "repos/$FULL/actions/workflows/$wf"
+        if [ "$(jq -r '.state // empty' <<<"$GH_BODY" 2>/dev/null)" = disabled_manually ]; then
+          ok "$name is not needed: $wf is disabled (re-enable with: gh workflow enable $wf)"; continue
+        fi
+        note=" (not needed while $wf is disabled)" ;;
+      *) unknown "$name: unknown waiver '$waiver'"; continue ;;
+    esac
+    case "$cond" in
+      -) ;;
+      template_private)
+        template_private
+        case "$TPL_PRIVATE" in
+          true) note=" (the template repo is private)" ;;
+          false) ok "$name is not needed: the template repo is public"; continue ;;
+          *) unknown "$name: could not tell whether the template repo '${TPL:-?}' is private; if it is, $name must be set"; continue ;;
+        esac ;;
+      *) unknown "$name: unknown condition '$cond'"; continue ;;
+    esac
+    if grep -qx "$name" <<<"$names"; then ok "$name is set"; else unmet "$name is not set$note: $if_missing until it is (see docs/SETUP.md)"; fi
+  done 3< <(jq -r '.secrets[] | select(.store == "actions")
+    | [.name, (.used_by // "-"), ((.waived_if // {}) | to_entries | map("\(.key)=\(.value)") | join(",") | if . == "" then "-" else . end),
+       (.only_if // "-"), (.if_missing // "-")] | @tsv' "$SECRETS")
+}
+
+# ------------------------------------------------------------------ check
+if [ "$MODE" = check ]; then
+  echo "Checking $FULL against $SETTINGS and $SECRETS"
+  gh_read "repos/$FULL"
+  if [ "$GH_STATUS" != ok ]; then unmet "repository $FULL does not exist or is not visible to you"; exit 1; fi
+  while IFS= read -r -u 3 entry; do check_entry "$entry"; done 3< <(jq -c '.settings[]' "$SETTINGS")
+  secrets_step
+  echo
+  if [ "$drift" = 0 ]; then echo "NO DRIFT"; exit 0; fi
+  echo "DRIFT FOUND: re-run ./scripts/bootstrap-github.sh (dry run first; it is idempotent) or fix the items above"
+  exit 1
 fi
 
 # ------------------------------------------------------------------ git + repo
@@ -59,117 +295,9 @@ else
   run gh repo create "$FULL" "--$VISIBILITY" --description "$DESCRIPTION" --source . --remote origin --push
 fi
 
-# ------------------------------------------------------------------ repo settings
-say "Merge settings: squash only, PR title as commit, delete merged branches"
-api -X PATCH "repos/$FULL" \
-  -F allow_squash_merge=true -F allow_merge_commit=false -F allow_rebase_merge=false \
-  -F delete_branch_on_merge=true -F allow_auto_merge=true -F has_wiki=false \
-  -f squash_merge_commit_title=PR_TITLE -f squash_merge_commit_message=PR_BODY
-
-say "Actions: read-only default token, no PR approvals by Actions, SHA pinning required"
-api -X PUT "repos/$FULL/actions/permissions/workflow" \
-  -f default_workflow_permissions=read -F can_approve_pull_request_reviews=false
-# forge-lab: keep the Actions allowlist ("selected") rather than the template's "all".
-# The list itself (GitHub's own actions plus named third-party ones) is set by hand; see SECURITY.md.
-api -X PUT "repos/$FULL/actions/permissions" -F enabled=true -f allowed_actions=selected -F sha_pinning_required=true
-
-say "Dependabot alerts and security updates"
-api -X PUT "repos/$FULL/vulnerability-alerts"
-api -X PUT "repos/$FULL/automated-security-fixes"
-
-if [[ "$VISIBILITY" = public ]]; then
-  say "Public-repo security features (free)"
-  api -X PATCH "repos/$FULL" --input - <<'JSON'
-{"security_and_analysis": {
-  "secret_scanning": {"status": "enabled"},
-  "secret_scanning_push_protection": {"status": "enabled"}
-}}
-JSON
-  api -X PUT "repos/$FULL/private-vulnerability-reporting"
-  api -X PATCH "repos/$FULL/code-scanning/default-setup" -f state=configured -f query_suite=default
-  say "Fork PRs: workflows from every outside contributor wait for approval"
-  api -X PUT "repos/$FULL/actions/permissions/fork-pr-contributor-approval" -f approval_policy=all_external_contributors
-else
-  say "Private repo: GitHub code/secret scanning need a paid org add-on; OSV-Scanner and Gitleaks run in CI instead"
-fi
-
-# ------------------------------------------------------------------ ruleset
-say "Default-branch ruleset (PR required, ci-ok required, no force-push/delete, linear history)"
-if [[ "$VISIBILITY" = public ]] || [[ "$PLAN" = pro ]]; then
-  existing=""
-  if [[ "$DRY_RUN" = 0 ]]; then
-    existing=$(gh api "repos/$FULL/rulesets" --jq '.[] | select(.name=="main") | .id' 2>/dev/null || true)
-  fi
-  if [[ -n "$existing" ]]; then
-    api -X PUT "repos/$FULL/rulesets/$existing" --input .github/rulesets/main.json
-  else
-    api -X POST "repos/$FULL/rulesets" --input .github/rulesets/main.json
-  fi
-else
-  warn "Skipped: rulesets on private repos need GitHub Pro. The gap is recorded in docs/THREAT_MODEL.md."
-fi
-
-# ------------------------------------------------------------------ releases
-if [[ "$PUBLISHES" = yes ]]; then
-  say "Release settings: immutable releases, 'release' environment limited to main"
-  api -X PUT "repos/$FULL/immutable-releases"
-  if [[ "$VISIBILITY" = public ]] || [[ "$PLAN" = pro ]]; then
-    api -X PUT "repos/$FULL/environments/release" --input - <<'JSON'
-{"deployment_branch_policy": {"protected_branches": false, "custom_branch_policies": true}}
-JSON
-    api -X POST "repos/$FULL/environments/release/deployment-branch-policies" -f name=main -f type=branch
-  else
-    warn "Skipped environment: environments on private repos need GitHub Pro."
-  fi
-fi
-
-# ------------------------------------------------------------------ secrets
-# The Actions secrets in this repo's secret requirements (.github/secret-requirements.json).
-# Prints true, false or unknown: is the template repo (_src_path in the answers file) private?
-template_private() {
-  local tpl p
-  tpl=$(sed -n 's/^_src_path: *//p' .copier-answers.yml 2>/dev/null | head -n 1 \
-    | sed -E -e "s/^['\"]//" -e "s/['\"]\$//" -e 's#^gh:##' -e 's#^(https://|git@)github\.com[:/]##' -e 's#\.git$##')
-  if printf '%s' "$tpl" | grep -Eq '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$'; then
-    p=$(gh api "repos/$tpl" --jq .private 2>/dev/null || true)
-    case "$p" in true|false) echo "$p"; return ;; esac
-  fi
-  echo unknown
-}
-say "Secrets the workflows need"
-if [ "$DRY_RUN" = 1 ]; then
-  printf '  [dry-run] check that CLAUDE_CODE_OAUTH_TOKEN is set\n'
-  printf '  [dry-run] check that TEMPLATE_READ_TOKEN is set\n'
-  printf '  [dry-run] check that EVAL_ANTHROPIC_API_KEY is set\n'
-else
-  SECRETS_SET=$(gh secret list --repo "$FULL" --json name --jq '.[].name' 2>/dev/null || true)
-  # Needed only while .github/workflows/claude-review.yml is in the repo.
-  if [ ! -e ".github/workflows/claude-review.yml" ]; then
-    ok "CLAUDE_CODE_OAUTH_TOKEN is not needed: .github/workflows/claude-review.yml isn't in this repo"
-  elif grep -qx CLAUDE_CODE_OAUTH_TOKEN <<<"$SECRETS_SET"; then
-    ok "CLAUDE_CODE_OAUTH_TOKEN is set"
-  else
-    warn "CLAUDE_CODE_OAUTH_TOKEN is not set: the Claude review job passes with a warning and reviews nothing until it is (see the manual steps)"
-  fi
-  # Needed only while .github/workflows/template-update.yml is in the repo.
-  if [ ! -e ".github/workflows/template-update.yml" ]; then
-    ok "TEMPLATE_READ_TOKEN is not needed: .github/workflows/template-update.yml isn't in this repo"
-  elif [ "$(template_private)" = false ]; then
-    ok "TEMPLATE_READ_TOKEN is not needed: the template repo is public"
-  elif grep -qx TEMPLATE_READ_TOKEN <<<"$SECRETS_SET"; then
-    ok "TEMPLATE_READ_TOKEN is set"
-  else
-    warn "TEMPLATE_READ_TOKEN is not set (only if the template repo is private): the weekly template update check fails until it is (see the manual steps)"
-  fi
-  # Needed only while .github/workflows/evals.yml is in the repo.
-  if [ ! -e ".github/workflows/evals.yml" ]; then
-    ok "EVAL_ANTHROPIC_API_KEY is not needed: .github/workflows/evals.yml isn't in this repo"
-  elif grep -qx EVAL_ANTHROPIC_API_KEY <<<"$SECRETS_SET"; then
-    ok "EVAL_ANTHROPIC_API_KEY is set"
-  else
-    warn "EVAL_ANTHROPIC_API_KEY is not set: the nightly evals run against the mock model only until it is (see the manual steps)"
-  fi
-fi
+# ------------------------------------------------------------------ settings and secrets
+while IFS= read -r -u 3 entry; do apply_entry "$entry"; done 3< <(jq -c '.settings[]' "$SETTINGS")
+secrets_step
 
 # ------------------------------------------------------------------ manual steps
 say "Done. Remaining manual steps (also in docs/SETUP.md):"

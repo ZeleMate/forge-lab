@@ -38,6 +38,7 @@
       "Bash(git push --force-with-lease*)",
       "Bash(git push * +*)",
       "Bash(gh release create *)",
+      "Bash(gh release upload *)",
       "Bash(gh secret *)",
       "Bash(gh api -X DELETE *)",
       "Bash(gh api --method DELETE *)",
