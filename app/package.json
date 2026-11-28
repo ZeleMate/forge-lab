@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@forge-lab/lib": "workspace:*",
-    "@truefoundry/trueforge-sdk": "0.184.1",
-    "@truefoundry/trueforge-ui": "0.184.1",
+    "@truefoundry/trueforge-sdk": "0.185.0",
+    "@truefoundry/trueforge-ui": "0.185.1",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
@@ -17,8 +17,8 @@
     "@tailwindcss/vite": "4.3.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "@vitejs/plugin-react": "6.2.1",
+    "@vitejs/plugin-react": "6.3.0",
     "tailwindcss": "4.3.5",
-    "vite": "8.3.6"
+    "vite": "8.3.8"
   }
 }
