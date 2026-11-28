@@ -194,31 +194,56 @@ async function runToEnd(
   for (let pauses = 0; ; pauses++) {
     // `at(-1)` is the last element; the array always has one here.
     const last = runs.at(-1) as TurnRun;
-    const pending = last.state.status === "done" ? (last.state.required_actions ?? []) : [];
-    if (pending.length === 0) return runs;
+    const answers = answerPause(last, decisions);
+    if (answers.length === 0) return runs;
     if (pauses === MAX_PAUSES) throw new Error(`more than ${MAX_PAUSES} Approval pauses in one message`);
+    log.push(...answers.map((a) => a.record));
+    runs.push(
+      await streamTurn(
+        sessionId,
+        answers.map((a) => a.input),
+        last.turnId,
+      ),
+    );
+  }
+}
 
-    const calls = last.persisted.flatMap((e) => {
-      const m = ModelMessageSchema.safeParse(e);
-      return m.success ? m.data.tool_calls : [];
-    });
-    const input = pending.flatMap((action) =>
-      action.tool_calls.map(({ id }) => {
-        const tool = toolName(calls.find((c) => c.id === id));
-        const decision = decisions.get(tool);
-        // A pause the expected file didn't plan for is a finding, not something to guess.
-        if (!decision) throw new Error(`Turn ${last.turnId} paused on ${tool}, which has no decision in ## Approvals`);
-        log.push({ pausedTurnId: last.turnId, toolCallId: id, tool, decision });
-        return {
+export type ApprovalInput = {
+  type: "user.tool_approval";
+  thread_id: string;
+  tool_call_id: string;
+  approval: { status: Decision };
+};
+
+// The answers to a Turn's Approval pause, one per paused tool call, taken from
+// the decision list; an empty array when the Turn didn't pause. `Pick` keeps
+// only the fields it reads, so a test can pass a small object.
+export function answerPause(
+  run: Pick<TurnRun, "turnId" | "state" | "persisted">,
+  decisions: Map<string, Decision>,
+): { input: ApprovalInput; record: ApprovalRecord }[] {
+  const pending = run.state.status === "done" ? (run.state.required_actions ?? []) : [];
+  const calls = run.persisted.flatMap((e) => {
+    const m = ModelMessageSchema.safeParse(e);
+    return m.success ? m.data.tool_calls : [];
+  });
+  return pending.flatMap((action) =>
+    action.tool_calls.map(({ id }) => {
+      const tool = toolName(calls.find((c) => c.id === id));
+      const decision = decisions.get(tool);
+      // A pause the expected file didn't plan for is a finding, not something to guess.
+      if (!decision) throw new Error(`Turn ${run.turnId} paused on ${tool}, which has no decision in ## Approvals`);
+      return {
+        input: {
           type: "user.tool_approval",
           thread_id: action.thread_id,
           tool_call_id: id,
           approval: { status: decision },
-        };
-      }),
-    );
-    runs.push(await streamTurn(sessionId, input, last.turnId));
-  }
+        },
+        record: { pausedTurnId: run.turnId, toolCallId: id, tool, decision },
+      };
+    }),
+  );
 }
 
 export function toolName(call: z.infer<typeof ToolCallSchema> | undefined): string {
