@@ -6,7 +6,17 @@
   "files": {
     // TypeScript and JSON only. A leading `!` excludes: the `*-results/` folders
     // hold recorded Experiment output, which stays exactly as it was written.
-    "includes": ["**/*.ts", "**/*.tsx", "**/*.json", "**/*.jsonc", "!**/*-results"]
+    // The `.github/*-requirements.json` and `language-profiles.json` files are
+    // written by `copier update`; reformatting them would conflict on every update.
+    "includes": [
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.json",
+      "**/*.jsonc",
+      "!**/*-results",
+      "!.github/*-requirements.json",
+      "!.github/language-profiles.json"
+    ]
   },
   "formatter": {
     "enabled": true,

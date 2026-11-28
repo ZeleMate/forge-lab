@@ -1,0 +1,133 @@
+{
+  "_comment": "Written by the repo template (ADR 0005); refreshed by copier update. scripts/bootstrap-github.sh applies these settings and, with --check, reports drift from them.",
+  "settings": [
+    {
+      "body": {
+        "allow_auto_merge": true,
+        "allow_merge_commit": false,
+        "allow_rebase_merge": false,
+        "allow_squash_merge": true,
+        "delete_branch_on_merge": true,
+        "has_wiki": false,
+        "squash_merge_commit_message": "PR_BODY",
+        "squash_merge_commit_title": "PR_TITLE"
+      },
+      "endpoint": "repos/{repo}",
+      "method": "PATCH",
+      "name": "Squash-only merges, PR title as commit message, auto-delete branches, auto-merge allowed, no wiki"
+    },
+    {
+      "endpoint": "repos/{repo}",
+      "expect": {
+        "visibility": "public"
+      },
+      "name": "Visibility"
+    },
+    {
+      "body": {
+        "can_approve_pull_request_reviews": false,
+        "default_workflow_permissions": "read"
+      },
+      "endpoint": "repos/{repo}/actions/permissions/workflow",
+      "method": "PUT",
+      "name": "Read-only default GITHUB_TOKEN, and Actions cannot approve pull requests"
+    },
+    {
+      "body": {
+        "allowed_actions": "selected",
+        "enabled": true,
+        "sha_pinning_required": true
+      },
+      "endpoint": "repos/{repo}/actions/permissions",
+      "method": "PUT",
+      "name": "Actions enabled, limited to a selected allowlist (forge-lab, ADR 0003) and pinned to full commit SHAs"
+    },
+    {
+      "endpoint": "repos/{repo}/actions/permissions/selected-actions",
+      "expect": {
+        "patterns_allowed": [
+          "ZeleMate/*",
+          "astral-sh/setup-uv@*",
+          "dependabot/fetch-metadata@*"
+        ]
+      },
+      "name": "A selected-actions allowlist allows what the workflows call (else ci.yml fails at startup with no logs)",
+      "when": {
+        "repos/{repo}/actions/permissions": {
+          "allowed_actions": "selected"
+        }
+      }
+    },
+    {
+      "endpoint": "repos/{repo}/vulnerability-alerts",
+      "method": "PUT",
+      "name": "Dependabot alerts"
+    },
+    {
+      "endpoint": "repos/{repo}/automated-security-fixes",
+      "expect": {
+        "enabled": true
+      },
+      "method": "PUT",
+      "name": "Dependabot security updates"
+    },
+    {
+      "body": {
+        "security_and_analysis": {
+          "secret_scanning": {
+            "status": "enabled"
+          },
+          "secret_scanning_push_protection": {
+            "status": "enabled"
+          }
+        }
+      },
+      "endpoint": "repos/{repo}",
+      "method": "PATCH",
+      "name": "Secret scanning and push protection"
+    },
+    {
+      "endpoint": "repos/{repo}/private-vulnerability-reporting",
+      "expect": {
+        "enabled": true
+      },
+      "method": "PUT",
+      "name": "Private vulnerability reporting"
+    },
+    {
+      "body": {
+        "query_suite": "default",
+        "state": "configured"
+      },
+      "endpoint": "repos/{repo}/code-scanning/default-setup",
+      "method": "PATCH",
+      "name": "CodeQL default setup"
+    },
+    {
+      "body": {
+        "approval_policy": "all_external_contributors"
+      },
+      "endpoint": "repos/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "method": "PUT",
+      "name": "Fork pull request workflows wait for approval for every outside contributor"
+    },
+    {
+      "body_file": ".github/rulesets/main.json",
+      "endpoint": "repos/{repo}/rulesets",
+      "key": {
+        "name": "main"
+      },
+      "method": "POST",
+      "name": "Ruleset main: PR required, ci-ok required, review threads resolved, no force-push or deletion, linear history"
+    },
+    {
+      "name": "SonarQube Cloud project imported, with Automatic Analysis on"
+    },
+    {
+      "name": "Dependabot malware alerts (Settings, Advanced Security)"
+    },
+    {
+      "name": "Lefthook hooks installed in each clone (lefthook install)"
+    }
+  ]
+}

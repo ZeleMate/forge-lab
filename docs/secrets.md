@@ -13,7 +13,7 @@ The user enters every live key ([AGENTS.md](../AGENTS.md)). Agents read variable
 | `SONARQUBE_TOKEN` (SonarQube Cloud user token) | the owner's keychain, passed only to the Claude Code process (`docs/SETUP.md`); never in a file | `.mcp.json` (SonarQube MCP server, read through `${SONARQUBE_TOKEN:-}`, so a shell or CI job without the token still parses the config) | yearly, or on leak |
 | `TEMPLATE_READ_TOKEN` (only if the template repo is private) | GitHub Actions secret | `template-update.yml` | fine-grained PAT, contents:read on the template repo, ≤ 1 year |
 
-The machine-readable list is `.github/secret-requirements.json`; the GitHub audit reads it.
+The machine-readable list is `.github/secret-requirements.json`; `scripts/bootstrap-github.sh` reads it, and with `--check` reports a needed secret that isn't set.
 
 ## Rules
 

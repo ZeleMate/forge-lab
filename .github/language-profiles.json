@@ -1,0 +1,4 @@
+{
+  "_comment": "Written by the repo template from includes/languages.json (ADR 0006); refreshed by copier update. For scripts and skills: the checks AGENTS.md documents (run each in dir, in order), the lock command and the registry `publishes` sends packages to (null: none).",
+  "languages": []
+}

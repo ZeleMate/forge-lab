@@ -38,7 +38,7 @@ jobs:
           if [ "$rc" -eq 2 ]; then
             title="Repo template update available"
             if [ -z "$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[].number')" ]; then
-              gh issue create --title "$title" --body "Run \`uvx copier update --trust\` locally, review the diff, and open a PR."
+              gh issue create --title "$title" --body "Run \`uv run --no-build --project .github/tools copier update --trust\` locally (the Copier version locked in .github/tools/uv.lock), review the diff, and open a PR."
             fi
           elif [ "$rc" -ne 0 ]; then
             echo "::error::copier check-update failed (rc=$rc). If the template repo is private, set the TEMPLATE_READ_TOKEN secret (see docs/SETUP.md)."
