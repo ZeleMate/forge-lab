@@ -145,8 +145,11 @@ function roundsAreWellFormed(events: WireEvent[]): boolean {
     const start = events.indexOf(m);
     const next = events.findIndex((e, i) => i > start && e.type === "model.message");
     const responses = events.slice(start + 1, next).filter((e) => e.type === "tool.response");
-    const answered = responses.map((r) => str(r.tool_call_id)).sort();
-    if (ids.length === 0 || answered.join() !== [...ids].sort().join()) return false;
+    // `sort()` without a compare function sorts by UTF-16 code units; naming the
+    // order makes it explicit. `toSorted` returns a sorted copy and leaves the array as it was.
+    const byText = (a: string, b: string) => a.localeCompare(b);
+    const answered = responses.map((r) => str(r.tool_call_id)).toSorted(byText);
+    if (ids.length === 0 || answered.join() !== ids.toSorted(byText).join()) return false;
   }
   return true;
 }
